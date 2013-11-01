@@ -1,0 +1,1 @@
+web: java -cp target/classes:target/dependency/* -Ddw.server.connector.port=$PORT -Ddw.aws.accessKey=$AWS_ACCESS_KEY -Ddw.aws.secretKey=$AWS_SECRET_KEY com.myezteam.application.WsApplication server src/main/resources/prod.yml
