@@ -10,7 +10,6 @@
  */
 package com.myezteam.config;
 
-import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,13 +22,6 @@ import com.yammer.dropwizard.db.DatabaseConfiguration;
  * 
  */
 public class WsConfiguration extends Configuration {
-  // I'm not sure what's going on, but if I don't add this, then I can't start the server from the
-  // command line, and therefore, can't start it in heroku
-  @Valid
-  @NotNull
-  @JsonProperty("server")
-  public Map<String, Object> server;
-
   @Valid
   @NotNull
   @JsonProperty("aws")
