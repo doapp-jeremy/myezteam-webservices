@@ -8,7 +8,7 @@
  *
  * Copyright 2013 - All rights reserved.  Created by DoApp, Inc.
  */
-package com.adagogo.config;
+package com.myezteam.config;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import org.hibernate.validator.constraints.NotEmpty;

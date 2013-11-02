@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.skife.jdbi.v2.DBI;
-import com.adagogo.config.WsConfiguration;
+import com.myezteam.config.WsConfiguration;
 import com.myezteam.db.TeamDAO;
 import com.myezteam.exception.IllegalArgumentExceptionMapper;
 import com.myezteam.exception.WebApplicationExceptionMapper;
