@@ -17,9 +17,12 @@ import java.util.Set;
 import org.skife.jdbi.v2.DBI;
 import com.myezteam.config.WsConfiguration;
 import com.myezteam.db.TeamDAO;
+import com.myezteam.db.UserDAO;
 import com.myezteam.exception.IllegalArgumentExceptionMapper;
 import com.myezteam.exception.WebApplicationExceptionMapper;
+import com.myezteam.resource.AuthResource;
 import com.myezteam.resource.TeamResource;
+import com.myezteam.resource.UserResource;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -61,9 +64,13 @@ public class WsService extends Service<WsConfiguration> {
   public void run(WsConfiguration configuration, Environment environment) throws Exception {
     final DBIFactory factory = new DBIFactory();
     final DBI jdbi = factory.build(environment, configuration.getDatabase(), "mysql");
+
     final TeamDAO teamDAO = jdbi.onDemand(TeamDAO.class);
+    final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
 
     environment.addResource(new TeamResource(teamDAO));
+    environment.addResource(new UserResource(userDAO));
+    environment.addResource(new AuthResource(userDAO));
 
     configureExceptionMappers(environment);
   }

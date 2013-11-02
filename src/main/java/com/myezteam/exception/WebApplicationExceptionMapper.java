@@ -38,14 +38,19 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
     Throwable t = e.getCause();
     if (t != null) {
       t.printStackTrace();
-      if ((t instanceof IllegalArgumentException) || (t instanceof InvalidArgumentException)) { return Response.status(400)
-          .type(MediaType.APPLICATION_JSON)
-          .entity(new Error(t))
-          .build(); }
+      if ((t instanceof IllegalArgumentException) || (t instanceof InvalidArgumentException)) {
+        return Response.status(400)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(new WsError(t))
+            .build();
+      }
+      else {
+        return Response.status(404).type(MediaType.APPLICATION_JSON).entity(new WsError(t)).build();
+      }
     }
     return Response.status(500)
         .type(MediaType.APPLICATION_JSON)
-        .entity(new Error(e))
+        .entity(new WsError(e))
         .build();
   }
 
