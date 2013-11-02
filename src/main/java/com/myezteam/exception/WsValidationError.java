@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import com.codahale.dropwizard.jackson.JsonSnakeCase;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy;
 
@@ -23,7 +22,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy.LowerCaseWithUnders
  * @author jeremy
  * 
  */
-@JsonSnakeCase
 public class WsValidationError extends WsError {
   @JsonProperty
   private final Map<String, String> violations = new HashMap<String, String>();

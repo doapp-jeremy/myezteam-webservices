@@ -8,7 +8,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<dropwizard.version>0.7.0-SNAPSHOT</dropwizard.version>
+		<!-- <dropwizard.source>com.codahale.dropwizard</dropwizard.source> <dropwizard.version>0.7.0-SNAPSHOT</dropwizard.version> -->
+		<dropwizard.source>com.yammer.dropwizard</dropwizard.source>
+		<dropwizard.version>0.6.2</dropwizard.version>
 	</properties>
 
 	<repositories>
@@ -62,16 +64,25 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.codahale.dropwizard</groupId>
+			<groupId>${dropwizard.source}</groupId>
 			<artifactId>dropwizard-core</artifactId>
 			<version>${dropwizard.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.codahale.dropwizard</groupId>
+			<groupId>${dropwizard.source}</groupId>
 			<artifactId>dropwizard-auth</artifactId>
 			<version>${dropwizard.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>${dropwizard.source}</groupId>
+			<artifactId>dropwizard-jdbi</artifactId>
+			<version>${dropwizard.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.26</version>
+		</dependency>
 	</dependencies>
 
 	<build>

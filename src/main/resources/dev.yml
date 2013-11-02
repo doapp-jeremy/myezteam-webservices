@@ -1,9 +1,48 @@
 aws:
   tablePrefix: DEV-
-server:
-  type: simple
-  applicationContextPath: /
-  connector:
-    type: http
-    port: 8080
+
+# Database settings.
+database:
+  # the name of your JDBC driver
+  driverClass: com.mysql.jdbc.Driver
+
+
+logging:
+  # Settings for logging to stdout.
+  console:
+
+    # If true, write log statements to stdout.
+    enabled: true
+
+    # Do not display log statements below this threshold to stdout.
+    threshold: ALL
+
+  # Logger-specific levels.
+  loggers:
+
+    # Overrides the level of com.example.dw.Thing and sets it to DEBUG.
+    "com.doapps.push": DEBUG
+
+  # Settings for logging to a file.
+  file:
+
+    # If true, write log statements to a file.
+    enabled: true
+
+    # Do not write log statements below this threshold to the file.
+    threshold: ALL
+
+    # The file to which current statements will be logged.
+    currentLogFilename: /var/log/myezteam-webservices/myezteam-webservices-service.log
+
+    # When the log file rotates, the archived log will be renamed to this and gzipped. The
+    # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
+    # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
+    archivedLogFilenamePattern: /var/log/myezteam-webservices/myezteam-webservices-service.log-%d.log.gz
+
+    # The number of archived files to keep.
+    archivedFileCount: 5
+
+    # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
+    timeZone: UTC
 

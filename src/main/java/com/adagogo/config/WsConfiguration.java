@@ -12,8 +12,9 @@ package com.adagogo.config;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import com.codahale.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yammer.dropwizard.config.Configuration;
+import com.yammer.dropwizard.db.DatabaseConfiguration;
 
 
 /**
@@ -23,11 +24,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class WsConfiguration extends Configuration {
   @Valid
   @NotNull
-  @JsonProperty
+  @JsonProperty("aws")
   private final AwsConfiguration aws = new AwsConfiguration();
 
   public AwsConfiguration getAwsConfiguration() {
     return aws;
+  }
+
+  @Valid
+  @NotNull
+  @JsonProperty("database")
+  private final DatabaseConfiguration database = new DatabaseConfiguration();
+
+  /**
+   * @return the database
+   */
+  public DatabaseConfiguration getDatabase() {
+    return database;
   }
 
 }
