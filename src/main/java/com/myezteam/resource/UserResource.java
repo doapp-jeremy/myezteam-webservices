@@ -13,12 +13,12 @@ package com.myezteam.resource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.myezteam.api.User;
 import com.myezteam.db.UserDAO;
+import com.yammer.dropwizard.auth.Auth;
 
 
 /**
@@ -36,10 +36,9 @@ public class UserResource {
   }
 
   @GET
-  @Path("/{email}")
-  public User get(@PathParam("email") String email) {
+  public User me(@Auth Long userId) {
     try {
-      return userDAO.findByEmail(email);
+      return userDAO.findById(userId);
     } catch (Throwable e) {
       e.printStackTrace();
       throw new WebApplicationException(e);

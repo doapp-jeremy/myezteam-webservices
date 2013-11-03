@@ -35,15 +35,23 @@ public interface UserDAO {
      */
     @Override
     public User map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new User(r.getLong("id"), r.getString("email"));
+      return new User(r.getLong("id"), r.getString("email"), r.getString("first_name"), r.getString("last_name"));
     }
 
   }
 
   /**
+   * @param userId
    * @return
    */
-  @SqlQuery("SELECT id,email FROM users WHERE email = :email")
+  @SqlQuery("SELECT * FROM users WHERE id = :id")
+  @Mapper(UserMapper.class)
+  public User findById(@Bind("id") Long id);
+
+  /**
+   * @return
+   */
+  @SqlQuery("SELECT * FROM users WHERE email = :email")
   @Mapper(UserMapper.class)
   public User findByEmail(@Bind("email") String email);
 

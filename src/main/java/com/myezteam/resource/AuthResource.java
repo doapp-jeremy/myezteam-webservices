@@ -12,6 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import java.util.Map;
+import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,7 +20,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.google.common.base.Strings;
+import com.myezteam.api.Token;
 import com.myezteam.api.User;
+import com.myezteam.db.TokenDAO;
 import com.myezteam.db.UserDAO;
 
 
@@ -32,20 +35,28 @@ import com.myezteam.db.UserDAO;
 @Path("/auth")
 public class AuthResource {
   private final UserDAO userDAO;
+  private final TokenDAO tokenDAO;
 
-  public AuthResource(UserDAO userDAO) {
+  public AuthResource(UserDAO userDAO, TokenDAO tokenDAO) {
     this.userDAO = userDAO;
+    this.tokenDAO = tokenDAO;
   }
 
   @POST
   @Path("/login")
-  public User login(Map<String, String> body) {
+  public Token login(Map<String, String> body) {
     try {
       checkArgument(false == Strings.isNullOrEmpty(body.get("email")), "email is required");
       checkArgument(false == Strings.isNullOrEmpty(body.get("password")), "password is required");
       User user = userDAO.authenticate(body.get("email"), body.get("password"));
       if (user == null) { throw new Exception("Invalid login"); }
-      return user;
+
+      // generate a token
+      Token token = new Token(UUID.randomUUID().toString(), user.getId());
+      token.setCreated(System.currentTimeMillis());
+      tokenDAO.saveToken(token);
+
+      return token;
     } catch (Throwable e) {
       e.printStackTrace();
       throw new WebApplicationException(e);

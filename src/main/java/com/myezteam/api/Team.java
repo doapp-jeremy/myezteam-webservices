@@ -24,6 +24,10 @@ public class Team {
   private final long id;
   @JsonProperty
   private final String name;
+  @JsonProperty
+  private String type;
+  @JsonProperty
+  private String defaultLocation;
 
   /**
    * @param long1
@@ -32,6 +36,40 @@ public class Team {
   public Team(long id, String name) {
     this.id = id;
     this.name = name;
+  }
+
+  /**
+   * @param long1
+   * @param string
+   * @param string2
+   * @param string3
+   */
+  public Team(long id, String name, String type, String defaultLocation) {
+    this.id = id;
+    this.name = name;
+    this.type = type;
+    this.defaultLocation = defaultLocation;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    return 17 + 31 * (int) id;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (object instanceof Team) { return this.hashCode() == object.hashCode(); }
+    return super.equals(object);
   }
 
   /*

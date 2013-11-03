@@ -78,7 +78,12 @@
 			<artifactId>dropwizard-jdbi</artifactId>
 			<version>${dropwizard.version}</version>
 		</dependency>
-		<dependency>
+    <dependency>
+      <groupId>${dropwizard.source}</groupId>
+      <artifactId>dropwizard-auth</artifactId>
+      <version>${dropwizard.version}</version>
+    </dependency>
+				<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.26</version>

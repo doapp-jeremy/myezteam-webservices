@@ -15,8 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.skife.jdbi.v2.DBI;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.TableNameOverride;
+import com.myezteam.auth.TokenAuthenticator;
+import com.myezteam.config.AwsConfiguration;
 import com.myezteam.config.WsConfiguration;
 import com.myezteam.db.TeamDAO;
+import com.myezteam.db.TokenDAO;
 import com.myezteam.db.UserDAO;
 import com.myezteam.exception.IllegalArgumentExceptionMapper;
 import com.myezteam.exception.WebApplicationExceptionMapper;
@@ -25,6 +34,7 @@ import com.myezteam.resource.TeamResource;
 import com.myezteam.resource.UserResource;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.yammer.dropwizard.Service;
+import com.yammer.dropwizard.auth.oauth.OAuthProvider;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.jdbi.DBIFactory;
@@ -68,9 +78,19 @@ public class WsService extends Service<WsConfiguration> {
     final TeamDAO teamDAO = jdbi.onDemand(TeamDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
 
+    AwsConfiguration awsConfiguration = configuration.getAwsConfiguration();
+    AWSCredentials awsCredentials = awsConfiguration.getAWSCredentials();
+    AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(awsCredentials);
+    DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(dynamoDB, new DynamoDBMapperConfig(
+        TableNameOverride.withTableNamePrefix(awsConfiguration.getTablePrefix())));
+
+    TokenDAO tokenDAO = new TokenDAO(dynamoDBMapper);
+
+    environment.addResource(new OAuthProvider<Long>(new TokenAuthenticator(tokenDAO), "token"));
+
     environment.addResource(new TeamResource(teamDAO));
     environment.addResource(new UserResource(userDAO));
-    environment.addResource(new AuthResource(userDAO));
+    environment.addResource(new AuthResource(userDAO, tokenDAO));
 
     configureExceptionMappers(environment);
   }
