@@ -10,16 +10,15 @@
  */
 package com.myezteam.resource;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import com.google.common.collect.Lists;
 import com.myezteam.api.Team;
 import com.myezteam.db.TeamDAO;
 import com.yammer.dropwizard.auth.Auth;
@@ -31,7 +30,7 @@ import com.yammer.dropwizard.auth.Auth;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/teams")
+@Path("/v1/teams")
 public class TeamResource {
   private final TeamDAO teamDAO;
 
@@ -40,18 +39,45 @@ public class TeamResource {
   }
 
   @GET
-  public List<Team> list(@Auth long userId) {
+  public List<Team> player(@Auth long userId) {
     try {
-      // return teamDAO.findUsersTeams(userId);
-
-      Set<Team> teams = new HashSet<Team>();
-      teams.addAll(teamDAO.findTeamsUserOwns(userId));
-      teams.addAll(teamDAO.findTeamsUserManages(userId));
-      teams.addAll(teamDAO.findTeamsUserPlaysOn(userId));
-
-      return Lists.newArrayList(teams.iterator());
+      return teamDAO.findTeamsUserPlaysOn(userId);
     } catch (Throwable e) {
-      e.printStackTrace();
+      throw new WebApplicationException(e);
+    }
+  }
+
+  @GET
+  @Path("/owner")
+  public List<Team> owner(@Auth long userId) {
+    try {
+      return teamDAO.findTeamsUserOwns(userId);
+    } catch (Throwable e) {
+      throw new WebApplicationException(e);
+    }
+  }
+
+  @GET
+  @Path("/manager")
+  public List<Team> manager(@Auth long userId) {
+    try {
+      return teamDAO.findTeamsUserManages(userId);
+    } catch (Throwable e) {
+      throw new WebApplicationException(e);
+    }
+  }
+
+  @GET
+  @Path("/all")
+  public Map<String, List<Team>> all(@Auth long userId) {
+    try {
+      Map<String, List<Team>> teams = new HashMap<String, List<Team>>();
+      teams.put("owner", teamDAO.findTeamsUserOwns(userId));
+      teams.put("manager", teamDAO.findTeamsUserManages(userId));
+      teams.put("player", teamDAO.findTeamsUserPlaysOn(userId));
+
+      return teams;
+    } catch (Throwable e) {
       throw new WebApplicationException(e);
     }
   }

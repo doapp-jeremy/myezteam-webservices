@@ -27,7 +27,7 @@ import com.yammer.dropwizard.auth.Auth;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/users")
+@Path("/v1/users")
 public class UserResource {
   private final UserDAO userDAO;
 

@@ -32,7 +32,7 @@ import com.myezteam.db.UserDAO;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/auth")
+@Path("/v1/auth")
 public class AuthResource {
   private final UserDAO userDAO;
   private final TokenDAO tokenDAO;
