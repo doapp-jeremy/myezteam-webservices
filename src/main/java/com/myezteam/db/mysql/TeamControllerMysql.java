@@ -63,8 +63,16 @@ public class TeamControllerMysql extends TeamController {
    * @see com.myezteam.db.TeamController#save(com.myezteam.api.Team)
    */
   @Override
-  public void save(Team team) {
-    teamDAO.update(team);
+  public Team save(Team team) {
+    if (null == team.getId()) {
+      teamDAO.create(team);
+      // this is a hack until I can figure out how to get the id of the newly generated team
+      return teamDAO.getLastCreatedTeam(team.getOwnerId());
+    }
+    else {
+      teamDAO.update(team);
+    }
+    return team;
   }
 
   /*

@@ -93,8 +93,9 @@ public abstract class TeamController {
 
   /**
    * @param team
+   * @return
    */
-  public abstract void save(Team team);
+  public abstract Team save(Team team);
 
   /**
    * @param teamId

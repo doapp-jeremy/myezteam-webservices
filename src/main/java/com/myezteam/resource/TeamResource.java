@@ -22,6 +22,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.google.common.base.Strings;
@@ -39,7 +40,7 @@ import com.yammer.dropwizard.auth.Auth;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v1/teams")
-public class TeamResource {
+public class TeamResource extends BaseResource {
   private final TeamController teamController;
   private final TeamACL teamACL;
 
@@ -49,8 +50,9 @@ public class TeamResource {
   }
 
   @GET
-  public List<Team> player(@Auth Long userId) {
+  public List<Team> player(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       return teamController.getTeamsUserPlaysOn(userId);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
@@ -59,8 +61,9 @@ public class TeamResource {
 
   @GET
   @Path("/owner")
-  public List<Team> owner(@Auth Long userId) {
+  public List<Team> owner(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       return teamController.getTeamsUserOwns(userId);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
@@ -69,8 +72,9 @@ public class TeamResource {
 
   @GET
   @Path("/manager")
-  public List<Team> manager(@Auth Long userId) {
+  public List<Team> manager(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       return teamController.getTeamsUserManages(userId);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
@@ -79,8 +83,9 @@ public class TeamResource {
 
   @GET
   @Path("/all")
-  public Map<String, List<Team>> all(@Auth Long userId) {
+  public Map<String, List<Team>> all(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       return teamController.getUsersTeams(userId);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
@@ -89,8 +94,9 @@ public class TeamResource {
 
   @GET
   @Path("/{id}")
-  public Team get(@Auth Long userId, @PathParam("id") Long teamId) {
+  public Team get(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       // verify user has access to team
       return teamACL.validateReadAccess(userId, teamId);
     } catch (Throwable e) {
@@ -99,16 +105,14 @@ public class TeamResource {
   }
 
   @POST
-  public void create(@Auth Long userId, @PathParam("id") Long teamId, Team team) {
+  public Team create(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Team team) {
     try {
-      checkNotNull(teamId, "Team id is null");
+      checkApiKey(apiKey);
       checkNotNull(team, "Team is empty");
-      checkArgument(team.getId() == teamId, "Team id's don't match");
       checkArgument(false == Strings.isNullOrEmpty(team.getName()), "Name is empty");
 
-      // verify user has access to team
-      teamACL.validateWriteAccess(userId, teamId);
-      teamController.save(team);
+      team.setOwnerId(userId);
+      return teamController.save(team);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
     }

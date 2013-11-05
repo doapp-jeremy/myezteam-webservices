@@ -17,12 +17,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.google.common.base.Strings;
 import com.myezteam.api.Token;
 import com.myezteam.api.User;
-import com.myezteam.db.mysql.TokenDAO;
+import com.myezteam.db.dynamo.TokenDAO;
 import com.myezteam.db.mysql.UserDAO;
 
 
@@ -33,7 +34,7 @@ import com.myezteam.db.mysql.UserDAO;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v1/auth")
-public class AuthResource {
+public class AuthResource extends BaseResource {
   private final UserDAO userDAO;
   private final TokenDAO tokenDAO;
 
@@ -44,8 +45,9 @@ public class AuthResource {
 
   @POST
   @Path("/login")
-  public Token login(Map<String, String> body) {
+  public Token login(@QueryParam(API_KEY) String apiKey, Map<String, String> body) {
     try {
+      checkApiKey(apiKey);
       checkArgument(false == Strings.isNullOrEmpty(body.get("email")), "email is required");
       checkArgument(false == Strings.isNullOrEmpty(body.get("password")), "password is required");
       User user = userDAO.authenticate(body.get("email"), body.get("password"));

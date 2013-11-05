@@ -21,7 +21,9 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 @JsonSnakeCase
 public class Team {
   @JsonProperty
-  private final Long id;
+  private Long id;
+  @JsonProperty
+  private Long ownerId;
   @JsonProperty
   private String name;
   @JsonProperty
@@ -30,6 +32,8 @@ public class Team {
   private String defaultLocation;
   @JsonProperty
   private String description;
+
+  private Team() {}
 
   /**
    * @param long1
@@ -107,10 +111,24 @@ public class Team {
   }
 
   /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
    * @return the type
    */
   public String getType() {
     return type;
+  }
+
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
   }
 
   /**
@@ -121,9 +139,44 @@ public class Team {
   }
 
   /**
+   * @param description the description to set
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
    * @return the defaultLocation
    */
   public String getDefaultLocation() {
     return defaultLocation;
+  }
+
+  /**
+   * @param defaultLocation the defaultLocation to set
+   */
+  public void setDefaultLocation(String defaultLocation) {
+    this.defaultLocation = defaultLocation;
+  }
+
+  /**
+   * @return the ownerId
+   */
+  public Long getOwnerId() {
+    return ownerId;
+  }
+
+  /**
+   * @param userId
+   */
+  public void setOwnerId(Long userId) {
+    this.ownerId = userId;
+  }
+
+  /**
+   * @param id2
+   */
+  public void setId(Long id) {
+    this.id = id;
   }
 }
