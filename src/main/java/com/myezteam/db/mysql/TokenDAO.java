@@ -8,7 +8,7 @@
  *
  * Copyright 2013 - All rights reserved.  Created by DoApp, Inc.
  */
-package com.myezteam.db;
+package com.myezteam.db.mysql;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.myezteam.api.Token;

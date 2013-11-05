@@ -8,7 +8,7 @@
  *
  * Copyright 2013 - All rights reserved.  Created by DoApp, Inc.
  */
-package com.myezteam.db;
+package com.myezteam.db.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -67,4 +67,11 @@ public interface TeamDAO {
       + " FROM players AS Player RIGHT JOIN teams AS Team ON (Team.id=Player.team_id) WHERE Player.user_id = :user_id GROUP BY Team.id")
   @Mapper(TeamMapper.class)
   public List<Team> findTeamsUserPlaysOn(@Bind("user_id") long userId);
+
+  /**
+   * @param teamId
+   * @return
+   */
+  @SqlQuery("SELECT " + TEAM_FIELDS + " FROM teams AS Team WHERE Team.id = :id")
+  public Team findById(@Bind("id") long id);
 }

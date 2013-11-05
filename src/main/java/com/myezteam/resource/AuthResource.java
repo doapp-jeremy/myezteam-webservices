@@ -22,8 +22,8 @@ import javax.ws.rs.core.MediaType;
 import com.google.common.base.Strings;
 import com.myezteam.api.Token;
 import com.myezteam.api.User;
-import com.myezteam.db.TokenDAO;
-import com.myezteam.db.UserDAO;
+import com.myezteam.db.mysql.TokenDAO;
+import com.myezteam.db.mysql.UserDAO;
 
 
 /**

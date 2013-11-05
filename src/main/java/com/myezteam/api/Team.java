@@ -21,9 +21,9 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 @JsonSnakeCase
 public class Team {
   @JsonProperty
-  private final long id;
+  private final Long id;
   @JsonProperty
-  private final String name;
+  private String name;
   @JsonProperty
   private String type;
   @JsonProperty
@@ -33,7 +33,7 @@ public class Team {
    * @param long1
    * @param string
    */
-  public Team(long id, String name) {
+  public Team(Long id, String name) {
     this.id = id;
     this.name = name;
   }
@@ -51,6 +51,13 @@ public class Team {
     this.defaultLocation = defaultLocation;
   }
 
+  /**
+   * @param teamId
+   */
+  public Team(Long id) {
+    this.id = id;
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -58,7 +65,7 @@ public class Team {
    */
   @Override
   public int hashCode() {
-    return 17 + 31 * (int) id;
+    return 17 + 31 * (int) (long) id;
   }
 
   /*

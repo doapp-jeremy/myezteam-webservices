@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.common.base.Optional;
 import com.myezteam.api.Token;
-import com.myezteam.db.TokenDAO;
+import com.myezteam.db.mysql.TokenDAO;
 import com.yammer.dropwizard.auth.AuthenticationException;
 import com.yammer.dropwizard.auth.Authenticator;
 

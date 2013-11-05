@@ -24,9 +24,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.Table
 import com.myezteam.auth.TokenAuthenticator;
 import com.myezteam.config.AwsConfiguration;
 import com.myezteam.config.WsConfiguration;
-import com.myezteam.db.TeamDAO;
-import com.myezteam.db.TokenDAO;
-import com.myezteam.db.UserDAO;
+import com.myezteam.db.mysql.TeamDAO;
+import com.myezteam.db.mysql.TokenDAO;
+import com.myezteam.db.mysql.UserDAO;
 import com.myezteam.exception.IllegalArgumentExceptionMapper;
 import com.myezteam.exception.WebApplicationExceptionMapper;
 import com.myezteam.resource.AuthResource;
