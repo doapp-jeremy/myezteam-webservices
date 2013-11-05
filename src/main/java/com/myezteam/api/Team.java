@@ -28,6 +28,8 @@ public class Team {
   private String type;
   @JsonProperty
   private String defaultLocation;
+  @JsonProperty
+  private String description;
 
   /**
    * @param long1
@@ -44,11 +46,12 @@ public class Team {
    * @param string2
    * @param string3
    */
-  public Team(long id, String name, String type, String defaultLocation) {
+  public Team(long id, String name, String type, String defaultLocation, String description) {
     this.id = id;
     this.name = name;
     this.type = type;
     this.defaultLocation = defaultLocation;
+    this.description = description;
   }
 
   /**
@@ -87,5 +90,40 @@ public class Team {
   @Override
   public String toString() {
     return id + ": " + name;
+  }
+
+  /**
+   * @return
+   */
+  public Long getId() {
+    return id;
+  }
+
+  /**
+   * @return
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * @return the defaultLocation
+   */
+  public String getDefaultLocation() {
+    return defaultLocation;
   }
 }

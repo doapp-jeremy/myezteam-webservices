@@ -27,7 +27,7 @@ public class TeamACL {
     this.teamController = teamController;
   }
 
-  public Team valideRead(Long userId, Long teamId) throws ExecutionException, AclException {
+  public Team validateReadAccess(Long userId, Long teamId) throws ExecutionException, AclException {
     Team team = new Team(teamId);
     for (List<Team> teams : teamController.getUsersTeams(userId).values()) {
       if (teams.contains(team)) { return teams.get(teams.indexOf(team)); }
@@ -35,7 +35,7 @@ public class TeamACL {
     throw new AclException("Not authorized");
   }
 
-  public Team validateWrite(Long userId, Long teamId) throws ExecutionException, AclException {
+  public Team validateWriteAccess(Long userId, Long teamId) throws ExecutionException, AclException {
     Team team = new Team(teamId);
     List<Team> ownerTeams = teamController.getTeamsUserOwns(userId);
     if (ownerTeams.contains(team)) { return ownerTeams.get(ownerTeams.indexOf(team)); }

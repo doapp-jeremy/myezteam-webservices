@@ -12,6 +12,7 @@ package com.myezteam.db.mysql;
 
 import java.util.List;
 import com.myezteam.api.Team;
+import com.myezteam.api.User;
 import com.myezteam.db.TeamController;
 
 
@@ -54,5 +55,47 @@ public class TeamControllerMysql extends TeamController {
   @Override
   protected List<Team> findTeamsUserPlaysOn(Long userId) {
     return teamDAO.findTeamsUserPlaysOn(userId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#save(com.myezteam.api.Team)
+   */
+  @Override
+  public void save(Team team) {
+    teamDAO.update(team);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#addManagers(java.lang.Long, java.util.List)
+   */
+  @Override
+  public void addManagers(Long teamId, List<Long> userIds) {
+    for (Long managerId : userIds) {
+      teamDAO.addManager(teamId, managerId);
+    }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#getManagers(java.lang.Long)
+   */
+  @Override
+  public List<User> getManagers(Long teamId) {
+    return teamDAO.getManagers(teamId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#removeManager(java.lang.Long, java.lang.Long)
+   */
+  @Override
+  public void removeManager(Long teamId, Long managerId) {
+    teamDAO.removeManager(teamId, managerId);
   }
 }

@@ -20,6 +20,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.myezteam.api.Team;
+import com.myezteam.api.User;
 
 
 /**
@@ -89,5 +90,28 @@ public abstract class TeamController {
           return teams;
         }
       });
+
+  /**
+   * @param team
+   */
+  public abstract void save(Team team);
+
+  /**
+   * @param teamId
+   * @param userIds
+   */
+  public abstract void addManagers(Long teamId, List<Long> userIds);
+
+  /**
+   * @param teamId
+   * @return
+   */
+  public abstract List<User> getManagers(Long teamId);
+
+  /**
+   * @param teamId
+   * @param managerId
+   */
+  public abstract void removeManager(Long teamId, Long managerId);
 
 }

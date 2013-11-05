@@ -21,9 +21,12 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.TableNameOverride;
+import com.myezteam.acl.TeamACL;
 import com.myezteam.auth.TokenAuthenticator;
 import com.myezteam.config.AwsConfiguration;
 import com.myezteam.config.WsConfiguration;
+import com.myezteam.db.TeamController;
+import com.myezteam.db.mysql.TeamControllerMysql;
 import com.myezteam.db.mysql.TeamDAO;
 import com.myezteam.db.mysql.TokenDAO;
 import com.myezteam.db.mysql.UserDAO;
@@ -86,9 +89,12 @@ public class WsService extends Service<WsConfiguration> {
 
     TokenDAO tokenDAO = new TokenDAO(dynamoDBMapper);
 
+    TeamController teamController = new TeamControllerMysql(teamDAO);
+    TeamACL teamACL = new TeamACL(teamController);
+
     environment.addResource(new OAuthProvider<Long>(new TokenAuthenticator(tokenDAO), "token"));
 
-    environment.addResource(new TeamResource(teamDAO));
+    environment.addResource(new TeamResource(teamController, teamACL));
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
 
