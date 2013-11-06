@@ -54,4 +54,8 @@ public interface PlayerDAO {
 
   @SqlUpdate("DELETE FROM players WHERE id = :player_id AND team_id = :team_id")
   public abstract void removePlayer(@Bind("team_id") Long teamId, @Bind("player_id") Long playerId);
+
+  @SqlUpdate("UPDATE players SET player_type_id = :player_type_id,modified = UTC_TIMESTAMP() WHERE id = :player_id AND team_id = :team_id AND player_type_id != :player_type_id")
+  public abstract void updatePlayerType(@Bind("team_id") Long teamId, @Bind("player_id") Long playerId,
+      @Bind("player_type_id") Long playerTypeId);
 }

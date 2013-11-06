@@ -139,4 +139,15 @@ public class TeamControllerMysql extends TeamController {
   public void removePlayer(Long teamId, Long playerId) {
     playerDAO.removePlayer(teamId, playerId);
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#updatePlayerType(java.lang.Long, java.lang.Long,
+   * java.lang.Long)
+   */
+  @Override
+  public void updatePlayerType(Long teamId, Long playerId, Long playerTypeId) {
+    playerDAO.updatePlayerType(teamId, playerId, playerTypeId);
+  }
 }

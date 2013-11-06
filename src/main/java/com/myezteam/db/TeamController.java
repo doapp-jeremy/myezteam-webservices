@@ -134,4 +134,6 @@ public abstract class TeamController {
    */
   public abstract void removePlayer(Long teamId, Long playerId);
 
+  public abstract void updatePlayerType(Long teamId, Long playerId, Long playerTypeId);
+
 }

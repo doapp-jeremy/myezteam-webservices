@@ -16,6 +16,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -87,6 +88,23 @@ public class PlayerResource extends BaseResource {
       checkNotNull(playerId, "Player id is empty");
       teamACL.validateWriteAccess(userId, teamId);
       teamController.removePlayer(teamId, playerId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @PUT
+  @Path("/team/{team_id}/{player_id}/{player_type_id}")
+  public void changePlayerType(@Auth Long userId, @PathParam("team_id") Long teamId, @PathParam("player_id") Long playerId,
+      @PathParam("player_type_id") Long playerTypeId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      checkNotNull(userId, "User id is empty");
+      checkNotNull(playerId, "Player id is empty");
+      checkNotNull(playerId, "Player type id is empty");
+      teamACL.validateWriteAccess(userId, teamId);
+      teamController.updatePlayerType(teamId, playerId, playerTypeId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

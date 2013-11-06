@@ -336,4 +336,7 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ### DELETE /players/team/{team_id}/{player_id}
 #### Remove player from team
 
+### PUT /players/team/{team_id}/{player_id}/{player_type_id}
+#### Change player type
+
 
