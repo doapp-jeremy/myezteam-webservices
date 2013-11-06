@@ -248,3 +248,92 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 }
 ```
 
+## Player Resource
+
+### GET /players/team/{team_id}
+#### Get players on a team
+```
+[
+    {
+        "id": 68,
+        "team_id": 3,
+        "user": {
+            "id": 3,
+            "email": "junker37@gmail.com",
+            "first_name": "Jeremy",
+            "last_name": "McJunkin"
+        },
+        "player_type": "Regular"
+    },
+    {
+        "id": 51,
+        "team_id": 3,
+        "user": {
+            "id": 64,
+            "email": "boecker@us.ibm.com",
+            "first_name": "Doug",
+            "last_name": "Boecker"
+        },
+        "player_type": "Regular"
+    }
+]
+```
+
+### POST /players/team/{team_id}
+#### Example data
+```
+{
+  "team_id": 3,
+  "user_id": 129,
+  "player_type_id": 2
+}
+```
+#### Response
+```
+[
+    {
+        "id": 68,
+        "user_id": 3,
+        "team_id": 3,
+        "user": {
+            "id": 3,
+            "email": "junker37@gmail.com",
+            "first_name": "Jeremy",
+            "last_name": "McJunkin"
+        },
+        "player_type": "Regular",
+        "player_type_id": 1
+    },
+    {
+        "id": 51,
+        "user_id": 64,
+        "team_id": 3,
+        "user": {
+            "id": 64,
+            "email": "boecker@us.ibm.com",
+            "first_name": "Doug",
+            "last_name": "Boecker"
+        },
+        "player_type": "Regular",
+        "player_type_id": 1
+    },
+    {
+        "id": 1221,
+        "user_id": 129,
+        "team_id": 3,
+        "user": {
+            "id": 129,
+            "email": "nathan.rabe@gmail.com",
+            "first_name": "Nate",
+            "last_name": "Rabe"
+        },
+        "player_type": "Sub",
+        "player_type_id": 2
+    }
+]
+```
+
+### DELETE /players/team/{team_id}/{player_id}
+#### Remove player from team
+
+

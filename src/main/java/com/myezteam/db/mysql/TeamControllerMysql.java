@@ -11,6 +11,7 @@
 package com.myezteam.db.mysql;
 
 import java.util.List;
+import com.myezteam.api.Player;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
 import com.myezteam.db.TeamController;
@@ -22,9 +23,11 @@ import com.myezteam.db.TeamController;
  */
 public class TeamControllerMysql extends TeamController {
   private final TeamDAO teamDAO;
+  private final PlayerDAO playerDAO;
 
-  public TeamControllerMysql(TeamDAO teamDAO) {
+  public TeamControllerMysql(TeamDAO teamDAO, PlayerDAO playerDAO) {
     this.teamDAO = teamDAO;
+    this.playerDAO = playerDAO;
   }
 
   /*
@@ -105,5 +108,35 @@ public class TeamControllerMysql extends TeamController {
   @Override
   public void removeManager(Long teamId, Long managerId) {
     teamDAO.removeManager(teamId, managerId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#addPlayer(java.lang.Long, com.myezteam.api.Player)
+   */
+  @Override
+  public void addPlayer(Long teamId, Player player) {
+    playerDAO.addPlayer(teamId, player);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#getPlayers(java.lang.Long)
+   */
+  @Override
+  public List<Player> getPlayers(Long teamId) {
+    return playerDAO.getPlayersForTeam(teamId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#removePlayer(java.lang.Long, java.lang.Long)
+   */
+  @Override
+  public void removePlayer(Long teamId, Long playerId) {
+    playerDAO.removePlayer(teamId, playerId);
   }
 }

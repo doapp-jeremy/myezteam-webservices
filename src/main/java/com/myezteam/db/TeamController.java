@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.myezteam.api.Player;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
 
@@ -114,5 +115,23 @@ public abstract class TeamController {
    * @param managerId
    */
   public abstract void removeManager(Long teamId, Long managerId);
+
+  /**
+   * @param teamId
+   * @param player
+   */
+  public abstract void addPlayer(Long teamId, Player player);
+
+  /**
+   * @param teamId
+   * @return
+   */
+  public abstract List<Player> getPlayers(Long teamId);
+
+  /**
+   * @param teamId
+   * @param playerId
+   */
+  public abstract void removePlayer(Long teamId, Long playerId);
 
 }

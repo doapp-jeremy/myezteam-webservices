@@ -175,4 +175,5 @@ public class TeamResource extends BaseResource {
       throw new WebApplicationException(t);
     }
   }
+
 }
