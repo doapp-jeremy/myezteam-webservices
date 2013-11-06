@@ -81,7 +81,7 @@ public interface TeamDAO {
   @SqlUpdate("INSERT INTO teams (name, user_id, type, default_location, description, created) VALUES (:t.name, :t.ownerId, :t.type, :t.defaultLocation, :t.description, UTC_TIMESTAMP())")
   public int create(@BindBean("t") Team team);
 
-  @SqlUpdate("UPDATE teams SET name = :t.name, type = :t.type, default_location = :t.defaultLocation, description = :t.description, modified = UTC_TIMESTAMP()")
+  @SqlUpdate("UPDATE teams SET name = :t.name, type = :t.type, default_location = :t.defaultLocation, description = :t.description, modified = UTC_TIMESTAMP() WHERE id = :t.id LIMIT 1")
   public void update(@BindBean("t") Team team);
 
   @SqlUpdate("INSERT INTO teams_users (team_id,user_id) VALUES (:team_id,:user_id)")
