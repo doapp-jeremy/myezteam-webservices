@@ -14,6 +14,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.myezteam.api.User;
@@ -28,7 +29,7 @@ import com.yammer.dropwizard.auth.Auth;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v1/users")
-public class UserResource {
+public class UserResource extends BaseResource {
   private final UserDAO userDAO;
 
   public UserResource(UserDAO userDAO) {
@@ -36,11 +37,11 @@ public class UserResource {
   }
 
   @GET
-  public User me(@Auth Long userId) {
+  public User me(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       return userDAO.findById(userId);
     } catch (Throwable e) {
-      e.printStackTrace();
       throw new WebApplicationException(e);
     }
   }

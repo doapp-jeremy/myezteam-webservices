@@ -149,8 +149,9 @@ public class TeamResource extends BaseResource {
 
   @POST
   @Path("/{id}/managers")
-  public void addManagers(@Auth Long userId, @PathParam("id") Long teamId, List<Long> userIds) {
+  public void addManagers(@Auth Long userId, @PathParam("id") Long teamId, List<Long> userIds, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       checkNotNull(teamId, "Team id is empty");
       checkNotNull(userIds, "User ids is empty");
       teamACL.validateOwner(userId, teamId);
@@ -162,8 +163,10 @@ public class TeamResource extends BaseResource {
 
   @DELETE
   @Path("/{id}/managers/{user_id}")
-  public void deleteManager(@Auth Long userId, @PathParam("id") Long teamId, @PathParam("user_id") Long managerId) {
+  public void deleteManager(@Auth Long userId, @PathParam("id") Long teamId, @PathParam("user_id") Long managerId,
+      @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       checkNotNull(teamId, "Team id is empty");
       checkNotNull(userId, "User id is empty");
       teamACL.validateOwner(userId, teamId);
