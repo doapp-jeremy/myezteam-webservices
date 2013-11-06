@@ -82,7 +82,7 @@ public interface TeamDAO {
   public int create(@BindBean("t") Team team);
 
   @SqlUpdate("UPDATE teams SET name = :t.name, type = :t.type, default_location = :t.defaultLocation, description = :t.description, modified = UTC_TIMESTAMP()")
-  public void update(Team team);
+  public void update(@BindBean("t") Team team);
 
   @SqlUpdate("INSERT INTO teams_users (team_id,user_id) VALUES (:team_id,:user_id)")
   public void addManager(@Bind("team_id") Long teamId, @Bind("user_id") Long managerId);

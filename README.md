@@ -149,7 +149,7 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 }
 ```
 
-### GET /teams/{id}
+### GET /teams/{team_id}
 #### Get a team
 #### Response
 ```
@@ -184,3 +184,53 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
     "description": "Pickup broomball games"
 }
 ```
+
+### PUT /teams
+#### Update a team
+#### Example data
+```
+{
+    "id": 3,
+    "name": "Sloppy Waffles",
+    "type": "broomball",
+    "default_location": "Withers",
+    "description": "Outdoor broomball team"
+}
+```
+
+### GET /teams/{team_id}/managers
+#### Get a team's managers
+```
+[
+    {
+        "id": 64,
+        "email": "boecker@us.ibm.com",
+        "first_name": "Doug",
+        "last_name": "Boecker"
+    },
+    {
+        "id": 105,
+        "email": "michael.burman@gmail.com",
+        "first_name": "Mike",
+        "last_name": "Burman"
+    },
+    {
+        "id": 129,
+        "email": "nathan.rabe@gmail.com",
+        "first_name": "Nate",
+        "last_name": "Rabe"
+    }
+]
+```
+
+### POST /teams/{team_id}/managers
+#### Add a manager to a team
+#### Example data
+```
+[ 3, 7]
+```
+
+### DELETE /teams/{team_id}/managers/{user_id}
+#### Remove manager from team
+
+

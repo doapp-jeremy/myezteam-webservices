@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
@@ -22,7 +23,7 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 public class Team {
   @JsonProperty
   private Long id;
-  @JsonProperty
+  @JsonIgnore
   private Long ownerId;
   @JsonProperty
   private String name;

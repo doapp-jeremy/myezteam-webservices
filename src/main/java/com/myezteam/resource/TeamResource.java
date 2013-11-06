@@ -119,8 +119,9 @@ public class TeamResource extends BaseResource {
   }
 
   @PUT
-  public void update(@Auth Long userId, Team team) {
+  public void update(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Team team) {
     try {
+      checkApiKey(apiKey);
       checkNotNull(team, "Team is empty");
       checkNotNull(team.getId(), "Team id is empty");
       checkArgument(false == Strings.isNullOrEmpty(team.getName()), "Name is empty");
@@ -135,8 +136,9 @@ public class TeamResource extends BaseResource {
 
   @GET
   @Path("/{id}/managers")
-  public List<User> managers(@Auth Long userId, @PathParam("id") Long teamId) {
+  public List<User> managers(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {
     try {
+      checkApiKey(apiKey);
       checkNotNull(teamId, "Team id is empty");
       teamACL.validateOwner(userId, teamId);
       return teamController.getManagers(teamId);
