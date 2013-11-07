@@ -58,22 +58,18 @@ public class Player {
   private Long teamId;
   @JsonProperty
   private User user;
+  @JsonProperty
+  private Team team;
 
   private Player() {}
 
-  /**
-   * @param user
-   * @param long1
-   * @param long2
-   * @param long3
-   * @param long4
-   */
-  public Player(long id, long userId, long teamId, PlayerType playerType, User user) {
+  public Player(long id, long userId, long teamId, PlayerType playerType, User user, Team team) {
     this.id = id;
     this.userId = userId;
     this.teamId = teamId;
     this.type = playerType;
     this.user = user;
+    this.team = team;
   }
 
   @JsonProperty
@@ -96,6 +92,7 @@ public class Player {
     this.userId = userId;
   }
 
+  @JsonIgnore
   public int getPlayerTypeId() {
     return type.id;
   }

@@ -99,7 +99,7 @@ public class WsService extends Service<WsConfiguration> {
     environment.addResource(new OAuthProvider<Long>(new TokenAuthenticator(tokenDAO), "token"));
 
     environment.addResource(new TeamResource(teamController, teamACL));
-    environment.addResource(new PlayerResource(teamController, teamACL));
+    environment.addResource(new PlayerResource(teamController, teamACL, playerDAO));
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
 

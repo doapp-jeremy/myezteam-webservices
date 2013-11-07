@@ -250,6 +250,41 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 
 ## Player Resource
 
+### GET /players
+#### Get's all of the user's players
+```
+[
+    {
+        "id": 68,
+        "user_id": 3,
+        "team_id": 3,
+        "user": null,
+        "team": {
+            "id": 3,
+            "name": "Sloppy Waffles",
+            "type": null,
+            "default_location": null,
+            "description": null
+        },
+        "player_type": "Regular"
+    },
+    {
+        "id": 269,
+        "user_id": 3,
+        "team_id": 38,
+        "user": null,
+        "team": {
+            "id": 38,
+            "name": "IBM Coed BLUE Team",
+            "type": null,
+            "default_location": null,
+            "description": null
+        },
+        "player_type": "Sub"
+    }
+]
+```
+
 ### GET /players/team/{team_id}
 #### Get players on a team
 ```

@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Player;
 import com.myezteam.db.TeamController;
+import com.myezteam.db.mysql.PlayerDAO;
 import com.yammer.dropwizard.auth.Auth;
 
 
@@ -39,10 +40,23 @@ import com.yammer.dropwizard.auth.Auth;
 public class PlayerResource extends BaseResource {
   private final TeamController teamController;
   private final TeamACL teamACL;
+  private final PlayerDAO playerDAO;
 
-  public PlayerResource(TeamController teamController, TeamACL teamACL) {
+  public PlayerResource(TeamController teamController, TeamACL teamACL, PlayerDAO playerDAO) {
     this.teamController = teamController;
     this.teamACL = teamACL;
+    this.playerDAO = playerDAO;
+  }
+
+  @GET
+  public List<Player> myPlayers(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(userId, "User id is empty");
+      return playerDAO.getPlayersForUser(userId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
   }
 
   @GET
