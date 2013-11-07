@@ -1,4 +1,4 @@
-myezteam-werbservices
+myezteam-webservices
 =====================
 
 My EZ Team webservices

@@ -1,5 +1,5 @@
 aws:
-  tablePrefix: PROD-
+  tablePrefix: DEV-
 
 # Database settings.
 database:
