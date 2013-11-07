@@ -14,6 +14,7 @@ package com.myezteam.application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.skife.jdbi.v2.DBI;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -103,6 +104,15 @@ public class WsService extends Service<WsConfiguration> {
     environment.addResource(new AuthResource(userDAO, tokenDAO));
 
     configureExceptionMappers(environment);
+
+    // Allow CORS: https://groups.google.com/forum/#!msg/dropwizard-user/QYknyWOZmns/6YA8SmHSGu8J
+    // and http://wiki.eclipse.org/Jetty/Feature/Cross_Origin_Filter
+    environment.addFilter(CrossOriginFilter.class, "/*")
+        .setInitParam("allowedOrigins", "*")
+        .setInitParam("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin")
+        .setInitParam("allowedMethods", "GET,PUT,POST,DELETE,OPTIONS")
+        .setInitParam("preflightMaxAge", "5184000") // 2 months
+        .setInitParam("allowCredentials", "true");
   }
 
   private void configureExceptionMappers(Environment environment) {
