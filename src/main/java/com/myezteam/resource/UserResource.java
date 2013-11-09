@@ -54,7 +54,7 @@ public class UserResource extends BaseResource {
     try {
       checkApiKey(apiKey);
       checkNotNull(user.getId(), "User id is null");
-      checkArgument(userId == user.getId(), "Can not update the profile of another user");
+      checkArgument(userId.equals(user.getId()), "Can not update the profile of another user");
       userDAO.updateUser(user);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
