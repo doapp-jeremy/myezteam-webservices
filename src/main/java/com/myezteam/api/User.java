@@ -21,13 +21,15 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 @JsonSnakeCase
 public class User {
   @JsonProperty
-  private final Long id;
+  private Long id;
   @JsonProperty
-  private final String email;
+  private String email;
   @JsonProperty
   private String firstName;
   @JsonProperty
   private String lastName;
+
+  private User() {}
 
   /**
    * @param long1

@@ -10,8 +10,11 @@
  */
 package com.myezteam.resource;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -41,6 +44,18 @@ public class UserResource extends BaseResource {
     try {
       checkApiKey(apiKey);
       return userDAO.findById(userId);
+    } catch (Throwable e) {
+      throw new WebApplicationException(e);
+    }
+  }
+
+  @PUT
+  public void update(@Auth Long userId, @QueryParam(API_KEY) String apiKey, User user) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(user.getId(), "User id is null");
+      checkArgument(userId == user.getId(), "Can not update the profile of another user");
+      userDAO.updateUser(user);
     } catch (Throwable e) {
       throw new WebApplicationException(e);
     }

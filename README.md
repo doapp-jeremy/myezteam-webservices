@@ -248,6 +248,17 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 }
 ```
 
+### PUT /users
+#### Update the logged in users personal info
+```
+{
+  "id": 3,
+  "first_name": "test",
+  "last_name": "asdfadsf",
+  "email":"junker37@gmail.com"
+}
+```
+
 ## Player Resource
 
 ### GET /players
