@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
@@ -26,16 +27,28 @@ public class Event {
   private String name;
   @JsonProperty
   private Long teamId;
+  @JsonProperty
+  private Date start;
+  @JsonProperty
+  private Date end;
+  @JsonProperty
+  private String description;
+  @JsonProperty
+  private String location;
 
   private Event() {}
 
   /**
    * @param long1
    */
-  public Event(Long id, String name, Long teamId) {
+  public Event(Long id, String name, Long teamId, Date start, Date end, String description, String location) {
     this.id = id;
     this.name = name;
     this.teamId = teamId;
+    this.start = start;
+    this.end = end;
+    this.description = description;
+    this.location = location;
   }
 
   public Long getId() {

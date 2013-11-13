@@ -385,4 +385,94 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ### PUT /players/team/{team_id}/{player_id}/{player_type_id}
 #### Change player type
 
+## Events
+
+### GET /events
+#### Get user's next 3 upcoming events
+#### Response
+```
+[
+    {
+        "id": 1253,
+        "name": "Pickup Games",
+        "team_id": 29,
+        "start": "2013-11-15",
+        "end": "2013-11-15",
+        "description": "",
+        "location": "Graham Arena Rink #4"
+    },
+    {
+        "id": 1254,
+        "name": "Pickup Games",
+        "team_id": 29,
+        "start": "2013-11-22",
+        "end": "2013-11-22",
+        "description": "",
+        "location": "Graham Arena Rink #4"
+    },
+    {
+        "id": 1255,
+        "name": "Pickup Games",
+        "team_id": 29,
+        "start": "2013-11-29",
+        "end": "2013-11-29",
+        "description": "",
+        "location": "Graham Arena Rink #4"
+    }
+]
+```
+
+### GET /events/{event_id}
+#### Get an event
+#### Response
+```
+{
+    "id": 1253,
+    "name": "Pickup Games",
+    "team_id": 29,
+    "start": "2013-11-15",
+    "end": "2013-11-15",
+    "description": "",
+    "location": "Graham Arena Rink #4"
+}
+```
+
+### POST /events
+#### Create an event
+#### Example data
+```
+{
+    "name": "Pickup Games",
+    "team_id": 29,
+    "start": "2013-12-15",
+    "end": "2013-12-15",
+    "description": "",
+    "location": "Graham Arena Rink #4"
+}
+```
+#### Response
+```
+TODO
+```
+
+### PUT /events/{event_id}
+#### Update an event
+#### Example data
+```
+```
+
+### DELETE /events/{event_id}
+#### Delete an event
+
+```
+{
+    "id": 1253,
+    "name": "Pickup Games - update name",
+    "team_id": 29,
+    "start": "2013-12-15",
+    "end": "2013-12-15",
+    "description": "",
+    "location": "Graham Arena Rink #4"
+}
+```
 

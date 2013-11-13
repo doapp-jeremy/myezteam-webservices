@@ -12,6 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -36,7 +37,7 @@ import com.yammer.dropwizard.auth.Auth;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/v1/players")
+@Path("/v1/events")
 public class EventResource extends BaseResource {
   private final TeamController teamController;
   private final TeamACL teamACL;
@@ -46,6 +47,28 @@ public class EventResource extends BaseResource {
     this.teamController = teamController;
     this.teamACL = teamACL;
     this.eventDAO = eventDAO;
+  }
+
+  @GET
+  public List<Event> list(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkNotNull(userId, "Invalid auth");
+      checkApiKey(apiKey);
+
+      // Map<String, List<Team>> teams = teamController.getUsersTeams(userId);
+      // List<Long> teamIds = new ArrayList<Long>();
+      // for (List<Team> listOfTeams : teams.values()) {
+      // for (Team team : listOfTeams) {
+      // teamIds.add(team.getId());
+      // }
+      // }
+      // System.out.println(teamIds);
+      List<Event> events = eventDAO.findUpcomingEvents(userId);
+
+      return events;
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
   }
 
   @GET
@@ -103,7 +126,7 @@ public class EventResource extends BaseResource {
 
   @DELETE
   @Path("/{id}")
-  public void delete(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Long eventId) {
+  public void delete(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("id") Long eventId) {
     try {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
@@ -113,6 +136,24 @@ public class EventResource extends BaseResource {
       teamACL.validateWriteAccess(userId, event.getTeamId());
 
       eventDAO.deleteEvent(eventId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @GET
+  @Path("/responses/{id}")
+  public List<Void> responses(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("id") Long eventId) {
+    try {
+      checkNotNull(userId, "Invalid auth");
+      checkApiKey(apiKey);
+      checkNotNull(eventId, "Event id is null");
+      Event event = eventDAO.findEventById(eventId);
+
+      teamACL.validateWriteAccess(userId, event.getTeamId());
+
+      eventDAO.deleteEvent(eventId);
+      return null;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

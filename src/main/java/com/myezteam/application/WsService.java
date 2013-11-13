@@ -28,6 +28,7 @@ import com.myezteam.config.AwsConfiguration;
 import com.myezteam.config.WsConfiguration;
 import com.myezteam.db.TeamController;
 import com.myezteam.db.dynamo.TokenDAO;
+import com.myezteam.db.mysql.EventDAO;
 import com.myezteam.db.mysql.PlayerDAO;
 import com.myezteam.db.mysql.TeamControllerMysql;
 import com.myezteam.db.mysql.TeamDAO;
@@ -35,6 +36,7 @@ import com.myezteam.db.mysql.UserDAO;
 import com.myezteam.exception.IllegalArgumentExceptionMapper;
 import com.myezteam.exception.WebApplicationExceptionMapper;
 import com.myezteam.resource.AuthResource;
+import com.myezteam.resource.EventResource;
 import com.myezteam.resource.PlayerResource;
 import com.myezteam.resource.TeamResource;
 import com.myezteam.resource.UserResource;
@@ -84,6 +86,7 @@ public class WsService extends Service<WsConfiguration> {
     final TeamDAO teamDAO = jdbi.onDemand(TeamDAO.class);
     final PlayerDAO playerDAO = jdbi.onDemand(PlayerDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
+    final EventDAO eventDAO = jdbi.onDemand(EventDAO.class);
 
     AwsConfiguration awsConfiguration = configuration.getAwsConfiguration();
     AWSCredentials awsCredentials = awsConfiguration.getAWSCredentials();
@@ -98,6 +101,7 @@ public class WsService extends Service<WsConfiguration> {
 
     environment.addResource(new OAuthProvider<Long>(new TokenAuthenticator(tokenDAO), "token"));
 
+    environment.addResource(new EventResource(teamController, teamACL, eventDAO));
     environment.addResource(new TeamResource(teamController, teamACL));
     environment.addResource(new PlayerResource(teamController, teamACL, playerDAO));
     environment.addResource(new UserResource(userDAO));
