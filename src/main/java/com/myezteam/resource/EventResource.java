@@ -26,6 +26,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Event;
+import com.myezteam.api.Response;
 import com.myezteam.db.TeamController;
 import com.myezteam.db.mysql.EventDAO;
 import com.yammer.dropwizard.auth.Auth;
@@ -55,14 +56,6 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
 
-      // Map<String, List<Team>> teams = teamController.getUsersTeams(userId);
-      // List<Long> teamIds = new ArrayList<Long>();
-      // for (List<Team> listOfTeams : teams.values()) {
-      // for (Team team : listOfTeams) {
-      // teamIds.add(team.getId());
-      // }
-      // }
-      // System.out.println(teamIds);
       List<Event> events = eventDAO.findUpcomingEvents(userId);
 
       return events;
@@ -142,18 +135,17 @@ public class EventResource extends BaseResource {
   }
 
   @GET
-  @Path("/responses/{id}")
-  public List<Void> responses(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("id") Long eventId) {
+  @Path("/{event_id}/responses")
+  public List<Response> responses(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("event_id") Long eventId) {
     try {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
       Event event = eventDAO.findEventById(eventId);
 
-      teamACL.validateWriteAccess(userId, event.getTeamId());
+      teamACL.validateReadAccess(userId, event.getTeamId());
 
-      eventDAO.deleteEvent(eventId);
-      return null;
+      return eventDAO.findResponses(eventId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

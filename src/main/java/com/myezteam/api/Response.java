@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -59,19 +60,29 @@ public class Response {
   @JsonProperty
   private Long eventId;
   @JsonProperty
-  private Long userId;
+  private Long playerId;
   @JsonProperty
-  private Long responseTypeId;
+  private ResponseType response;
+  @JsonProperty
+  private Date created;
 
   private Response() {}
 
   /**
    * @param long1
    */
-  public Response(Long id, Long eventId, Long userId) {
+  public Response(Long id, Long eventId, Long playerId) {
     this.id = id;
     this.eventId = eventId;
-    this.userId = userId;
+    this.playerId = playerId;
+  }
+
+  public Response(long id, long eventId, long playerId, ResponseType responseType, Date created) {
+    this.id = id;
+    this.eventId = eventId;
+    this.playerId = playerId;
+    this.response = responseType;
+    this.created = created;
   }
 
   public Long getId() {
@@ -88,14 +99,7 @@ public class Response {
   /**
    * @return the userId
    */
-  public Long getUserId() {
-    return userId;
-  }
-
-  /**
-   * @return the responseTypeId
-   */
-  public Long getResponseTypeId() {
-    return responseTypeId;
+  public Long getPlayerId() {
+    return playerId;
   }
 }

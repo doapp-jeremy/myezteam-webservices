@@ -21,7 +21,9 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import com.myezteam.api.Event;
+import com.myezteam.api.Response;
 import com.myezteam.api.Response.ResponseType;
+import com.myezteam.db.mysql.ResponseDAO.ResponseMapper;
 
 
 /**
@@ -45,6 +47,8 @@ public interface EventDAO {
     }
   }
 
+  void close();
+
   @SqlQuery("SELECT * FROM events WHERE id = :id")
   @Mapper(EventMapper.class)
   public abstract Event findEventById(@Bind("id") Long id);
@@ -59,5 +63,7 @@ public interface EventDAO {
   @Mapper(EventMapper.class)
   public abstract List<Event> findUpcomingEvents(@Bind("user_id") Long userId);
 
-  void close();
+  @SqlQuery("SELECT * FROM responses WHERE event_id = :event_id")
+  @Mapper(ResponseMapper.class)
+  public abstract List<Response> findResponses(@Bind("event_id") Long eventId);
 }

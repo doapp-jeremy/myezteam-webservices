@@ -476,3 +476,41 @@ TODO
 }
 ```
 
+### GET /events/{event_id}/responses
+#### Gets responses for an event
+#### Response
+```
+[
+    {
+        "id": 11854,
+        "event_id": 1253,
+        "player_id": 360,
+        "response": {
+            "id": 3,
+            "label": "Probably"
+        },
+        "created": "2013-11-14"
+    },
+    {
+        "id": 11855,
+        "event_id": 1253,
+        "player_id": 427,
+        "response": {
+            "id": 3,
+            "label": "Probably"
+        },
+        "created": "2013-11-14"
+    },
+    {
+        "id": 11870,
+        "event_id": 1253,
+        "player_id": 1080,
+        "response": {
+            "id": 5,
+            "label": "No"
+        },
+        "created": "2013-11-14"
+    }
+]
+```
+
