@@ -12,6 +12,7 @@ package com.myezteam.api;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myezteam.api.Response.ResponseType;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
 
@@ -35,13 +36,16 @@ public class Event {
   private String description;
   @JsonProperty
   private String location;
+  @JsonProperty
+  private ResponseType defaultResponse;
 
   private Event() {}
 
   /**
    * @param long1
    */
-  public Event(Long id, String name, Long teamId, Date start, Date end, String description, String location) {
+  public Event(Long id, String name, Long teamId, Date start, Date end, String description, String location,
+      ResponseType defaultResponse) {
     this.id = id;
     this.name = name;
     this.teamId = teamId;
@@ -49,6 +53,7 @@ public class Event {
     this.end = end;
     this.description = description;
     this.location = location;
+    this.defaultResponse = defaultResponse;
   }
 
   public Long getId() {

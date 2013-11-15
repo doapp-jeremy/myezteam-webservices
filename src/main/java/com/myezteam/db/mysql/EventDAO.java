@@ -21,6 +21,7 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import com.myezteam.api.Event;
+import com.myezteam.api.Response.ResponseType;
 
 
 /**
@@ -40,7 +41,7 @@ public interface EventDAO {
     @Override
     public Event map(int index, ResultSet r, StatementContext ctx) throws SQLException {
       return new Event(r.getLong("id"), r.getString("name"), r.getLong("team_id"), r.getDate("start"), r.getDate("end"),
-          r.getString("description"), r.getString("location"));
+          r.getString("description"), r.getString("location"), ResponseType.get(r.getLong("response_type_id")));
     }
   }
 

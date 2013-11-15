@@ -50,7 +50,7 @@ public interface TeamDAO {
 
   @SqlQuery("SELECT "
       + TEAM_FIELDS
-      + " FROM teams AS Team RIGHT JOIN (SELECT pTeam.id AS player_team_id,mTeam.id AS manager_team_id,oTeam.id AS owner_team_id FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id=User.id) RIGHT JOIN teams AS pTeam ON (pTeam.id=Player.team_id) RIGHT JOIN teams_users AS TM ON (TM.user_id=User.id) RIGHT JOIN teams AS mTeam ON (mTeam.id=TM.team_id) RIGHT JOIN teams AS oTeam ON (oTeam.user_id=User.id) WHERE User.id = :user_id) AS T ON (T.player_team_id = Team.id OR T.manager_team_id = Team.id OR T.owner_team_id = Team.id) GROUP BY Team.id")
+      + " FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_managers AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) WHERE User.id = :user_id GROUP BY Team.id")
   @Mapper(TeamMapper.class)
   public List<Team> findUsersTeams(@Bind("user_id") long userId);
 
