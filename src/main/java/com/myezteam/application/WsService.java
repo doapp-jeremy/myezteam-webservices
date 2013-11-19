@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.joda.time.DateTimeZone;
 import org.skife.jdbi.v2.DBI;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -73,7 +74,9 @@ public class WsService extends Service<WsConfiguration> {
    * @see com.codahale.dropwizard.Application#initialize(com.codahale.dropwizard.setup.Bootstrap)
    */
   @Override
-  public void initialize(Bootstrap<WsConfiguration> bootstrap) {}
+  public void initialize(Bootstrap<WsConfiguration> bootstrap) {
+    DateTimeZone.setDefault(DateTimeZone.UTC);
+  }
 
   /*
    * (non-Javadoc)

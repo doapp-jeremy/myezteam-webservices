@@ -92,7 +92,7 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(event, "Event is null");
-      checkArgument(event.getId() != null, "Event id must be null");
+      checkArgument(event.getId() == null, "Event id must be null");
       checkNotNull(event.getName(), "Name is null");
       checkNotNull(event.getTeamId(), "Team id is null");
 

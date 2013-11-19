@@ -10,7 +10,7 @@
  */
 package com.myezteam.api;
 
-import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,10 +31,12 @@ public class Event {
   private String name;
   @JsonProperty
   private Long teamId;
+  @JsonProperty
+  private String timezone;
   @JsonIgnore
-  private DateTime start;
+  private String start;
   @JsonIgnore
-  private DateTime end;
+  private String end;
   @JsonProperty
   private String description;
   @JsonProperty
@@ -52,17 +54,14 @@ public class Event {
   /**
    * @param long1
    */
-  public Event(Long id, String name, Long teamId, String start, String end, String description, String location,
+  public Event(Long id, String name, Long teamId, String timezone, String start, String end, String description, String location,
       ResponseType defaultResponse) {
     this.id = id;
     this.name = name;
     this.teamId = teamId;
-    if (start != null) {
-      this.start = formatter.parseDateTime(start);
-    }
-    if (end != null) {
-      this.end = formatter.parseDateTime(end);
-    }
+    this.timezone = timezone;
+    this.start = start;
+    this.end = end;
     this.description = description;
     this.location = location;
     this.defaultResponse = defaultResponse;
@@ -88,13 +87,13 @@ public class Event {
 
   @JsonProperty
   public String getStart() {
-    if (start != null) { return start.toString(); }
+    if (start != null) { return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(start).toString(); }
     return null;
   }
 
   @JsonProperty
   public String getEnd() {
-    if (end != null) { return end.toString(); }
+    if (end != null) { return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(end).toString(); }
     return null;
   }
 }
