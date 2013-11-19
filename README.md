@@ -551,7 +551,7 @@ TODO
 ]
 ```
 
-### POST /events
+### POST /responses
 #### Create a response
 #### Example data
 ```
