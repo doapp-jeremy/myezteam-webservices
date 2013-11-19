@@ -51,12 +51,13 @@ public class Team {
    * @param string2
    * @param string3
    */
-  public Team(long id, String name, String type, String defaultLocation, String description) {
+  public Team(Long id, Long ownerId, String name, String type, String defaultLocation, String description) {
     this.id = id;
     this.name = name;
     this.type = type;
     this.defaultLocation = defaultLocation;
     this.description = description;
+    this.ownerId = ownerId;
   }
 
   /**
@@ -163,6 +164,7 @@ public class Team {
   /**
    * @return the ownerId
    */
+  @JsonProperty
   public Long getOwnerId() {
     return ownerId;
   }
@@ -180,4 +182,5 @@ public class Team {
   public void setId(Long id) {
     this.id = id;
   }
+
 }

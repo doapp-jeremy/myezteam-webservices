@@ -150,4 +150,14 @@ public class TeamControllerMysql extends TeamController {
   public void updatePlayerType(Long teamId, Long playerId, Long playerTypeId) {
     playerDAO.updatePlayerType(teamId, playerId, playerTypeId);
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#getOwnerOfTeam(java.lang.Long)
+   */
+  @Override
+  public User getOwnerOfTeam(Long teamId) {
+    return teamDAO.getOwner(teamId);
+  }
 }

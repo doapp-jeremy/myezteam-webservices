@@ -40,7 +40,8 @@ public interface TeamDAO {
      */
     @Override
     public Team map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new Team(r.getLong("id"), r.getString("name"), r.getString("type"), r.getString("default_location"),
+      return new Team(r.getLong("id"), r.getLong("user_id"), r.getString("name"), r.getString("type"),
+          r.getString("default_location"),
           r.getString("description"));
     }
 
@@ -93,4 +94,8 @@ public interface TeamDAO {
 
   @SqlUpdate("DELETE FROM teams_users WHERE team_id = :team_id AND user_id = :user_id")
   public void removeManager(@Bind("team_id") Long teamId, @Bind("user_id") Long managerId);
+
+  @Mapper(UserMapper.class)
+  @SqlQuery("SELECT User.* FROM teams AS Team RIGHT JOIN users AS User ON (User.id = Team.user_id) WHERE Team.id = :team_id")
+  public User getOwner(@Bind("team_id") Long teamId);
 }

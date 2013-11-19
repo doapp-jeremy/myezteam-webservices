@@ -135,6 +135,19 @@ public class TeamResource extends BaseResource {
   }
 
   @GET
+  @Path("/{id}/owner")
+  public User owner(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      teamACL.validateReadAccess(userId, teamId);
+      return teamController.getOwnerOfTeam(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @GET
   @Path("/{id}/managers")
   public List<User> managers(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {
     try {

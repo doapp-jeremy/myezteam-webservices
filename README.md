@@ -200,6 +200,17 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 }
 ```
 
+### GET /teams/{team_id}/owner
+#### Get a team's owner
+```
+{
+    "id": 3,
+    "email": "junker37@gmail.com",
+    "first_name": "Jeremy",
+    "last_name": "McJunkin"
+}
+```
+
 ### GET /teams/{team_id}/managers
 #### Get a team's managers
 ```

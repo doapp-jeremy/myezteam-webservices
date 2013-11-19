@@ -136,4 +136,6 @@ public abstract class TeamController {
 
   public abstract void updatePlayerType(Long teamId, Long playerId, Long playerTypeId);
 
+  public abstract User getOwnerOfTeam(Long teamId);
+
 }
