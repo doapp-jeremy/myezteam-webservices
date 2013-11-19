@@ -546,10 +546,22 @@ TODO
 ```
 
 ### GET /responses/{event_id}
-#### Get logged in user's responses for event
+#### Get logged in user's responses for event, latest one first
 #### Response
 ```
 [
+    {
+        "id": 11873,
+        "event_id": 1254,
+        "player_id": 188,
+        "response": {
+            "id": 5,
+            "label": "No"
+        },
+        "created": "2013-11-19T04:04:06.000-06:00",
+        "comment": null,
+        "response_type_id": 5
+    },
     {
         "id": 11872,
         "event_id": 1254,

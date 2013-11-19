@@ -48,7 +48,7 @@ public interface ResponseDAO {
   void close();
 
   @Mapper(ResponseMapper.class)
-  @SqlQuery("SELECT Response.* FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id")
+  @SqlQuery("SELECT Response.* FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id ORDER BY Response.created DESC")
   public abstract List<Response> findUsersResponsesForEvent(@Bind("user_id") Long userId, @Bind("event_id") Long eventId);
 
   @Mapper(ResponseMapper.class)
