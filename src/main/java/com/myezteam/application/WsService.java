@@ -28,6 +28,7 @@ import com.myezteam.config.AwsConfiguration;
 import com.myezteam.config.WsConfiguration;
 import com.myezteam.db.TeamController;
 import com.myezteam.db.dynamo.TokenDAO;
+import com.myezteam.db.mysql.EmailDAO;
 import com.myezteam.db.mysql.EventDAO;
 import com.myezteam.db.mysql.PlayerDAO;
 import com.myezteam.db.mysql.TeamControllerMysql;
@@ -87,6 +88,7 @@ public class WsService extends Service<WsConfiguration> {
     final PlayerDAO playerDAO = jdbi.onDemand(PlayerDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
     final EventDAO eventDAO = jdbi.onDemand(EventDAO.class);
+    final EmailDAO emailDAO = jdbi.onDemand(EmailDAO.class);
 
     AwsConfiguration awsConfiguration = configuration.getAwsConfiguration();
     AWSCredentials awsCredentials = awsConfiguration.getAWSCredentials();
@@ -101,7 +103,7 @@ public class WsService extends Service<WsConfiguration> {
 
     environment.addResource(new OAuthProvider<Long>(new TokenAuthenticator(tokenDAO), "token"));
 
-    environment.addResource(new EventResource(teamController, teamACL, eventDAO));
+    environment.addResource(new EventResource(teamController, teamACL, eventDAO, emailDAO));
     environment.addResource(new TeamResource(teamController, teamACL));
     environment.addResource(new PlayerResource(teamController, teamACL, playerDAO));
     environment.addResource(new UserResource(userDAO));

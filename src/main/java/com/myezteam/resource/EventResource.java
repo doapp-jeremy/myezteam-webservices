@@ -25,9 +25,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.myezteam.acl.TeamACL;
+import com.myezteam.api.Email;
 import com.myezteam.api.Event;
 import com.myezteam.api.Response;
 import com.myezteam.db.TeamController;
+import com.myezteam.db.mysql.EmailDAO;
 import com.myezteam.db.mysql.EventDAO;
 import com.yammer.dropwizard.auth.Auth;
 
@@ -43,11 +45,13 @@ public class EventResource extends BaseResource {
   private final TeamController teamController;
   private final TeamACL teamACL;
   private final EventDAO eventDAO;
+  private final EmailDAO emailDAO;
 
-  public EventResource(TeamController teamController, TeamACL teamACL, EventDAO eventDAO) {
+  public EventResource(TeamController teamController, TeamACL teamACL, EventDAO eventDAO, EmailDAO emailDAO) {
     this.teamController = teamController;
     this.teamACL = teamACL;
     this.eventDAO = eventDAO;
+    this.emailDAO = emailDAO;
   }
 
   @GET
@@ -146,6 +150,23 @@ public class EventResource extends BaseResource {
       teamACL.validateReadAccess(userId, event.getTeamId());
 
       return eventDAO.findResponses(eventId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @GET
+  @Path("/{event_id}/emails")
+  public List<Email> emails(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("event_id") Long eventId) {
+    try {
+      checkNotNull(userId, "Invalid auth");
+      checkApiKey(apiKey);
+      checkNotNull(eventId, "Event id is null");
+      Event event = eventDAO.findEventById(eventId);
+
+      teamACL.validateWriteAccess(userId, event.getTeamId());
+
+      return emailDAO.findEmailsForEvent(eventId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

@@ -518,5 +518,19 @@ TODO
 #### Gets emails for an event
 #### Response
 ```
+[
+    {
+        "id": 3216,
+        "title": "Can you play?",
+        "days_before": 1,
+        "content": "Please respond if you can play this week.",
+        "event_id": 1254,
+        "include_rsvp_form": true,
+        "send_type": "days_before",
+        "send_on": null,
+        "team_id": 0,
+        "default": false
+    }
+]
 ```
 
