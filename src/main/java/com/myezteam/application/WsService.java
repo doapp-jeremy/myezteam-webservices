@@ -31,6 +31,7 @@ import com.myezteam.db.dynamo.TokenDAO;
 import com.myezteam.db.mysql.EmailDAO;
 import com.myezteam.db.mysql.EventDAO;
 import com.myezteam.db.mysql.PlayerDAO;
+import com.myezteam.db.mysql.ResponseDAO;
 import com.myezteam.db.mysql.TeamControllerMysql;
 import com.myezteam.db.mysql.TeamDAO;
 import com.myezteam.db.mysql.UserDAO;
@@ -39,6 +40,7 @@ import com.myezteam.exception.WebApplicationExceptionMapper;
 import com.myezteam.resource.AuthResource;
 import com.myezteam.resource.EventResource;
 import com.myezteam.resource.PlayerResource;
+import com.myezteam.resource.ResponseResource;
 import com.myezteam.resource.TeamResource;
 import com.myezteam.resource.UserResource;
 import com.sun.jersey.api.core.ResourceConfig;
@@ -89,6 +91,7 @@ public class WsService extends Service<WsConfiguration> {
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
     final EventDAO eventDAO = jdbi.onDemand(EventDAO.class);
     final EmailDAO emailDAO = jdbi.onDemand(EmailDAO.class);
+    final ResponseDAO responseDAO = jdbi.onDemand(ResponseDAO.class);
 
     AwsConfiguration awsConfiguration = configuration.getAwsConfiguration();
     AWSCredentials awsCredentials = awsConfiguration.getAWSCredentials();
@@ -108,6 +111,7 @@ public class WsService extends Service<WsConfiguration> {
     environment.addResource(new PlayerResource(teamController, teamACL, playerDAO));
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
+    environment.addResource(new ResponseResource(teamACL, responseDAO, eventDAO, playerDAO));
 
     configureExceptionMappers(environment);
 

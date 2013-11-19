@@ -534,3 +534,34 @@ TODO
 ]
 ```
 
+### POST /events
+#### Create a response
+#### Example data
+```
+{
+  "response_type_id":2,
+  "event_id":1254,
+  "player_id":188
+}
+```
+
+### GET /responses/{event_id}
+#### Get logged in user's responses for event
+#### Response
+```
+[
+    {
+        "id": 11872,
+        "event_id": 1254,
+        "player_id": 188,
+        "response": {
+            "id": 2,
+            "label": "Yes"
+        },
+        "created": "2013-11-19T03:57:02.000-06:00",
+        "comment": null,
+        "response_type_id": 2
+    }
+]
+```
+

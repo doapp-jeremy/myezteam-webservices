@@ -10,9 +10,12 @@
  */
 package com.myezteam.api;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
@@ -61,10 +64,19 @@ public class Response {
   private Long eventId;
   @JsonProperty
   private Long playerId;
+  @JsonIgnore
+  private Long responseTypeId;
   @JsonProperty
   private ResponseType response;
+  @JsonIgnore
+  private DateTime created;
   @JsonProperty
-  private Date created;
+  private String comment;
+
+  static final DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendYear(4, 4).appendLiteral("-")
+      .appendMonthOfYear(2).appendLiteral("-").appendDayOfMonth(2).appendLiteral(" ").appendHourOfDay(2).appendLiteral(":")
+      .appendMinuteOfHour(2).appendLiteral(":").appendSecondOfMinute(2).appendLiteral(".").appendMillisOfSecond(1)
+      .toFormatter();
 
   private Response() {}
 
@@ -77,12 +89,14 @@ public class Response {
     this.playerId = playerId;
   }
 
-  public Response(long id, long eventId, long playerId, ResponseType responseType, Date created) {
+  public Response(long id, long eventId, long playerId, ResponseType responseType, String created) {
     this.id = id;
     this.eventId = eventId;
     this.playerId = playerId;
     this.response = responseType;
-    this.created = created;
+    if (created != null) {
+      this.created = formatter.parseDateTime(created);
+    }
   }
 
   public Long getId() {
@@ -101,5 +115,34 @@ public class Response {
    */
   public Long getPlayerId() {
     return playerId;
+  }
+
+  /**
+   * @return the created
+   */
+  @JsonProperty("created")
+  public String getCreated() {
+    if (created != null) { return created.toString(); }
+    return null;
+  }
+
+  /**
+   * @return
+   */
+  public Long getResponseTypeId() {
+    if (response != null) { return (long) response.id; }
+    return responseTypeId;
+  }
+
+  @JsonProperty("response_type_id")
+  public void setResponseTypeId(Long responseTypeId) {
+    this.responseTypeId = responseTypeId;
+  }
+
+  /**
+   * @return the comment
+   */
+  public String getComment() {
+    return comment;
   }
 }

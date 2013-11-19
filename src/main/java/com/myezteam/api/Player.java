@@ -101,4 +101,11 @@ public class Player {
     this.type = PlayerType.get(playerTypeId);
   }
 
+  /**
+   * @return
+   */
+  public Long getTeamId() {
+    return this.teamId;
+  }
+
 }
