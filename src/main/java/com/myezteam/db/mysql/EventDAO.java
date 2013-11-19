@@ -42,7 +42,7 @@ public interface EventDAO {
      */
     @Override
     public Event map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new Event(r.getLong("id"), r.getString("name"), r.getLong("team_id"), r.getDate("start"), r.getDate("end"),
+      return new Event(r.getLong("id"), r.getString("name"), r.getLong("team_id"), r.getString("start"), r.getString("end"),
           r.getString("description"), r.getString("location"), ResponseType.get(r.getLong("response_type_id")));
     }
   }

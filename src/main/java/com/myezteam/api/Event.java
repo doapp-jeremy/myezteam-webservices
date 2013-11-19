@@ -10,7 +10,10 @@
  */
 package com.myezteam.api;
 
-import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myezteam.api.Response.ResponseType;
 import com.yammer.dropwizard.json.JsonSnakeCase;
@@ -28,10 +31,10 @@ public class Event {
   private String name;
   @JsonProperty
   private Long teamId;
-  @JsonProperty
-  private Date start;
-  @JsonProperty
-  private Date end;
+  @JsonIgnore
+  private DateTime start;
+  @JsonIgnore
+  private DateTime end;
   @JsonProperty
   private String description;
   @JsonProperty
@@ -39,18 +42,27 @@ public class Event {
   @JsonProperty
   private ResponseType defaultResponse;
 
+  private static final DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendYear(4, 4).appendLiteral("-")
+      .appendMonthOfYear(2).appendLiteral("-").appendDayOfMonth(2).appendLiteral(" ").appendHourOfDay(2).appendLiteral(":")
+      .appendMinuteOfHour(2).appendLiteral(":").appendSecondOfMinute(2).appendLiteral(".").appendMillisOfSecond(1)
+      .toFormatter();
+
   private Event() {}
 
   /**
    * @param long1
    */
-  public Event(Long id, String name, Long teamId, Date start, Date end, String description, String location,
+  public Event(Long id, String name, Long teamId, String start, String end, String description, String location,
       ResponseType defaultResponse) {
     this.id = id;
     this.name = name;
     this.teamId = teamId;
-    this.start = start;
-    this.end = end;
+    if (start != null) {
+      this.start = formatter.parseDateTime(start);
+    }
+    if (end != null) {
+      this.end = formatter.parseDateTime(end);
+    }
     this.description = description;
     this.location = location;
     this.defaultResponse = defaultResponse;
@@ -74,4 +86,15 @@ public class Event {
     return teamId;
   }
 
+  @JsonProperty
+  public String getStart() {
+    if (start != null) { return start.toString(); }
+    return null;
+  }
+
+  @JsonProperty
+  public String getEnd() {
+    if (end != null) { return end.toString(); }
+    return null;
+  }
 }

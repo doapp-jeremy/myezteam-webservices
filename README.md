@@ -514,3 +514,9 @@ TODO
 ]
 ```
 
+### GET /events/{event_id}/emails
+#### Gets emails for an event
+#### Response
+```
+```
+
