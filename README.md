@@ -438,13 +438,18 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 #### Response
 ```
 {
-    "id": 1253,
+    "id": 1254,
     "name": "Pickup Games",
     "team_id": 29,
-    "start": "2013-11-15",
-    "end": "2013-11-15",
+    "timezone": "America/Chicago",
+    "start": "2013-11-22T11:30:00.000-06:00",
+    "end": "2013-11-22T13:30:00.000-06:00",
     "description": "",
-    "location": "Graham Arena Rink #4"
+    "location": "Graham Arena Rink #4",
+    "default_response": {
+        "id": 1,
+        "label": "No Response"
+    }
 }
 ```
 
@@ -455,9 +460,10 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 {
     "name": "Pickup Games",
     "team_id": 29,
-    "start": "2013-12-15",
-    "end": "2013-12-15",
-    "description": "",
+    "timezone":"America/Los_Angeles",
+    "start": "2013-12-15 10:30:00",
+    "end": "2013-12-15 11:45:00",
+    "description": "This is a test event",
     "location": "Graham Arena Rink #4"
 }
 ```

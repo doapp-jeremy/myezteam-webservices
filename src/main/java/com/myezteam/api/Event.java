@@ -86,14 +86,53 @@ public class Event {
   }
 
   @JsonProperty
+  public void setStart(String start) {
+    this.start = start;
+  }
+
+  @JsonProperty
+  public void setEnd(String end) {
+    this.end = end;
+  }
+
+  @JsonProperty
   public String getStart() {
-    if (start != null) { return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(start).toString(); }
-    return null;
+    if (start != null) {
+      try {
+        return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(start).toString();
+      } catch (Exception e) {}
+    }
+    return start;
   }
 
   @JsonProperty
   public String getEnd() {
-    if (end != null) { return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(end).toString(); }
-    return null;
+    if (end != null) {
+      try {
+        return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(end).toString();
+      } catch (Exception e) {}
+    }
+    return end;
+  }
+
+  /**
+   * @return the timezone
+   */
+  public String getTimezone() {
+    return timezone;
+  }
+
+  /**
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * @return the location
+   */
+  public String getLocation() {
+    return location;
   }
 }

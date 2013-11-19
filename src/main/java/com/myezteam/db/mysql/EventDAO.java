@@ -54,7 +54,7 @@ public interface EventDAO {
   @Mapper(EventMapper.class)
   public abstract Event findEventById(@Bind("id") Long id);
 
-  @SqlUpdate("INSERT INTO events (name, team_id, created) VALUES (:e.name, e:teamId, UTC_TIMESTAMP())")
+  @SqlUpdate("INSERT INTO events (name, team_id, timezone, start, end, description, location, created) VALUES (:e.name, :e.teamId, :e.timezone, :e.start, :e.end, :e.description, :e.location, UTC_TIMESTAMP())")
   public abstract void createEvent(@BindBean("e") Event event);
 
   @SqlUpdate("DELETE FROM events WHERE id = :id")
