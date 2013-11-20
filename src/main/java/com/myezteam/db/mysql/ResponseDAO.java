@@ -40,15 +40,15 @@ public interface ResponseDAO {
      */
     @Override
     public Response map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"), ResponseType.get(r
-          .getLong("response_type_id")), r.getString("created"));
+      return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"),
+          ResponseType.get(r.getLong("response_type_id")), r.getString("created"));
     }
   }
 
   void close();
 
   @Mapper(ResponseMapper.class)
-  @SqlQuery("SELECT Response.* FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id GROUP BY Player.id ORDER BY Response.created DESC")
+  @SqlQuery("SELECT Response.* FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id ORDER BY Response.created DESC")
   public abstract List<Response> findUsersResponsesForEvent(@Bind("user_id") Long userId, @Bind("event_id") Long eventId);
 
   @Mapper(ResponseMapper.class)
