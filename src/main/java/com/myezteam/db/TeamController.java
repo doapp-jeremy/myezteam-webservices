@@ -138,4 +138,6 @@ public abstract class TeamController {
 
   public abstract User getOwnerOfTeam(Long teamId);
 
+  public abstract void deleteTeam(Long teamId);
+
 }

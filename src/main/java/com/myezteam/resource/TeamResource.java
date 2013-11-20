@@ -134,6 +134,19 @@ public class TeamResource extends BaseResource {
     }
   }
 
+  @DELETE
+  @Path("/{id}")
+  public void delete(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      teamACL.validateOwner(userId, teamId);
+      teamController.deleteTeam(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
   @GET
   @Path("/{id}/owner")
   public User owner(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {

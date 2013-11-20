@@ -160,4 +160,14 @@ public class TeamControllerMysql extends TeamController {
   public User getOwnerOfTeam(Long teamId) {
     return teamDAO.getOwner(teamId);
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#deleteTeam(java.lang.Long)
+   */
+  @Override
+  public void deleteTeam(Long teamId) {
+    teamDAO.deleteTeam(teamId);
+  }
 }
