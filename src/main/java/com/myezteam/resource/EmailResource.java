@@ -145,6 +145,11 @@ public class EmailResource extends BaseResource {
         checkNotNull(email.getTeamId(), "Team id is null, required for default email");
       }
 
+      List<Integer> playerTypes = checkNotNull(email.getPlayerTypes(), "Player types not set");
+      checkArgument(playerTypes.size() > 0, "Must specify at least 1 player type");
+      List<Integer> responseTypes = checkNotNull(email.getResponseTypes(), "Response types not set");
+      checkArgument(responseTypes.size() > 0, "Must specify at least 1 response type");
+
       String sendType = checkNotNull(email.getSendType(), "Send type is null");
       if ("now".equals(sendType)) {
         // TODO: send email now
@@ -163,7 +168,13 @@ public class EmailResource extends BaseResource {
       teamACL.validateWriteAccess(userId, event.getTeamId());
       emailDAO.update(email);
 
-      return null;
+      // delete existing player and response types, then insert the new ones
+      emailDAO.deletePlayerTypes(email.getId());
+      emailDAO.createPlayerTypes(email.getId(), email.getPlayerTypes());
+      emailDAO.deleteResponseTypes(email.getId());
+      emailDAO.createResponseTypes(email.getId(), email.getResponseTypes());
+
+      return email;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

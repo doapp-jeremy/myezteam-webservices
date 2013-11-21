@@ -668,13 +668,45 @@ TODO
 #### Example data
 ```
 {
-  "id":3309,
-  "title":"Updated title",
-  "content":"Please RSVP",
-  "days_before":3,
-  "event_id":1254,
-  "include_rsvp_form":true,
-  "send_type":"days_before"
+    "id": 3313,
+    "title": "Updated title",
+    "days_before": 3,
+    "content": "Please RSVP",
+    "event_id": 1254,
+    "include_rsvp_form": true,
+    "send_type": "days_before",
+    "send_on": null,
+    "team_id": 0,
+    "player_types": [
+        3
+    ],
+    "response_types": [
+        1,
+        3
+    ],
+    "default": false
+}
+```
+#### Response
+```
+{
+    "id": 3313,
+    "title": "Updated title",
+    "days_before": 3,
+    "content": "Please RSVP",
+    "event_id": 1254,
+    "include_rsvp_form": true,
+    "send_type": "days_before",
+    "send_on": null,
+    "team_id": 0,
+    "player_types": [
+        3
+    ],
+    "response_types": [
+        1,
+        3
+    ],
+    "default": false
 }
 ```
 

@@ -79,4 +79,10 @@ public interface EmailDAO {
 
   @SqlQuery("SELECT response_type_id FROM email_response_types WHERE email_id = :email_id")
   public abstract List<Integer> getResponseTypes(@Bind("email_id") Long emailId);
+
+  @SqlUpdate("DELETE FROM email_player_types WHERE email_id = :email_id")
+  public abstract void deletePlayerTypes(@Bind("email_id") Long emailId);
+
+  @SqlUpdate("DELETE FROM email_response_types WHERE email_id = :email_id")
+  public abstract void deleteResponseTypes(@Bind("email_id") Long emailId);
 }
