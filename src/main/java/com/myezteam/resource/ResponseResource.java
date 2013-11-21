@@ -59,7 +59,7 @@ public class ResponseResource extends BaseResource {
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
 
-      Event event = eventDAO.findEventById(eventId);
+      Event event = eventDAO.findById(eventId);
 
       teamACL.validateReadAccess(userId, event.getTeamId());
 

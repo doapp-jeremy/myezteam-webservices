@@ -598,3 +598,54 @@ TODO
 ]
 ```
 
+
+## Email Resource
+
+### POST /emails
+#### Example data
+```
+{
+  "title":"Test email",
+  "content":"Please RSVP",
+  "days_before":2,
+  "event_id":1254,
+  "include_rsvp_form":true,
+  "send_type":"days_before"
+}
+```
+
+### GET /emails/{email_id}
+#### Response
+```
+{
+    "id": 3309,
+    "title": "Test email",
+    "days_before": 2,
+    "content": "Please RSVP",
+    "event_id": 1254,
+    "include_rsvp_form": true,
+    "send_type": "days_before",
+    "send_on": null,
+    "team_id": 0,
+    "default": false
+}
+```
+
+### PUT /emails
+#### Example data
+```
+{
+  "id":3309,
+  "title":"Updated title",
+  "content":"Please RSVP",
+  "days_before":3,
+  "event_id":1254,
+  "include_rsvp_form":true,
+  "send_type":"days_before"
+}
+```
+
+### DELETE /emails/{email_id}
+#### Delete email
+
+

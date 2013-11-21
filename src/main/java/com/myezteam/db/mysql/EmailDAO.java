@@ -15,7 +15,9 @@ import java.sql.SQLException;
 import java.util.List;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
+import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import com.myezteam.api.Email;
@@ -47,6 +49,18 @@ public interface EmailDAO {
 
   @Mapper(EmailMapper.class)
   @SqlQuery("SELECT * FROM emails WHERE event_id = :event_id")
-  public List<Email> findEmailsForEvent(@Bind("event_id") Long geventId);
+  public abstract List<Email> findEmailsForEvent(@Bind("event_id") Long geventId);
 
+  @Mapper(EmailMapper.class)
+  @SqlQuery("SELECT * FROM emails WHERE id = :email_id")
+  public abstract Email findById(@Bind("email_id") Long emailId);
+
+  @SqlUpdate("INSERT INTO emails (created, title, days_before, content, event_id, rsvp, send, send_on, `default`, team_id) VALUES (UTC_TIMESTAMP(), :e.title, :e.daysBefore, :e.content, :e.eventId, :e.includeRsvpForm, :e.sendType, :e.sendOn, :e.defaultEmail, :e.teamId)")
+  public abstract void create(@BindBean("e") Email email);
+
+  @SqlUpdate("UPDATE emails SET modified = UTC_TIMESTAMP(), title = :e.title, days_before = :e.daysBefore, content = :e.content, rsvp = :e.includeRsvpForm, send = :e.sendType, send_on = :e.sendOn WHERE id = :e.id LIMIT 1")
+  public abstract void update(@BindBean("e") Email email);
+
+  @SqlUpdate("DELETE FROM emails WHERE id = :email_id LIMIT 1")
+  public abstract void delete(@Bind("email_id") Long emailId);
 }

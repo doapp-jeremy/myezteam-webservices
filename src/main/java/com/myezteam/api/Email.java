@@ -57,4 +57,73 @@ public class Email {
     this.teamId = teamId;
   }
 
+  /**
+   * @return the id
+   */
+  public Long getId() {
+    return id;
+  }
+
+  /**
+   * @return the title
+   */
+  public String getTitle() {
+    return title;
+  }
+
+  /**
+   * @return the daysBefore
+   */
+  public int getDaysBefore() {
+    return daysBefore;
+  }
+
+  /**
+   * @return the content
+   */
+  public String getContent() {
+    return content;
+  }
+
+  /**
+   * @return
+   */
+  public Long getEventId() {
+    return eventId;
+  }
+
+  /**
+   * @return the includeRsvpForm
+   */
+  public boolean isIncludeRsvpForm() {
+    return includeRsvpForm;
+  }
+
+  /**
+   * @return the sendType
+   */
+  public String getSendType() {
+    return sendType;
+  }
+
+  /**
+   * @return the sendOn
+   */
+  public String getSendOn() {
+    return sendOn;
+  }
+
+  /**
+   * @return the defaultEmail
+   */
+  public boolean isDefaultEmail() {
+    return defaultEmail;
+  }
+
+  /**
+   * @return the teamId
+   */
+  public Long getTeamId() {
+    return teamId;
+  }
 }

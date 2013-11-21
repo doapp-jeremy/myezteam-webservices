@@ -76,7 +76,7 @@ public class EventResource extends BaseResource {
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
 
-      Event event = eventDAO.findEventById(eventId);
+      Event event = eventDAO.findById(eventId);
 
       teamACL.validateReadAccess(userId, event.getTeamId());
 
@@ -97,7 +97,7 @@ public class EventResource extends BaseResource {
       checkNotNull(event.getTeamId(), "Team id is null");
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
-      eventDAO.createEvent(event);
+      eventDAO.create(event);
 
       return null;
     } catch (Throwable t) {
@@ -106,16 +106,19 @@ public class EventResource extends BaseResource {
   }
 
   @PUT
-  public void update(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Event event) {
+  @Path("/{id}")
+  public void update(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("id") Long id, Event event) {
     try {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(event, "Event is null");
-      checkNotNull(event.getId(), "Event id is null");
+      checkNotNull(id, "Event id is null");
+      checkArgument(id.equals(event.getId()), "Id's don't match");
       checkNotNull(event.getName(), "Name is null");
       checkNotNull(event.getTeamId(), "Team id is null");
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
+      eventDAO.update(event);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }
@@ -128,11 +131,11 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
-      Event event = eventDAO.findEventById(eventId);
+      Event event = eventDAO.findById(eventId);
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
 
-      eventDAO.deleteEvent(eventId);
+      eventDAO.delete(eventId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }
@@ -145,7 +148,7 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
-      Event event = eventDAO.findEventById(eventId);
+      Event event = eventDAO.findById(eventId);
 
       teamACL.validateReadAccess(userId, event.getTeamId());
 
@@ -162,7 +165,7 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
-      Event event = eventDAO.findEventById(eventId);
+      Event event = eventDAO.findById(eventId);
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
 

@@ -39,6 +39,7 @@ import com.myezteam.db.mysql.UserDAO;
 import com.myezteam.exception.IllegalArgumentExceptionMapper;
 import com.myezteam.exception.WebApplicationExceptionMapper;
 import com.myezteam.resource.AuthResource;
+import com.myezteam.resource.EmailResource;
 import com.myezteam.resource.EventResource;
 import com.myezteam.resource.PlayerResource;
 import com.myezteam.resource.ResponseResource;
@@ -115,6 +116,7 @@ public class WsService extends Service<WsConfiguration> {
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
     environment.addResource(new ResponseResource(teamACL, responseDAO, eventDAO, playerDAO));
+    environment.addResource(new EmailResource(teamACL, eventDAO, emailDAO));
 
     configureExceptionMappers(environment);
 

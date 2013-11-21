@@ -52,13 +52,16 @@ public interface EventDAO {
 
   @SqlQuery("SELECT * FROM events WHERE id = :id")
   @Mapper(EventMapper.class)
-  public abstract Event findEventById(@Bind("id") Long id);
+  public abstract Event findById(@Bind("id") Long id);
 
   @SqlUpdate("INSERT INTO events (name, team_id, timezone, start, end, description, location, created) VALUES (:e.name, :e.teamId, :e.timezone, :e.start, :e.end, :e.description, :e.location, UTC_TIMESTAMP())")
-  public abstract void createEvent(@BindBean("e") Event event);
+  public abstract void create(@BindBean("e") Event event);
+
+  @SqlUpdate("UPDATE events SET modified = UTC_TIMESTAMP(), timezone = :e.timezone, :e.start, :e.end, :e.description, :e.location")
+  public abstract void update(@BindBean("e") Event event);
 
   @SqlUpdate("DELETE FROM events WHERE id = :id")
-  public abstract void deleteEvent(@Bind("id") Long eventId);
+  public abstract void delete(@Bind("id") Long eventId);
 
   @SqlQuery("SELECT Event.* FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_managers AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) LEFT JOIN events AS Event ON (Event.team_id = Team.id) WHERE User.id = :user_id AND Event.start >= UTC_TIMESTAMP() GROUP BY Event.id ORDER BY Event.start ASC LIMIT 3")
   @Mapper(EventMapper.class)
@@ -67,4 +70,5 @@ public interface EventDAO {
   @SqlQuery("SELECT Response.id,Response.created,Player.id AS player_id,Event.id AS event_id,Response.comment,COALESCE(Response.response_type_id,Event.response_type_id) AS response_type_id FROM events AS Event LEFT JOIN teams AS Team ON (Team.id = Event.team_id) LEFT JOIN players AS Player ON (Player.team_id = Team.id) LEFT JOIN responses AS Response ON (Response.event_id = Event.id AND Response.player_id = Player.id) WHERE Event.id = :event_id GROUP BY Player.id ORDER BY Response.created DESC")
   @Mapper(ResponseMapper.class)
   public abstract List<Response> findResponses(@Bind("event_id") Long eventId);
+
 }
