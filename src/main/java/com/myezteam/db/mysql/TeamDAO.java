@@ -20,8 +20,10 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
+import com.myezteam.api.Email;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
+import com.myezteam.db.mysql.EmailDAO.EmailMapper;
 import com.myezteam.db.mysql.UserDAO.UserMapper;
 
 
@@ -101,4 +103,8 @@ public interface TeamDAO {
 
   @SqlUpdate("DELETE FROM teams WHERE team_id = :team_id LIMIT 1")
   public void deleteTeam(@Bind("team_id") Long teamId);
+
+  @Mapper(EmailMapper.class)
+  @SqlQuery("SELECT * FROM emails WHERE `default` = 1 AND team_id = :team_id")
+  public List<Email> getDefaultEmails(@Bind("team_id") Long teamId);
 }

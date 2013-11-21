@@ -168,4 +168,18 @@ public class Email {
   public void setResponseTypes(List<Integer> responseTypes) {
     this.responseTypes = responseTypes;
   }
+
+  /**
+   * @param defaultEmail the defaultEmail to set
+   */
+  public void setDefaultEmail(boolean defaultEmail) {
+    this.defaultEmail = defaultEmail;
+  }
+
+  /**
+   * @param teamId the teamId to set
+   */
+  public void setTeamId(Long teamId) {
+    this.teamId = teamId;
+  }
 }

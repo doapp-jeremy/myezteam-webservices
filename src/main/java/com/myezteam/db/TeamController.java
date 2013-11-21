@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.myezteam.api.Email;
 import com.myezteam.api.Player;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
@@ -139,5 +140,7 @@ public abstract class TeamController {
   public abstract User getOwnerOfTeam(Long teamId);
 
   public abstract void deleteTeam(Long teamId);
+
+  public abstract List<Email> getDefaultEmails(Long teamId);
 
 }

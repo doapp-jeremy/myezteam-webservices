@@ -250,6 +250,57 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ### DELETE /teams/{team_id}/managers/{user_id}
 #### Remove manager from team
 
+### GET /teams/{team_id}/default_emails
+#### Get's a team's default emails, the ones created for an event by default
+#### Response
+```
+[
+    {
+        "id": 677,
+        "title": "Can you play?",
+        "days_before": 1,
+        "content": "Please respond if you can play this week.",
+        "event_id": 0,
+        "include_rsvp_form": true,
+        "send_type": "days_before",
+        "send_on": null,
+        "team_id": 29,
+        "player_types": null,
+        "response_types": null,
+        "default": true
+    },
+    {
+        "id": 3314,
+        "title": "Updated title",
+        "days_before": 3,
+        "content": "Please RSVP",
+        "event_id": 1254,
+        "include_rsvp_form": true,
+        "send_type": "days_before",
+        "send_on": null,
+        "team_id": 29,
+        "player_types": null,
+        "response_types": null,
+        "default": true
+    },
+    {
+        "id": 3315,
+        "title": "Updated title",
+        "days_before": 3,
+        "content": "Please RSVP",
+        "event_id": 1254,
+        "include_rsvp_form": true,
+        "send_type": "days_before",
+        "send_on": null,
+        "team_id": 29,
+        "player_types": null,
+        "response_types": null,
+        "default": true
+    }
+]
+```
+
+
 ## User Resource
 
 ### GET /users
@@ -602,6 +653,7 @@ TODO
 ## Email Resource
 
 ### POST /emails
+#### If "default" is true, team_id must be set
 #### Example data
 ```
 {
@@ -612,7 +664,9 @@ TODO
   "include_rsvp_form":true,
   "send_type":"days_before",
   "player_types": [ 1, 2 ],
-  "response_types": [ 2, 5 ]
+  "response_types": [ 2, 5 ],
+  "default":false,
+  "team_id":null
 }
 ```
 #### Response
@@ -713,4 +767,28 @@ TODO
 ### DELETE /emails/{email_id}
 #### Delete email
 
+### PUT /emails/{email_id}/make_default
+#### Copies this email and creates one that is a default for the team
+#### Response
+```
+{
+    "id": 3315,
+    "title": "Updated title",
+    "days_before": 3,
+    "content": "Please RSVP",
+    "event_id": 1254,
+    "include_rsvp_form": true,
+    "send_type": "days_before",
+    "send_on": null,
+    "team_id": 29,
+    "player_types": [
+        3
+    ],
+    "response_types": [
+        3,
+        1
+    ],
+    "default": true
+}
+```
 

@@ -11,6 +11,7 @@
 package com.myezteam.db.mysql;
 
 import java.util.List;
+import com.myezteam.api.Email;
 import com.myezteam.api.Player;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
@@ -169,5 +170,15 @@ public class TeamControllerMysql extends TeamController {
   @Override
   public void deleteTeam(Long teamId) {
     teamDAO.deleteTeam(teamId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#getDefaultEmails(java.lang.Long)
+   */
+  @Override
+  public List<Email> getDefaultEmails(Long teamId) {
+    return teamDAO.getDefaultEmails(teamId);
   }
 }

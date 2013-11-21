@@ -27,6 +27,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import com.google.common.base.Strings;
 import com.myezteam.acl.TeamACL;
+import com.myezteam.api.Email;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
 import com.myezteam.db.TeamController;
@@ -202,4 +203,16 @@ public class TeamResource extends BaseResource {
     }
   }
 
+  @GET
+  @Path("/{id}/default_emails")
+  public List<Email> defaultEmails(@Auth Long userId, @PathParam("id") Long teamId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      teamACL.validateOwner(userId, teamId);
+      return teamController.getDefaultEmails(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
 }

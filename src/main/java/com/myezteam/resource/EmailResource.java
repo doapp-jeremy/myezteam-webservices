@@ -86,6 +86,10 @@ public class EmailResource extends BaseResource {
       Event event = checkNotNull(eventDAO.findById(email.getEventId()), "Could not find event");
       teamACL.validateWriteAccess(userId, event.getTeamId());
 
+      if (email.getEventId() == null) {
+        checkArgument(true == email.isDefaultEmail(), "Must be a default email if event id is null");
+        checkNotNull(email.getTeamId(), "Team id is required for default email");
+      }
       if (email.isDefaultEmail()) {
         checkNotNull(email.getTeamId(), "Team id is null, required for default email");
       }
@@ -137,13 +141,16 @@ public class EmailResource extends BaseResource {
       checkNotNull(email.getTitle(), "Title is null");
       checkNotNull(email.getContent(), "Content is null");
 
-      checkNotNull(email.getEventId(), "Event id is null");
-      Event event = checkNotNull(eventDAO.findById(email.getEventId()), "Could not find event");
-      teamACL.validateWriteAccess(userId, event.getTeamId());
-
+      if (email.getEventId() == null) {
+        checkArgument(true == email.isDefaultEmail(), "Must be a default email if event id is null");
+        checkNotNull(email.getTeamId(), "Team id is required for default email");
+      }
       if (email.isDefaultEmail()) {
         checkNotNull(email.getTeamId(), "Team id is null, required for default email");
       }
+
+      Event event = checkNotNull(eventDAO.findById(email.getEventId()), "Could not find event");
+      teamACL.validateWriteAccess(userId, event.getTeamId());
 
       List<Integer> playerTypes = checkNotNull(email.getPlayerTypes(), "Player types not set");
       checkArgument(playerTypes.size() > 0, "Must specify at least 1 player type");
@@ -198,4 +205,40 @@ public class EmailResource extends BaseResource {
     }
   }
 
+  @PUT
+  @Path("/{id}/make_default")
+  public Email makeDefault(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("id") Long id) {
+    try {
+      checkNotNull(userId, "Invalid auth");
+      checkApiKey(apiKey);
+      checkNotNull(id, "Id is null");
+      Email email = emailDAO.findById(id);
+      checkArgument("days_before".equals(email.getSendType()), "Can only make emails with send type days_before default");
+      Event event = eventDAO.findById(email.getEventId());
+
+      teamACL.validateWriteAccess(userId, event.getTeamId());
+
+      Email defaultEmail = email;
+      defaultEmail.setId(null);
+      defaultEmail.setDefaultEmail(true);
+      defaultEmail.setTeamId(event.getTeamId());
+
+      emailDAO.create(defaultEmail);
+      Long defaultEmailId = emailDAO.getLastInsertId();
+      defaultEmail.setId(defaultEmailId);
+
+      List<Integer> playerTypes = emailDAO.getPlayerTypes(id);
+      List<Integer> responseTypes = emailDAO.getResponseTypes(id);
+
+      emailDAO.createPlayerTypes(defaultEmailId, playerTypes);
+      emailDAO.createResponseTypes(defaultEmailId, responseTypes);
+
+      defaultEmail.setPlayerTypes(playerTypes);
+      defaultEmail.setResponseTypes(responseTypes);
+
+      return defaultEmail;
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
 }
