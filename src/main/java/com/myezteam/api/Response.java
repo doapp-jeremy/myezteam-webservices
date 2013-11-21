@@ -28,13 +28,29 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 public class Response {
   public static class ResponseType {
     private static Map<Integer, ResponseType> responseTypes = new HashMap<Integer, Response.ResponseType>();
-    public final int id;
-    public final String label;
+    public int id;
+    public String label;
+
+    private ResponseType() {}
 
     private ResponseType(int id, String label) {
       this.id = id;
       this.label = label;
       responseTypes.put(id, this);
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+      return id;
+    }
+
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+      return label;
     }
 
     /*

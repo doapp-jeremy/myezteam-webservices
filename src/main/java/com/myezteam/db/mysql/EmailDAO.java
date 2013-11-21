@@ -16,6 +16,7 @@ import java.util.List;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
+import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
@@ -58,9 +59,24 @@ public interface EmailDAO {
   @SqlUpdate("INSERT INTO emails (created, title, days_before, content, event_id, rsvp, send, send_on, `default`, team_id) VALUES (UTC_TIMESTAMP(), :e.title, :e.daysBefore, :e.content, :e.eventId, :e.includeRsvpForm, :e.sendType, :e.sendOn, :e.defaultEmail, :e.teamId)")
   public abstract void create(@BindBean("e") Email email);
 
+  @SqlQuery("SELECT LAST_INSERT_ID()")
+  public abstract Long getLastInsertId();
+
   @SqlUpdate("UPDATE emails SET modified = UTC_TIMESTAMP(), title = :e.title, days_before = :e.daysBefore, content = :e.content, rsvp = :e.includeRsvpForm, send = :e.sendType, send_on = :e.sendOn WHERE id = :e.id LIMIT 1")
   public abstract void update(@BindBean("e") Email email);
 
   @SqlUpdate("DELETE FROM emails WHERE id = :email_id LIMIT 1")
   public abstract void delete(@Bind("email_id") Long emailId);
+
+  @SqlBatch("INSERT INTO email_player_types (email_id, player_type_id) VALUES (:email_id, :pt)")
+  public abstract void createPlayerTypes(@Bind("email_id") Long emailId, @Bind("pt") List<Integer> playerTypes);
+
+  @SqlBatch("INSERT INTO email_response_types (email_id, response_type_id) VALUES (:email_id, :rt)")
+  public abstract void createResponseTypes(@Bind("email_id") Long emailId, @Bind("rt") List<Integer> responseTypes);
+
+  @SqlQuery("SELECT player_type_id FROM email_player_types WHERE email_id = :email_id")
+  public abstract List<Integer> getPlayerTypes(@Bind("email_id") Long emailId);
+
+  @SqlQuery("SELECT response_type_id FROM email_response_types WHERE email_id = :email_id")
+  public abstract List<Integer> getResponseTypes(@Bind("email_id") Long emailId);
 }

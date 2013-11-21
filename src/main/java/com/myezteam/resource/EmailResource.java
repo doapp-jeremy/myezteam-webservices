@@ -12,6 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -62,6 +63,9 @@ public class EmailResource extends BaseResource {
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
 
+      email.setPlayerTypes(emailDAO.getPlayerTypes(email.getId()));
+      email.setResponseTypes(emailDAO.getResponseTypes(email.getId()));
+
       return email;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
@@ -86,6 +90,11 @@ public class EmailResource extends BaseResource {
         checkNotNull(email.getTeamId(), "Team id is null, required for default email");
       }
 
+      List<Integer> playerTypes = checkNotNull(email.getPlayerTypes(), "Player types not set");
+      checkArgument(playerTypes.size() > 0, "Must specify at least 1 player type");
+      List<Integer> responseTypes = checkNotNull(email.getResponseTypes(), "Response types not set");
+      checkArgument(responseTypes.size() > 0, "Must specify at least 1 response type");
+
       String sendType = checkNotNull(email.getSendType(), "Send type is null");
       if ("now".equals(sendType)) {
         // TODO: send email now
@@ -104,7 +113,13 @@ public class EmailResource extends BaseResource {
       teamACL.validateWriteAccess(userId, event.getTeamId());
       emailDAO.create(email);
 
-      return null;
+      Long emailId = emailDAO.getLastInsertId();
+      email.setId(emailId);
+
+      emailDAO.createPlayerTypes(emailId, email.getPlayerTypes());
+      emailDAO.createResponseTypes(emailId, email.getResponseTypes());
+
+      return email;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

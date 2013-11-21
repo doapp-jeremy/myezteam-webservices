@@ -26,13 +26,29 @@ public class Player {
   public static class PlayerType {
     private static Map<Integer, PlayerType> playerTypes = new HashMap<Integer, Player.PlayerType>();
 
-    public final int id;
-    public final String label;
+    private int id;
+    private String label;
 
-    private PlayerType(int id, String label) {
+    private PlayerType() {}
+
+    public PlayerType(int id, String label) {
       this.id = id;
       this.label = label;
       playerTypes.put(id, this);
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+      return id;
+    }
+
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+      return label;
     }
 
     public static PlayerType REGULAR = new PlayerType(1, "Regular");

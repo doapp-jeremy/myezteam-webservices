@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
@@ -20,6 +21,7 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
  */
 @JsonSnakeCase
 public class Email {
+
   @JsonProperty
   private Long id;
   @JsonProperty
@@ -40,6 +42,11 @@ public class Email {
   private boolean defaultEmail;
   @JsonProperty
   private Long teamId;
+
+  @JsonProperty
+  private List<Integer> playerTypes;
+  @JsonProperty
+  private List<Integer> responseTypes;
 
   private Email() {}
 
@@ -62,6 +69,13 @@ public class Email {
    */
   public Long getId() {
     return id;
+  }
+
+  /**
+   * @param id the id to set
+   */
+  public void setId(Long id) {
+    this.id = id;
   }
 
   /**
@@ -125,5 +139,33 @@ public class Email {
    */
   public Long getTeamId() {
     return teamId;
+  }
+
+  /**
+   * @return the playerTypes
+   */
+  public List<Integer> getPlayerTypes() {
+    return playerTypes;
+  }
+
+  /**
+   * @param playerTypes the playerTypes to set
+   */
+  public void setPlayerTypes(List<Integer> playerTypes) {
+    this.playerTypes = playerTypes;
+  }
+
+  /**
+   * @return the responseTypes
+   */
+  public List<Integer> getResponseTypes() {
+    return responseTypes;
+  }
+
+  /**
+   * @param responseTypes the responseTypes to set
+   */
+  public void setResponseTypes(List<Integer> responseTypes) {
+    this.responseTypes = responseTypes;
   }
 }
