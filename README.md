@@ -554,34 +554,48 @@ TODO
 ```
 [
     {
-        "id": 11854,
-        "event_id": 1253,
-        "player_id": 360,
-        "response": {
-            "id": 3,
-            "label": "Probably"
+        "id": 3,
+        "event_id": 1254,
+        "player_id": 188,
+        "player_info": {
+            "email": "junker37@gmail.com",
+            "firstName": "Jeremy",
+            "lastName": "McJunkin",
+            "userId": 3,
+            "playerType": {
+                "id": 1,
+                "label": "Regular"
+            }
         },
-        "created": "2013-11-14"
+        "response": {
+            "id": 2,
+            "label": "Yes"
+        },
+        "created": "2007-11-13T16:34:36.000Z",
+        "comment": null,
+        "response_type_id": 2
     },
     {
-        "id": 11855,
-        "event_id": 1253,
-        "player_id": 427,
-        "response": {
-            "id": 3,
-            "label": "Probably"
+        "id": 11,
+        "event_id": 1254,
+        "player_id": 220,
+        "player_info": {
+            "email": "zane131@gmail.com",
+            "firstName": "Zane",
+            "lastName": "Shelley",
+            "userId": 11,
+            "playerType": {
+                "id": 1,
+                "label": "Regular"
+            }
         },
-        "created": "2013-11-14"
-    },
-    {
-        "id": 11870,
-        "event_id": 1253,
-        "player_id": 1080,
         "response": {
-            "id": 5,
-            "label": "No"
+            "id": 1,
+            "label": "No Response"
         },
-        "created": "2013-11-14"
+        "created": "2007-11-20T09:16:10.000Z",
+        "comment": null,
+        "response_type_id": 1
     }
 ]
 ```
