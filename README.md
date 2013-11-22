@@ -164,6 +164,52 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 }
 ```
 
+### GET /teams/{team_id}/players
+#### Get a team's players
+```
+[
+    {
+        "id": 51,
+        "user_id": 64,
+        "team_id": 3,
+        "user": {
+            "id": 64,
+            "email": "boecker@us.ibm.com",
+            "first_name": "Doug",
+            "last_name": "Boecker"
+        },
+        "team": null,
+        "player_type": "Regular"
+    },
+    {
+        "id": 52,
+        "user_id": 5,
+        "team_id": 3,
+        "user": {
+            "id": 5,
+            "email": "cradick@gmail.com",
+            "first_name": "Ryan",
+            "last_name": "Cradick"
+        },
+        "team": null,
+        "player_type": "Regular"
+    },
+    {
+        "id": 54,
+        "user_id": 66,
+        "team_id": 3,
+        "user": {
+            "id": 66,
+            "email": "bwmashak@charter.net",
+            "first_name": "Ben",
+            "last_name": "Mashak"
+        },
+        "team": null,
+        "player_type": "Member"
+    }
+]
+```
+
 ### POST /teams
 #### Create a team
 #### Example data
@@ -362,36 +408,7 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ]
 ```
 
-### GET /players/team/{team_id}
-#### Get players on a team
-```
-[
-    {
-        "id": 68,
-        "team_id": 3,
-        "user": {
-            "id": 3,
-            "email": "junker37@gmail.com",
-            "first_name": "Jeremy",
-            "last_name": "McJunkin"
-        },
-        "player_type": "Regular"
-    },
-    {
-        "id": 51,
-        "team_id": 3,
-        "user": {
-            "id": 64,
-            "email": "boecker@us.ibm.com",
-            "first_name": "Doug",
-            "last_name": "Boecker"
-        },
-        "player_type": "Regular"
-    }
-]
-```
-
-### POST /players/team/{team_id}
+### POST /players
 #### Example data
 ```
 {
@@ -445,10 +462,10 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ]
 ```
 
-### DELETE /players/team/{team_id}/{player_id}
+### DELETE /players/{player_id}
 #### Remove player from team
 
-### PUT /players/team/{team_id}/{player_id}/{player_type_id}
+### PUT /players/{player_id}/{player_type_id}
 #### Change player type
 
 ## Events

@@ -93,7 +93,7 @@ public class PlayerResource extends BaseResource {
 
   @DELETE
   @Path("/team/{team_id}/{player_id}")
-  public void deletePlayer(@Auth Long userId, @PathParam("team_id") Long teamId, @PathParam("player_id") Long playerId,
+  public void deletePlayerOld(@Auth Long userId, @PathParam("team_id") Long teamId, @PathParam("player_id") Long playerId,
       @QueryParam(API_KEY) String apiKey) {
     try {
       checkApiKey(apiKey);
@@ -109,7 +109,7 @@ public class PlayerResource extends BaseResource {
 
   @PUT
   @Path("/team/{team_id}/{player_id}/{player_type_id}")
-  public void changePlayerType(@Auth Long userId, @PathParam("team_id") Long teamId, @PathParam("player_id") Long playerId,
+  public void changePlayerTypeOld(@Auth Long userId, @PathParam("team_id") Long teamId, @PathParam("player_id") Long playerId,
       @PathParam("player_type_id") Long playerTypeId, @QueryParam(API_KEY) String apiKey) {
     try {
       checkApiKey(apiKey);
@@ -117,6 +117,57 @@ public class PlayerResource extends BaseResource {
       checkNotNull(userId, "User id is empty");
       checkNotNull(playerId, "Player id is empty");
       checkNotNull(playerId, "Player type id is empty");
+      teamACL.validateWriteAccess(userId, teamId);
+      teamController.updatePlayerType(teamId, playerId, playerTypeId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @POST
+  public List<Player> addPlayer(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Player player) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(player, "Player is empty");
+      Long teamId = checkNotNull(player.getTeamId(), "Team id is empty");
+      checkNotNull(userId, "User id is empty");
+      checkNotNull(player.getUserId(), "Player user id is empty");
+      checkNotNull(player.getPlayerTypeId(), "Player type id is empty");
+      teamACL.validateWriteAccess(userId, teamId);
+      teamController.addPlayer(teamId, player);
+      return teamController.getPlayers(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @DELETE
+  @Path("/{player_id}")
+  public void deletePlayer(@Auth Long userId, @PathParam("player_id") Long playerId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(userId, "User id is empty");
+      checkNotNull(playerId, "Player id is empty");
+      Player player = playerDAO.findPlayer(playerId);
+      Long teamId = player.getTeamId();
+      teamACL.validateWriteAccess(userId, teamId);
+      teamController.removePlayer(teamId, playerId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @PUT
+  @Path("/{player_id}/{player_type_id}")
+  public void changePlayerType(@Auth Long userId, @PathParam("player_id") Long playerId,
+      @PathParam("player_type_id") Long playerTypeId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(userId, "User id is empty");
+      checkNotNull(playerId, "Player id is empty");
+      checkNotNull(playerId, "Player type id is empty");
+      Player player = playerDAO.findPlayer(playerId);
+      Long teamId = player.getTeamId();
       teamACL.validateWriteAccess(userId, teamId);
       teamController.updatePlayerType(teamId, playerId, playerTypeId);
     } catch (Throwable t) {
