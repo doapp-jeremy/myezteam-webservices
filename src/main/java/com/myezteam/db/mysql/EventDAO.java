@@ -67,7 +67,7 @@ public interface EventDAO {
   @Mapper(EventMapper.class)
   public abstract List<Event> findUpcomingEvents(@Bind("user_id") Long userId);
 
-  @SqlQuery("SELECT Response.id,Response.created,Player.id AS player_id,Event.id AS event_id,Response.comment,COALESCE(Response.response_type_id,Event.response_type_id) AS response_type_id FROM events AS Event LEFT JOIN teams AS Team ON (Team.id = Event.team_id) LEFT JOIN players AS Player ON (Player.team_id = Team.id) LEFT JOIN responses AS Response ON (Response.event_id = Event.id AND Response.player_id = Player.id) WHERE Event.id = :event_id GROUP BY Player.id ORDER BY Response.created DESC")
+  @SqlQuery("SELECT User.*,Player.user_id,Player.player_type_id,Response.id,Response.created,Player.id AS player_id,Event.id AS event_id,Response.comment,COALESCE(Response.response_type_id,Event.response_type_id) AS response_type_id FROM events AS Event LEFT JOIN teams AS Team ON (Team.id = Event.team_id) LEFT JOIN players AS Player ON (Player.team_id = Team.id) LEFT JOIN responses AS Response ON (Response.event_id = Event.id AND Response.player_id = Player.id) LEFT JOIN users AS User ON (User.id = Player.user_id) WHERE Event.id = :event_id GROUP BY Player.id ORDER BY Response.created DESC")
   @Mapper(ResponseMapper.class)
   public abstract List<Response> findResponses(@Bind("event_id") Long eventId);
 

@@ -124,4 +124,11 @@ public class Player {
     return this.teamId;
   }
 
+  /**
+   * @return
+   */
+  public Long getId() {
+    return this.id;
+  }
+
 }

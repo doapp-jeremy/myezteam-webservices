@@ -17,6 +17,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myezteam.api.Player.PlayerType;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
 
@@ -74,12 +75,35 @@ public class Response {
     }
   }
 
+  public static class PlayerInfo {
+    @JsonProperty
+    public final String email;
+    @JsonProperty
+    public final String firstName;
+    @JsonProperty
+    public final String lastName;
+    @JsonProperty
+    public final Long userId;
+    @JsonProperty
+    public final PlayerType playerType;
+
+    public PlayerInfo(Long userId, String email, String firstName, String lastName, PlayerType playerType) {
+      this.userId = userId;
+      this.email = email;
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.playerType = playerType;
+    }
+  }
+
   @JsonProperty
   private Long id;
   @JsonProperty
   private Long eventId;
   @JsonProperty
   private Long playerId;
+  @JsonProperty
+  private PlayerInfo playerInfo;
   @JsonIgnore
   private Long responseTypeId;
   @JsonProperty
@@ -99,16 +123,17 @@ public class Response {
   /**
    * @param long1
    */
-  public Response(Long id, Long eventId, Long playerId) {
-    this.id = id;
-    this.eventId = eventId;
-    this.playerId = playerId;
-  }
+  // public Response(Long id, Long eventId, Long playerId) {
+  // this.id = id;
+  // this.eventId = eventId;
+  // this.playerId = playerId;
+  // }
 
-  public Response(long id, long eventId, long playerId, ResponseType responseType, String created) {
+  public Response(long id, long eventId, long playerId, PlayerInfo playerInfo, ResponseType responseType, String created) {
     this.id = id;
     this.eventId = eventId;
     this.playerId = playerId;
+    this.playerInfo = playerInfo;
     this.response = responseType;
     if (created != null) {
       this.created = formatter.parseDateTime(created);

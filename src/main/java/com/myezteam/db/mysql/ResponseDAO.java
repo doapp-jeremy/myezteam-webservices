@@ -20,7 +20,9 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
+import com.myezteam.api.Player.PlayerType;
 import com.myezteam.api.Response;
+import com.myezteam.api.Response.PlayerInfo;
 import com.myezteam.api.Response.ResponseType;
 
 
@@ -40,7 +42,10 @@ public interface ResponseDAO {
      */
     @Override
     public Response map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"),
+      PlayerInfo playerInfo = new PlayerInfo(r.getLong("user_id"), r.getString("email"), r.getString("first_name"),
+          r.getString("last_name"), PlayerType.get(r.getLong("player_type_id")));
+
+      return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"), playerInfo,
           ResponseType.get(r.getLong("response_type_id")), r.getString("created"));
     }
   }
@@ -48,7 +53,7 @@ public interface ResponseDAO {
   void close();
 
   @Mapper(ResponseMapper.class)
-  @SqlQuery("SELECT Response.* FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id ORDER BY Response.created DESC")
+  @SqlQuery("SELECT Response.*,User.*,Player.user_id,Player.player_type_id FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id ORDER BY Response.created DESC")
   public abstract List<Response> findUsersResponsesForEvent(@Bind("user_id") Long userId, @Bind("event_id") Long eventId);
 
   @Mapper(ResponseMapper.class)
