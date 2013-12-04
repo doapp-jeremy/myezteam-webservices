@@ -46,7 +46,7 @@ public interface ResponseDAO {
           r.getString("last_name"), PlayerType.get(r.getLong("player_type_id")));
 
       return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"), playerInfo,
-          ResponseType.get(r.getLong("response_type_id")), r.getString("created"));
+          ResponseType.get(r.getLong("response_type_id")), r.getString("comment"), r.getString("created"));
     }
   }
 

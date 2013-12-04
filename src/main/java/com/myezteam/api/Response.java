@@ -129,12 +129,14 @@ public class Response {
   // this.playerId = playerId;
   // }
 
-  public Response(long id, long eventId, long playerId, PlayerInfo playerInfo, ResponseType responseType, String created) {
+  public Response(long id, long eventId, long playerId, PlayerInfo playerInfo, ResponseType responseType, String comment,
+      String created) {
     this.id = id;
     this.eventId = eventId;
     this.playerId = playerId;
     this.playerInfo = playerInfo;
     this.response = responseType;
+    this.comment = comment;
     if (created != null) {
       this.created = formatter.parseDateTime(created);
     }
