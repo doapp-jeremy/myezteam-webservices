@@ -76,11 +76,11 @@ public interface EventDAO {
   List<Event> getEventsForTeam(@Bind("team_id") Long teamId);
 
   @Mapper(EventMapper.class)
-  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id")
-  List<Event> getUpdateEventsForTeam(@Bind("team_id") Long teamId);
+  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id AND start >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 DAY) ORDER BY start ASC, end ASC")
+  List<Event> getUpcomingEventsForTeam(@Bind("team_id") Long teamId);
 
   @Mapper(EventMapper.class)
-  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id")
+  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id AND start < UTC_TIMESTAMP() ORDER BY start DESC, end DESC")
   List<Event> getPastEventsForTeam(@Bind("team_id") Long teamId);
 
 }

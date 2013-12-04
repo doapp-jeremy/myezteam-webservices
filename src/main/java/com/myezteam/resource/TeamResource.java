@@ -240,10 +240,23 @@ public class TeamResource extends BaseResource {
       checkNotNull(teamId, "Team id is empty");
       checkNotNull(userId, "User id is empty");
       teamACL.validateReadAccess(userId, teamId);
-      return teamController.getEvents(teamId);
+      return teamController.getUpcomingEvents(teamId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }
   }
 
+  @GET
+  @Path("/{team_id}/past_events")
+  public List<Event> pastEvents(@Auth Long userId, @PathParam("team_id") Long teamId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      checkNotNull(userId, "User id is empty");
+      teamACL.validateReadAccess(userId, teamId);
+      return teamController.getPastEvents(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
 }

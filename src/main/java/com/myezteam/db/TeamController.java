@@ -144,6 +144,8 @@ public abstract class TeamController {
 
   public abstract List<Email> getDefaultEmails(Long teamId);
 
-  public abstract List<Event> getEvents(Long teamId);
+  public abstract List<Event> getUpcomingEvents(Long teamId);
+
+  public abstract List<Event> getPastEvents(Long teamId);
 
 }

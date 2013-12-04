@@ -188,10 +188,20 @@ public class TeamControllerMysql extends TeamController {
   /*
    * (non-Javadoc)
    * 
-   * @see com.myezteam.db.TeamController#getEvents(java.lang.Long)
+   * @see com.myezteam.db.TeamController#getUpcomingEvents(java.lang.Long)
    */
   @Override
-  public List<Event> getEvents(Long teamId) {
-    return eventDAO.getEventsForTeam(teamId);
+  public List<Event> getUpcomingEvents(Long teamId) {
+    return eventDAO.getUpcomingEventsForTeam(teamId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#getPastEvents(java.lang.Long)
+   */
+  @Override
+  public List<Event> getPastEvents(Long teamId) {
+    return eventDAO.getPastEventsForTeam(teamId);
   }
 }
