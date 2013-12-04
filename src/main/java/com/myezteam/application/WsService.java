@@ -105,7 +105,7 @@ public class WsService extends Service<WsConfiguration> {
 
     TokenDAO tokenDAO = new TokenDAO(dynamoDBMapper);
 
-    TeamController teamController = new TeamControllerMysql(teamDAO, playerDAO);
+    TeamController teamController = new TeamControllerMysql(teamDAO, playerDAO, eventDAO);
     TeamACL teamACL = new TeamACL(teamController);
 
     environment.addResource(new OAuthProvider<Long>(new TokenAuthenticator(tokenDAO), "token"));

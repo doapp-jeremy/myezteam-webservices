@@ -71,4 +71,16 @@ public interface EventDAO {
   @Mapper(ResponseMapper.class)
   public abstract List<Response> findResponses(@Bind("event_id") Long eventId);
 
+  @Mapper(EventMapper.class)
+  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id")
+  List<Event> getEventsForTeam(@Bind("team_id") Long teamId);
+
+  @Mapper(EventMapper.class)
+  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id")
+  List<Event> getUpdateEventsForTeam(@Bind("team_id") Long teamId);
+
+  @Mapper(EventMapper.class)
+  @SqlQuery("SELECT * FROM events WHERE team_id = :team_id")
+  List<Event> getPastEventsForTeam(@Bind("team_id") Long teamId);
+
 }

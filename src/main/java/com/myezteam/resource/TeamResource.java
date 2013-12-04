@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import com.google.common.base.Strings;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Email;
+import com.myezteam.api.Event;
 import com.myezteam.api.Player;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
@@ -226,6 +227,20 @@ public class TeamResource extends BaseResource {
       checkNotNull(userId, "User id is empty");
       teamACL.validateReadAccess(userId, teamId);
       return teamController.getPlayers(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @GET
+  @Path("/{team_id}/events")
+  public List<Event> events(@Auth Long userId, @PathParam("team_id") Long teamId, @QueryParam(API_KEY) String apiKey) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      checkNotNull(userId, "User id is empty");
+      teamACL.validateReadAccess(userId, teamId);
+      return teamController.getEvents(teamId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

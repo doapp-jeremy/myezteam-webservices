@@ -12,6 +12,7 @@ package com.myezteam.db.mysql;
 
 import java.util.List;
 import com.myezteam.api.Email;
+import com.myezteam.api.Event;
 import com.myezteam.api.Player;
 import com.myezteam.api.Team;
 import com.myezteam.api.User;
@@ -25,10 +26,12 @@ import com.myezteam.db.TeamController;
 public class TeamControllerMysql extends TeamController {
   private final TeamDAO teamDAO;
   private final PlayerDAO playerDAO;
+  private final EventDAO eventDAO;
 
-  public TeamControllerMysql(TeamDAO teamDAO, PlayerDAO playerDAO) {
+  public TeamControllerMysql(TeamDAO teamDAO, PlayerDAO playerDAO, EventDAO eventDAO) {
     this.teamDAO = teamDAO;
     this.playerDAO = playerDAO;
+    this.eventDAO = eventDAO;
   }
 
   /*
@@ -180,5 +183,15 @@ public class TeamControllerMysql extends TeamController {
   @Override
   public List<Email> getDefaultEmails(Long teamId) {
     return teamDAO.getDefaultEmails(teamId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.myezteam.db.TeamController#getEvents(java.lang.Long)
+   */
+  @Override
+  public List<Event> getEvents(Long teamId) {
+    return eventDAO.getEventsForTeam(teamId);
   }
 }

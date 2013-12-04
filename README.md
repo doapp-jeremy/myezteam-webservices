@@ -347,6 +347,97 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ```
 
 
+### GET /teams/{team_id}/events
+### Get all events for a team
+```
+[
+    {
+        "id": 1290,
+        "name": "Game 1 vs. Team Ramrod",
+        "team_id": 186,
+        "timezone": "America/Chicago",
+        "start": "2013-11-17T10:00:00.000-06:00",
+        "end": "2013-11-17T11:00:00.000-06:00",
+        "description": "Please RSVP with your status.",
+        "location": "Dodge County Ice Arena, Kasson",
+        "default_response": {
+            "id": 1,
+            "label": "No Response"
+        }
+    },
+    {
+        "id": 1291,
+        "name": "Game 2 vs. Beastiality Boys",
+        "team_id": 186,
+        "timezone": "America/Chicago",
+        "start": "2013-11-17T11:00:00.000-06:00",
+        "end": "2013-11-17T12:00:00.000-06:00",
+        "description": "Please RSVP with your status.",
+        "location": "Dodge County Ice Arena, Kasson",
+        "default_response": {
+            "id": 1,
+            "label": "No Response"
+        }
+    },
+    {
+        "id": 1292,
+        "name": "Game 3 vs. Beastiality Boys",
+        "team_id": 186,
+        "timezone": "America/Chicago",
+        "start": "2013-11-24T10:00:00.000-06:00",
+        "end": "2013-11-24T11:00:00.000-06:00",
+        "description": "Please RSVP with your status.",
+        "location": "Dodge County Ice Arena, Kasson",
+        "default_response": {
+            "id": 1,
+            "label": "No Response"
+        }
+    },
+    {
+        "id": 1293,
+        "name": "Game 4 vs. Team Ramrod",
+        "team_id": 186,
+        "timezone": "America/Chicago",
+        "start": "2013-12-01T11:00:00.000-06:00",
+        "end": "2013-12-01T12:00:00.000-06:00",
+        "description": "Please RSVP with your status.",
+        "location": "Dodge County Ice Arena, Kasson",
+        "default_response": {
+            "id": 1,
+            "label": "No Response"
+        }
+    },
+    {
+        "id": 1294,
+        "name": "Game 5 vs. Team Ramrod",
+        "team_id": 186,
+        "timezone": "America/Chicago",
+        "start": "2013-12-08T10:00:00.000-06:00",
+        "end": "2013-12-08T11:00:00.000-06:00",
+        "description": "Please RSVP with your status.",
+        "location": "Dodge County Ice Arena, Kasson",
+        "default_response": {
+            "id": 1,
+            "label": "No Response"
+        }
+    },
+    {
+        "id": 1295,
+        "name": "Game 6 vs. Beastiality Boys",
+        "team_id": 186,
+        "timezone": "America/Chicago",
+        "start": "2013-12-08T11:00:00.000-06:00",
+        "end": "2013-12-08T12:00:00.000-06:00",
+        "description": "Please RSVP with your status.",
+        "location": "Dodge County Ice Arena, Kasson",
+        "default_response": {
+            "id": 1,
+            "label": "No Response"
+        }
+    }
+]
+```
+
 ## User Resource
 
 ### GET /users
