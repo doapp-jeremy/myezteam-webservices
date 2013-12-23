@@ -112,7 +112,7 @@ public class WsService extends Service<WsConfiguration> {
 
     environment.addResource(new EventResource(teamController, teamACL, eventDAO, emailDAO));
     environment.addResource(new TeamResource(teamController, teamACL));
-    environment.addResource(new PlayerResource(teamController, teamACL, playerDAO));
+    environment.addResource(new PlayerResource(teamController, teamACL, playerDAO, userDAO));
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
     environment.addResource(new ResponseResource(teamACL, responseDAO, eventDAO, playerDAO));

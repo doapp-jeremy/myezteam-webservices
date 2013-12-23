@@ -355,7 +355,7 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
     {
         "id": 1294,
         "name": "Game 5 vs. Team Ramrod",
-        "team_id": 186,
+        "team_id": 186,/play
         "timezone": "America/Chicago",
         "start": "2013-12-08T10:00:00.000-06:00",
         "end": "2013-12-08T11:00:00.000-06:00",
@@ -509,10 +509,11 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 
 ### POST /players
 #### Example data
+will create a new user if it doesn't exist
 ```
 {
   "team_id": 3,
-  "user_id": 129,
+  "email": "junker37@gmail.com",
   "player_type_id": 2
 }
 ```

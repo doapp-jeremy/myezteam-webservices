@@ -79,10 +79,19 @@ public class PlayerResource extends BaseResource {
   }
 
   public static class NewPlayer {
+    @JsonProperty("team_id")
+    private long teamId;
     @JsonProperty("email")
     private String email;
     @JsonProperty("player_type_id")
     private int playerTypeId;
+
+    /**
+     * @return the teamId
+     */
+    public long getTeamId() {
+      return teamId;
+    }
 
     /**
      * @return the email
@@ -100,13 +109,11 @@ public class PlayerResource extends BaseResource {
   }
 
   @POST
-  @Path("/team/{team_id}")
-  public List<Player> addPlayer(@Auth Long userId, @PathParam("team_id") Long teamId, @QueryParam(API_KEY) String apiKey,
-      NewPlayer newPlayer) {
+  public List<Player> addPlayer(@Auth Long userId, @QueryParam(API_KEY) String apiKey, NewPlayer newPlayer) {
     try {
       checkApiKey(apiKey);
-      checkNotNull(teamId, "Team id is empty");
       checkNotNull(userId, "User id is empty");
+      long teamId = checkNotNull(newPlayer.getTeamId(), "Team id is empty");
       String email = checkNotNull(newPlayer.getEmail(), "Player user email is empty");
       int playerTypeId = checkNotNull(newPlayer.getPlayerTypeId(), "Player type id is empty");
       teamACL.validateWriteAccess(userId, teamId);
