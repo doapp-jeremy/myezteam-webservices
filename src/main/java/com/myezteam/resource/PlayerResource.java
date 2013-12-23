@@ -182,22 +182,23 @@ public class PlayerResource extends BaseResource {
     }
   }
 
-  @POST
-  public List<Player> addPlayer(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Player player) {
-    try {
-      checkApiKey(apiKey);
-      checkNotNull(player, "Player is empty");
-      Long teamId = checkNotNull(player.getTeamId(), "Team id is empty");
-      checkNotNull(userId, "User id is empty");
-      checkNotNull(player.getUserId(), "Player user id is empty");
-      checkNotNull(player.getPlayerTypeId(), "Player type id is empty");
-      teamACL.validateWriteAccess(userId, teamId);
-      teamController.addPlayer(teamId, player);
-      return teamController.getPlayers(teamId);
-    } catch (Throwable t) {
-      throw new WebApplicationException(t);
-    }
-  }
+  // @POST
+  // public List<Player> addPlayer(@Auth Long userId, @QueryParam(API_KEY) String apiKey, Player
+  // player) {
+  // try {
+  // checkApiKey(apiKey);
+  // checkNotNull(player, "Player is empty");
+  // Long teamId = checkNotNull(player.getTeamId(), "Team id is empty");
+  // checkNotNull(userId, "User id is empty");
+  // checkNotNull(player.getUserId(), "Player user id is empty");
+  // checkNotNull(player.getPlayerTypeId(), "Player type id is empty");
+  // teamACL.validateWriteAccess(userId, teamId);
+  // teamController.addPlayer(teamId, player);
+  // return teamController.getPlayers(teamId);
+  // } catch (Throwable t) {
+  // throw new WebApplicationException(t);
+  // }
+  // }
 
   @DELETE
   @Path("/{player_id}")
