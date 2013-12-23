@@ -88,6 +88,19 @@ public class Player {
     this.team = team;
   }
 
+  /**
+   * @param userId2
+   * @param teamId2
+   * @param playerTypeId
+   * @param id2
+   * @param teamId3
+   */
+  public Player(Long teamId, Long userId, int playerTypeId) {
+    this.teamId = teamId;
+    this.userId = userId;
+    this.type = PlayerType.get(playerTypeId);
+  }
+
   @JsonProperty
   public String getPlayerType() {
     return type.label;

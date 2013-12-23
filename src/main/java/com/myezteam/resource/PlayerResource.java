@@ -23,10 +23,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Player;
+import com.myezteam.api.User;
 import com.myezteam.db.TeamController;
 import com.myezteam.db.mysql.PlayerDAO;
+import com.myezteam.db.mysql.UserDAO;
 import com.yammer.dropwizard.auth.Auth;
 
 
@@ -41,11 +44,13 @@ public class PlayerResource extends BaseResource {
   private final TeamController teamController;
   private final TeamACL teamACL;
   private final PlayerDAO playerDAO;
+  private final UserDAO userDAO;
 
-  public PlayerResource(TeamController teamController, TeamACL teamACL, PlayerDAO playerDAO) {
+  public PlayerResource(TeamController teamController, TeamACL teamACL, PlayerDAO playerDAO, UserDAO userDAO) {
     this.teamController = teamController;
     this.teamACL = teamACL;
     this.playerDAO = playerDAO;
+    this.userDAO = userDAO;
   }
 
   @GET
@@ -67,6 +72,52 @@ public class PlayerResource extends BaseResource {
       checkNotNull(teamId, "Team id is empty");
       checkNotNull(userId, "User id is empty");
       teamACL.validateReadAccess(userId, teamId);
+      return teamController.getPlayers(teamId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  public static class NewPlayer {
+    @JsonProperty("email")
+    private String email;
+    @JsonProperty("player_type_id")
+    private int playerTypeId;
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+      return email;
+    }
+
+    /**
+     * @return the playerTypeId
+     */
+    public int getPlayerTypeId() {
+      return playerTypeId;
+    }
+  }
+
+  @POST
+  @Path("/team/{team_id}")
+  public List<Player> addPlayer(@Auth Long userId, @PathParam("team_id") Long teamId, @QueryParam(API_KEY) String apiKey,
+      NewPlayer newPlayer) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(teamId, "Team id is empty");
+      checkNotNull(userId, "User id is empty");
+      String email = checkNotNull(newPlayer.getEmail(), "Player user email is empty");
+      int playerTypeId = checkNotNull(newPlayer.getPlayerTypeId(), "Player type id is empty");
+      teamACL.validateWriteAccess(userId, teamId);
+      User user = userDAO.findByEmail(email);
+      if (user == null) {
+        // create new user
+        userDAO.createUser(email);
+        user = new User(userDAO.getLastInsertId(), email);
+      }
+      Player player = new Player(teamId, userId, playerTypeId);
+      teamController.addPlayer(teamId, player);
       return teamController.getPlayers(teamId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
