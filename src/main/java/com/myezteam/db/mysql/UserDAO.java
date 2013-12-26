@@ -64,7 +64,7 @@ public interface UserDAO {
   @SqlUpdate("UPDATE users SET email = :u.email, first_name = :u.firstName, last_name = :u.lastName, modified = UTC_TIMESTAMP() WHERE id = :u.id LIMIT 1")
   public void updateUser(@BindBean("u") User user);
 
-  @SqlUpdate("INSERT INTO USERS (email) VALUES (:email)")
+  @SqlUpdate("INSERT INTO users (email) VALUES (:email)")
   public void createUser(@Bind("email") String email);
 
   @SqlQuery("SELECT LAST_INSERT_ID()")
