@@ -123,7 +123,7 @@ public class PlayerResource extends BaseResource {
         userDAO.createUser(email);
         user = new User(userDAO.getLastInsertId(), email);
       }
-      Player player = new Player(teamId, userId, playerTypeId);
+      Player player = new Player(teamId, user.getId(), playerTypeId);
       teamController.addPlayer(teamId, player);
       return teamController.getPlayers(teamId);
     } catch (Throwable t) {
