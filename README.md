@@ -786,6 +786,10 @@ TODO
 ### POST /emails
 #### If "default" is true, team_id must be set
 #### Example data
+possible send types: now, days_before, send_on
+if send_type is send_on, send_on must not be null
+if send_type is days_before, days_before must be non-negative
+a default email can only be of send_type: days_before
 ```
 {
   "title":"Updated title",

@@ -65,6 +65,19 @@ public class PlayerResource extends BaseResource {
   }
 
   @GET
+  @Path("/team/{team_id}/me")
+  public Player myPlayer(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("team_id") Integer teamId) {
+    try {
+      checkApiKey(apiKey);
+      checkNotNull(userId, "User id is empty");
+      checkNotNull(teamId, "Team id is empty");
+      return playerDAO.getPlayerForTeam(teamId, userId);
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  @GET
   @Path("/team/{team_id}")
   public List<Player> players(@Auth Long userId, @PathParam("team_id") Long teamId, @QueryParam(API_KEY) String apiKey) {
     try {

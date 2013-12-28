@@ -79,4 +79,8 @@ public interface PlayerDAO {
   @Mapper(PlayerMapper.class)
   @SqlQuery("SELECT * FROM players WHERE id = :player_id")
   public abstract Player findPlayer(@Bind("player_id") Long playerId);
+
+  @Mapper(PlayerMapper.class)
+  @SqlQuery("SELECT Player.*,User.*,Team.name AS team_name FROM players AS Player LEFT JOIN users AS User ON (User.id = Player.user_id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id) WHERE Player.team_id = :team_id AND Player.user_id = :user_id")
+  public abstract Player getPlayerForTeam(@Bind("team_id") Integer teamId, @Bind("user_id") Long userId);
 }

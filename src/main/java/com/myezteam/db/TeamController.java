@@ -46,7 +46,7 @@ public abstract class TeamController {
     return ownerTeams.get(userId);
   }
 
-  private final LoadingCache<Long, List<Team>> ownerTeams = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS)
+  private final LoadingCache<Long, List<Team>> ownerTeams = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.SECONDS)
       .maximumSize(1000).build(new CacheLoader<Long, List<Team>>() {
         @Override
         public List<Team> load(Long userId) throws Exception {
@@ -64,7 +64,7 @@ public abstract class TeamController {
     return managerTeams.get(userId);
   }
 
-  private final LoadingCache<Long, List<Team>> managerTeams = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS)
+  private final LoadingCache<Long, List<Team>> managerTeams = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.SECONDS)
       .maximumSize(1000).build(new CacheLoader<Long, List<Team>>() {
         @Override
         public List<Team> load(Long userId) throws Exception {
@@ -82,7 +82,7 @@ public abstract class TeamController {
     return playerTeams.get(userId);
   }
 
-  private final LoadingCache<Long, List<Team>> playerTeams = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS)
+  private final LoadingCache<Long, List<Team>> playerTeams = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.SECONDS)
       .maximumSize(1000).build(new CacheLoader<Long, List<Team>>() {
         @Override
         public List<Team> load(Long userId) throws Exception {
