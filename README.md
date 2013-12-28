@@ -507,6 +507,31 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 ]
 ```
 
+### Get /players/team/{team_id}/me
+Gets the player object for the team for the logged in user
+```
+{
+    "id": 1282,
+    "user_id": 666,
+    "team_id": 29,
+    "user": {
+        "id": 666,
+        "email": "tomcaflisch@gmail.com",
+        "first_name": "Tom",
+        "last_name": "Caflisch"
+    },
+    "team": {
+        "id": 29,
+        "owner_id": null,
+        "name": "Friday Broomball",
+        "type": null,
+        "default_location": null,
+        "description": null
+    },
+    "player_type": "Regular"
+}
+```
+
 ### POST /players
 #### Example data
 will create a new user if it doesn't exist
