@@ -42,9 +42,15 @@ public interface EventDAO {
      */
     @Override
     public Event map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new Event(r.getLong("id"), r.getString("name"), r.getLong("team_id"), r.getString("timezone"), r.getString("start"),
-          r.getString("end"),
-          r.getString("description"), r.getString("location"), ResponseType.get(r.getLong("response_type_id")));
+      try {
+        return new Event(r.getLong("id"), r.getString("name"), r.getLong("team_id"), r.getString("timezone"),
+            r.getString("start"),
+            r.getString("end"),
+            r.getString("description"), r.getString("location"), ResponseType.get(r.getLong("response_type_id")));
+      } catch (SQLException e) {
+        e.printStackTrace();
+        throw e;
+      }
     }
   }
 
@@ -67,7 +73,7 @@ public interface EventDAO {
   @Mapper(EventMapper.class)
   public abstract List<Event> findUpcomingEvents(@Bind("user_id") Long userId);
 
-  @SqlQuery("SELECT User.*,Player.user_id,Player.player_type_id,Response.id,Response.created,Player.id AS player_id,Event.id AS event_id,Response.comment,COALESCE(Response.response_type_id,Event.response_type_id) AS response_type_id FROM events AS Event LEFT JOIN teams AS Team ON (Team.id = Event.team_id) LEFT JOIN players AS Player ON (Player.team_id = Team.id) LEFT JOIN responses AS Response ON (Response.event_id = Event.id AND Response.player_id = Player.id) LEFT JOIN users AS User ON (User.id = Player.user_id) WHERE Event.id = :event_id GROUP BY Player.id ORDER BY Response.created DESC")
+  @SqlQuery("SELECT User.id AS user_id,User.first_name,User.last_name,User.email,Player.user_id,Player.player_type_id,Response.id,Response.created,Player.id AS player_id,Event.id AS event_id,Response.comment,COALESCE(Response.response_type_id,Event.response_type_id) AS response_type_id FROM events AS Event LEFT JOIN teams AS Team ON (Team.id = Event.team_id) LEFT JOIN players AS Player ON (Player.team_id = Team.id) LEFT JOIN responses AS Response INNER JOIN (SELECT player_id,MAX(created) AS created FROM responses AS Response WHERE Response.event_id = :event_id GROUP BY Response.player_id) LatestResponse ON (LatestResponse.player_id = Response.player_id AND LatestResponse.created = Response.created) ON (Response.player_id = Player.id) LEFT JOIN users AS User ON (User.id = Player.user_id) WHERE Event.id = :event_id GROUP BY Player.id ORDER BY Response.created DESC")
   @Mapper(ResponseMapper.class)
   public abstract List<Response> findResponses(@Bind("event_id") Long eventId);
 

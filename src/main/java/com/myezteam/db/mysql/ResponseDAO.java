@@ -42,11 +42,16 @@ public interface ResponseDAO {
      */
     @Override
     public Response map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      PlayerInfo playerInfo = new PlayerInfo(r.getLong("user_id"), r.getString("email"), r.getString("first_name"),
-          r.getString("last_name"), PlayerType.get(r.getLong("player_type_id")));
+      try {
+        PlayerInfo playerInfo = new PlayerInfo(r.getLong("user_id"), r.getString("email"), r.getString("first_name"),
+            r.getString("last_name"), PlayerType.get(r.getLong("player_type_id")));
+        return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"), playerInfo,
+            ResponseType.get(r.getLong("response_type_id")), r.getString("comment"), r.getString("created"));
+      } catch (SQLException e) {
+        e.printStackTrace();
+        throw e;
+      }
 
-      return new Response(r.getLong("id"), r.getLong("event_id"), r.getLong("player_id"), playerInfo,
-          ResponseType.get(r.getLong("response_type_id")), r.getString("comment"), r.getString("created"));
     }
   }
 

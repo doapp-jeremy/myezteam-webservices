@@ -148,7 +148,7 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       checkNotNull(eventId, "Event id is null");
-      Event event = eventDAO.findById(eventId);
+      Event event = checkNotNull(eventDAO.findById(eventId), "Invalid event id: " + eventId);
 
       teamACL.validateReadAccess(userId, event.getTeamId());
 
