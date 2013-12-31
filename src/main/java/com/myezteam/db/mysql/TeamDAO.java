@@ -101,7 +101,7 @@ public interface TeamDAO {
   @SqlQuery("SELECT User.* FROM teams AS Team RIGHT JOIN users AS User ON (User.id = Team.user_id) WHERE Team.id = :team_id")
   public User getOwner(@Bind("team_id") Long teamId);
 
-  @SqlUpdate("DELETE FROM teams WHERE team_id = :team_id LIMIT 1")
+  @SqlUpdate("DELETE FROM teams WHERE id = :team_id LIMIT 1")
   public void deleteTeam(@Bind("team_id") Long teamId);
 
   @Mapper(EmailMapper.class)
