@@ -220,7 +220,7 @@ public class PlayerResource extends BaseResource {
       checkApiKey(apiKey);
       checkNotNull(userId, "User id is empty");
       checkNotNull(playerId, "Player id is empty");
-      Player player = playerDAO.findPlayer(playerId);
+      Player player = checkNotNull(playerDAO.findPlayer(playerId), "Could not find player for id: " + playerId);
       Long teamId = player.getTeamId();
       teamACL.validateWriteAccess(userId, teamId);
       teamController.removePlayer(teamId, playerId);
