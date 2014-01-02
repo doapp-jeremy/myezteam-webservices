@@ -169,7 +169,7 @@ public class TeamResource extends BaseResource {
     try {
       checkApiKey(apiKey);
       checkNotNull(teamId, "Team id is empty");
-      teamACL.validateOwner(userId, teamId);
+      teamACL.validateWriteAccess(userId, teamId);
       return teamController.getManagers(teamId);
     } catch (Throwable t) {
       throw new WebApplicationException(t);

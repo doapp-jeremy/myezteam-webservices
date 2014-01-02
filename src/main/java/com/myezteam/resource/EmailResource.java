@@ -93,6 +93,7 @@ public class EmailResource extends BaseResource {
     Body body = new Body().withHtml(htmlContent);
     msg.setBody(body);
     sendEmailRequest.setMessage(msg);
+    ses.sendEmail(sendEmailRequest);
 
     // TODO: update sent time
   }
