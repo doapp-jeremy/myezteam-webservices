@@ -12,6 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -24,6 +25,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
+import com.amazonaws.services.simpleemail.model.Body;
+import com.amazonaws.services.simpleemail.model.Content;
+import com.amazonaws.services.simpleemail.model.Destination;
+import com.amazonaws.services.simpleemail.model.Message;
+import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Email;
 import com.myezteam.api.Event;
@@ -43,11 +50,51 @@ public class EmailResource extends BaseResource {
   private final TeamACL teamACL;
   private final EventDAO eventDAO;
   private final EmailDAO emailDAO;
+  private final AmazonSimpleEmailServiceClient ses;
 
-  public EmailResource(TeamACL teamACL, EventDAO eventDAO, EmailDAO emailDAO) {
+  public EmailResource(TeamACL teamACL, EventDAO eventDAO, EmailDAO emailDAO, AmazonSimpleEmailServiceClient ses) {
     this.teamACL = teamACL;
     this.eventDAO = eventDAO;
     this.emailDAO = emailDAO;
+    this.ses = ses;
+  }
+
+  @POST
+  @Path("/{id}/send")
+  public Email send(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @PathParam("id") Long id) {
+    try {
+      checkNotNull(userId, "Invalid auth");
+      checkApiKey(apiKey);
+      checkNotNull(id, "Email id is null");
+
+      Email email = emailDAO.findById(id);
+      Event event = eventDAO.findById(email.getEventId());
+
+      teamACL.validateWriteAccess(userId, event.getTeamId());
+
+      sendEmail(email);
+
+      return email;
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
+
+  private void sendEmail(Email email) {
+    SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
+    List<String> toAddresses = new ArrayList<String>();
+    toAddresses.add("junker37@gmail.com");
+    toAddresses.add("tomcaflisch@gmail.com");
+    Destination dest = new Destination().withToAddresses(toAddresses);
+    sendEmailRequest.setDestination(dest);
+    Content subjContent = new Content().withData(email.getTitle());
+    Message msg = new Message().withSubject(subjContent);
+    Content htmlContent = new Content().withData(email.getContent());
+    Body body = new Body().withHtml(htmlContent);
+    msg.setBody(body);
+    sendEmailRequest.setMessage(msg);
+
+    // TODO: update sent time
   }
 
   @GET
@@ -101,7 +148,7 @@ public class EmailResource extends BaseResource {
 
       String sendType = checkNotNull(email.getSendType(), "Send type is null");
       if ("now".equals(sendType)) {
-        // TODO: send email now
+        sendEmail(email);
       }
       else if ("days_before".equals(sendType)) {
         checkArgument(email.getDaysBefore() >= 0, "Days before must be > 0");

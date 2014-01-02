@@ -23,6 +23,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.TableNameOverride;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.auth.TokenAuthenticator;
 import com.myezteam.config.AwsConfiguration;
@@ -103,6 +104,8 @@ public class WsService extends Service<WsConfiguration> {
     DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(dynamoDB, new DynamoDBMapperConfig(
         TableNameOverride.withTableNamePrefix(awsConfiguration.getTablePrefix())));
 
+    AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(awsCredentials);
+
     TokenDAO tokenDAO = new TokenDAO(dynamoDBMapper);
 
     TeamController teamController = new TeamControllerMysql(teamDAO, playerDAO, eventDAO);
@@ -116,7 +119,7 @@ public class WsService extends Service<WsConfiguration> {
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
     environment.addResource(new ResponseResource(teamACL, responseDAO, eventDAO, playerDAO));
-    environment.addResource(new EmailResource(teamACL, eventDAO, emailDAO));
+    environment.addResource(new EmailResource(teamACL, eventDAO, emailDAO, ses));
 
     configureExceptionMappers(environment);
 
