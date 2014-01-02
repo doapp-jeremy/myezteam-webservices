@@ -69,7 +69,7 @@ public interface EventDAO {
   @SqlUpdate("DELETE FROM events WHERE id = :id")
   public abstract void delete(@Bind("id") Long eventId);
 
-  @SqlQuery("SELECT Event.* FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_managers AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) LEFT JOIN events AS Event ON (Event.team_id = Team.id) WHERE User.id = :user_id AND Event.start >= UTC_TIMESTAMP() GROUP BY Event.id ORDER BY Event.start ASC LIMIT 3")
+  @SqlQuery("SELECT Event.* FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_managers AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) LEFT JOIN events AS Event ON (Event.team_id = Team.id) WHERE User.id = :user_id AND DATEDIFF(Event.start, UTC_TIMESTAMP()) > -1 GROUP BY Event.id ORDER BY Event.start ASC LIMIT 3")
   @Mapper(EventMapper.class)
   public abstract List<Event> findUpcomingEvents(@Bind("user_id") Long userId);
 
