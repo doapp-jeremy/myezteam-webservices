@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
@@ -95,13 +96,20 @@ public class Event {
     this.end = end;
   }
 
-  @JsonProperty
-  public String getStart() {
+  @JsonIgnore
+  public DateTime getStartDateTime() {
     if (start != null) {
       try {
-        return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(start).toString();
+        return formatter.withZone(DateTimeZone.forID(timezone)).parseDateTime(start);
       } catch (Exception e) {}
     }
+    return null;
+  }
+
+  @JsonProperty
+  public String getStart() {
+    DateTime startDateTime = getStartDateTime();
+    if (startDateTime != null) { return startDateTime.toString(); }
     return start;
   }
 

@@ -12,6 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -24,6 +25,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Email;
 import com.myezteam.api.Event;
@@ -60,7 +65,28 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
 
-      List<Event> events = eventDAO.findUpcomingEvents(userId);
+      List<Event> allEvents = eventDAO.findUpcomingEvents(userId);
+      List<Event> events = new ArrayList<Event>();
+
+      // filter out events based on timezone of event
+      DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendYear(4, 4).appendLiteral("-").appendMonthOfYear(2)
+          .appendLiteral("-").appendDayOfMonth(2).appendLiteral(" ").appendHourOfDay(2).appendLiteral(":").appendMinuteOfHour(2)
+          .appendLiteral(":").appendSecondOfDay(2).toFormatter();
+      DateTime now = DateTime.now(DateTimeZone.UTC);
+      for (Event event : allEvents) {
+        String start = event.getStart();
+        System.out.println(start);
+        // DateTime eventStart = DateTime.parse(event.getStart(),
+        // new
+        // DateTimeFormatterBuilder().append(formatter).toFormatter().withZone(DateTimeZone.forID(event.getTimezone())));
+        DateTime eventStart = event.getStartDateTime();
+        if (eventStart.isAfter(now)) {
+          events.add(event);
+          if (events.size() >= 3) {
+            break;
+          }
+        }
+      }
 
       return events;
     } catch (Throwable t) {
