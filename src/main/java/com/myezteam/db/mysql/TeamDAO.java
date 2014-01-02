@@ -53,7 +53,7 @@ public interface TeamDAO {
 
   @SqlQuery("SELECT "
       + TEAM_FIELDS
-      + " FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_managers AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) WHERE User.id = :user_id GROUP BY Team.id")
+      + " FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_users AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) WHERE User.id = :user_id GROUP BY Team.id")
   @Mapper(TeamMapper.class)
   public List<Team> findUsersTeams(@Bind("user_id") long userId);
 
@@ -90,7 +90,7 @@ public interface TeamDAO {
   @SqlUpdate("INSERT INTO teams_users (team_id,user_id) VALUES (:team_id,:user_id)")
   public void addManager(@Bind("team_id") Long teamId, @Bind("user_id") Long managerId);
 
-  @SqlQuery("SELECT User.id,User.email,User.first_name,User.last_name FROM teams_users AS Manager LEFT JOIN users AS User ON (User.id=Manager.user_id) WHERE Manager.team_id = :team_id GROUP BY User.id")
+  @SqlQuery("SELECT User.id,User.email,User.first_name,User.last_name FROM teams_users AS Manager RIGHT JOIN users AS User ON (User.id=Manager.user_id) WHERE Manager.team_id = :team_id GROUP BY User.id")
   @Mapper(UserMapper.class)
   public List<User> getManagers(@Bind("team_id") Long teamId);
 
