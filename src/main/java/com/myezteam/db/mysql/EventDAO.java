@@ -63,10 +63,10 @@ public interface EventDAO {
   @SqlUpdate("INSERT INTO events (name, team_id, timezone, start, end, description, location, created) VALUES (:e.name, :e.teamId, :e.timezone, :e.start, :e.end, :e.description, :e.location, UTC_TIMESTAMP())")
   public abstract void create(@BindBean("e") Event event);
 
-  @SqlUpdate("UPDATE events SET modified = UTC_TIMESTAMP(), timezone = :e.timezone, :e.start, :e.end, :e.description, :e.location")
+  @SqlUpdate("UPDATE events SET modified = UTC_TIMESTAMP(), name = :e.name, timezone = :e.timezone, start = :e.start, end = :e.end, description = :e.description, location = :e.location WHERE id = :e.id LIMIT 1")
   public abstract void update(@BindBean("e") Event event);
 
-  @SqlUpdate("DELETE FROM events WHERE id = :id")
+  @SqlUpdate("DELETE FROM events WHERE id = :id LIMIT 1")
   public abstract void delete(@Bind("id") Long eventId);
 
   @SqlQuery("SELECT Event.* FROM users AS User LEFT JOIN players AS Player ON (Player.user_id = User.id) LEFT JOIN teams_managers AS TM ON (TM.user_id = User.id) LEFT JOIN teams AS Team ON (Team.id = Player.team_id OR Team.id = TM.team_id OR Team.user_id = User.id) LEFT JOIN events AS Event ON (Event.team_id = Team.id) WHERE User.id = :user_id AND DATEDIFF(Event.start, UTC_TIMESTAMP()) > -1 GROUP BY Event.id ORDER BY Event.start ASC LIMIT 10")

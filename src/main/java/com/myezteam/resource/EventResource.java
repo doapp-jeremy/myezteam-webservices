@@ -141,9 +141,10 @@ public class EventResource extends BaseResource {
       checkNotNull(id, "Event id is null");
       checkArgument(id.equals(event.getId()), "Id's don't match");
       checkNotNull(event.getName(), "Name is null");
-      checkNotNull(event.getTeamId(), "Team id is null");
 
-      teamACL.validateWriteAccess(userId, event.getTeamId());
+      Event storedEvent = checkNotNull(eventDAO.findById(id), "Event does not exist: " + id);
+
+      teamACL.validateWriteAccess(userId, storedEvent.getTeamId());
       eventDAO.update(event);
     } catch (Throwable t) {
       throw new WebApplicationException(t);
