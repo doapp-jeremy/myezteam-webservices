@@ -108,8 +108,7 @@ public class EmailResource extends BaseResource {
         if (false == playerTypes.contains(player.getPlayerTypeId())) {
           continue;
         }
-        String toEmail = player.getUser().getEmail();
-        ResponseType usersResponse = event.getDefaultResponse();
+        ResponseType usersResponse = ResponseType.NO_RESPONSE;
         Response response = responseDAO.findUsersLastResponsesForEvent(player.getUserId(), email.getEventId());
         if (response != null) {
           usersResponse = ResponseType.get(response.getResponseTypeId());
@@ -118,6 +117,7 @@ public class EmailResource extends BaseResource {
           continue;
         }
 
+        String toEmail = player.getUser().getEmail();
         SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
         List<String> toAddresses = new ArrayList<String>();
         toAddresses.add(toEmail);
