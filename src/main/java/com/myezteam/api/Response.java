@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.joda.time.DateTime;
@@ -72,6 +73,13 @@ public class Response {
 
     public static ResponseType get(long id) {
       return responseTypes.get((int) id);
+    }
+
+    /**
+     * @return
+     */
+    public static Collection<ResponseType> instances() {
+      return responseTypes.values();
     }
   }
 

@@ -107,6 +107,13 @@ public class Player {
   }
 
   /**
+   * @return the user
+   */
+  public User getUser() {
+    return user;
+  }
+
+  /**
    * @return the userId
    */
   public Long getUserId() {

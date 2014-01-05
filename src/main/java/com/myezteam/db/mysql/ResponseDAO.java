@@ -62,6 +62,10 @@ public interface ResponseDAO {
   public abstract List<Response> findUsersResponsesForEvent(@Bind("user_id") Long userId, @Bind("event_id") Long eventId);
 
   @Mapper(ResponseMapper.class)
+  @SqlQuery("SELECT Response.*,User.*,Player.user_id,Player.player_type_id FROM users AS User RIGHT JOIN players AS Player ON (Player.user_id = User.id) RIGHT JOIN responses AS Response ON (Response.player_id = Player.id AND Response.event_id = :event_id) WHERE User.id = :user_id ORDER BY Response.created DESC LIMIT 1")
+  public abstract Response findUsersLastResponsesForEvent(@Bind("user_id") Long userId, @Bind("event_id") Long eventId);
+
+  @Mapper(ResponseMapper.class)
   @SqlUpdate("INSERT INTO responses (created, response_type_id, player_id, event_id, comment) VALUES (UTC_TIMESTAMP(), :r.responseTypeId, :r.playerId, :r.eventId, :r.comment)")
   public abstract void create(@BindBean("r") Response response);
 

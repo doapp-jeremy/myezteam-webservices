@@ -143,4 +143,11 @@ public class Event {
   public String getLocation() {
     return location;
   }
+
+  /**
+   * @return the defaultResponse
+   */
+  public ResponseType getDefaultResponse() {
+    return defaultResponse;
+  }
 }

@@ -56,6 +56,12 @@ public interface EmailDAO {
   @SqlQuery("SELECT * FROM emails WHERE id = :email_id")
   public abstract Email findById(@Bind("email_id") Long emailId);
 
+  @SqlQuery("SELECT player_type_id FROM email_player_types WHERE email_id = :email_id")
+  public abstract List<Integer> findPlayerTypes(@Bind("email_id") Long emailId);
+
+  @SqlQuery("SELECT response_type_id FROM email_response_types WHERE email_id = :email_id")
+  public abstract List<Integer> findResponseTypes(@Bind("email_id") Long emailId);
+
   @SqlUpdate("INSERT INTO emails (created, title, days_before, content, event_id, rsvp, send, send_on, `default`, team_id) VALUES (UTC_TIMESTAMP(), :e.title, :e.daysBefore, :e.content, :e.eventId, :e.includeRsvpForm, :e.sendType, :e.sendOn, :e.defaultEmail, :e.teamId)")
   public abstract void create(@BindBean("e") Email email);
 
@@ -85,4 +91,7 @@ public interface EmailDAO {
 
   @SqlUpdate("DELETE FROM email_response_types WHERE email_id = :email_id")
   public abstract void deleteResponseTypes(@Bind("email_id") Long emailId);
+
+  @SqlUpdate("UPDATE emails SET sent = UTC_TIMESTAMP() WHERE id = :email_id LIMIT 1")
+  void setEmailSentNow(@Bind("email_id") Long id);
 }

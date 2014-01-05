@@ -119,7 +119,7 @@ public class WsService extends Service<WsConfiguration> {
     environment.addResource(new UserResource(userDAO));
     environment.addResource(new AuthResource(userDAO, tokenDAO));
     environment.addResource(new ResponseResource(teamACL, responseDAO, eventDAO, playerDAO));
-    environment.addResource(new EmailResource(teamACL, eventDAO, emailDAO, ses));
+    environment.addResource(new EmailResource(teamACL, teamDAO, playerDAO, eventDAO, emailDAO, responseDAO, ses));
 
     configureExceptionMappers(environment);
 

@@ -12,6 +12,8 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -34,8 +36,14 @@ import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Email;
 import com.myezteam.api.Event;
+import com.myezteam.api.Player;
+import com.myezteam.api.Response;
+import com.myezteam.api.Response.ResponseType;
 import com.myezteam.db.mysql.EmailDAO;
 import com.myezteam.db.mysql.EventDAO;
+import com.myezteam.db.mysql.PlayerDAO;
+import com.myezteam.db.mysql.ResponseDAO;
+import com.myezteam.db.mysql.TeamDAO;
 import com.yammer.dropwizard.auth.Auth;
 
 
@@ -48,14 +56,21 @@ import com.yammer.dropwizard.auth.Auth;
 @Path("/v1/emails")
 public class EmailResource extends BaseResource {
   private final TeamACL teamACL;
+  private final TeamDAO teamDAO;
+  private final PlayerDAO playerDAO;
   private final EventDAO eventDAO;
   private final EmailDAO emailDAO;
+  private final ResponseDAO responseDAO;
   private final AmazonSimpleEmailServiceClient ses;
 
-  public EmailResource(TeamACL teamACL, EventDAO eventDAO, EmailDAO emailDAO, AmazonSimpleEmailServiceClient ses) {
+  public EmailResource(TeamACL teamACL, TeamDAO teamDAO, PlayerDAO playerDAO, EventDAO eventDAO, EmailDAO emailDAO,
+      ResponseDAO responseDAO, AmazonSimpleEmailServiceClient ses) {
     this.teamACL = teamACL;
+    this.teamDAO = teamDAO;
+    this.playerDAO = playerDAO;
     this.eventDAO = eventDAO;
     this.emailDAO = emailDAO;
+    this.responseDAO = responseDAO;
     this.ses = ses;
   }
 
@@ -68,11 +83,11 @@ public class EmailResource extends BaseResource {
       checkNotNull(id, "Email id is null");
 
       Email email = emailDAO.findById(id);
-      Event event = eventDAO.findById(email.getEventId());
+      Event event = checkNotNull(eventDAO.findById(email.getEventId()), "Invalid event: " + email.getEventId());
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
 
-      sendEmail(email);
+      sendEmail(email, event);
 
       return email;
     } catch (Throwable t) {
@@ -80,20 +95,83 @@ public class EmailResource extends BaseResource {
     }
   }
 
-  private void sendEmail(Email email) {
-    SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
-    List<String> toAddresses = new ArrayList<String>();
-    toAddresses.add("junker37@gmail.com");
-    toAddresses.add("tomcaflisch@gmail.com");
-    Destination dest = new Destination().withToAddresses(toAddresses);
-    sendEmailRequest.setDestination(dest);
-    Content subjContent = new Content().withData(email.getTitle());
-    Message msg = new Message().withSubject(subjContent);
-    Content htmlContent = new Content().withData(email.getContent());
-    Body body = new Body().withHtml(htmlContent);
-    msg.setBody(body);
-    sendEmailRequest.setMessage(msg);
-    ses.sendEmail(sendEmailRequest);
+  private void sendEmail(Email email, Event event) throws NoSuchAlgorithmException {
+
+    MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+    List<Integer> playerTypes = emailDAO.findPlayerTypes(email.getId());
+    List<Integer> responseTypes = emailDAO.findResponseTypes(email.getId());
+
+    List<Player> players = playerDAO.getPlayersForTeam(event.getTeamId());
+    for (Player player : players) {
+      try {
+        if (false == playerTypes.contains(player.getPlayerTypeId())) {
+          continue;
+        }
+        String toEmail = player.getUser().getEmail();
+        ResponseType usersResponse = event.getDefaultResponse();
+        Response response = responseDAO.findUsersLastResponsesForEvent(player.getUserId(), email.getEventId());
+        if (response != null) {
+          usersResponse = ResponseType.get(response.getResponseTypeId());
+        }
+        if (false == responseTypes.contains(usersResponse.id)) {
+          continue;
+        }
+
+        SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
+        List<String> toAddresses = new ArrayList<String>();
+        toAddresses.add(toEmail);
+        // toAddresses.add("junker37@gmail.com");
+        // toAddresses.add("tomcaflisch@gmail.com");
+
+        Destination dest = new Destination().withToAddresses(toAddresses);
+        sendEmailRequest.setDestination(dest);
+        String title = event.getName() + ": " + email.getTitle();
+        Content subjContent = new Content().withData(title);
+        Message msg = new Message().withSubject(subjContent);
+
+        String content = "";
+        content += "Start: " + event.getStart();
+        content += "<br>";
+        content += "Location: " + event.getLocation();
+        content += "<br>";
+        content += email.getContent();
+        content += "<br>";
+        // $link = '/responses/email_rsvp/' . $event['Event']['id'] . '/' . $player['Player']['id']
+        // .
+        // '/' . $typeId . '/' . $player['Player']['response_key'];
+        // ResponseKeySalt
+        // $responseKey = md5($eventId . $this->responseKeySalt . $playerId);
+        String urlBase = "http://www.myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
+        byte messageDigest[] = md5.digest(new String(event.getId() + "ResponseKeySalt" + player.getId()).getBytes("UTF-8"));
+        String responseKey = new String();
+        for (int i = 0; i < messageDigest.length; i++) {
+          String byteString = Integer.toHexString(0xFF & messageDigest[i]);
+          if (byteString.length() == 1) {
+            byteString = "0" + byteString;
+          }
+          responseKey += byteString;
+        }
+        for (ResponseType responseType : ResponseType.instances()) {
+          if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
+            String url = urlBase + "/" + responseType.id + "/" + responseKey;
+            content += "<br>";
+            content += "<a href='" + url + "'>" + responseType.label + "</a>";
+          }
+        }
+
+        Content htmlContent = new Content().withData(content);
+        Body body = new Body().withHtml(htmlContent);
+        msg.setBody(body);
+        sendEmailRequest.setMessage(msg);
+        ses.sendEmail(sendEmailRequest);
+        // max 5 per second
+        Thread.sleep(200);
+        break;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
 
     // TODO: update sent time
   }
@@ -149,7 +227,7 @@ public class EmailResource extends BaseResource {
 
       String sendType = checkNotNull(email.getSendType(), "Send type is null");
       if ("now".equals(sendType)) {
-        sendEmail(email);
+        sendEmail(email, event);
       }
       else if ("days_before".equals(sendType)) {
         checkArgument(email.getDaysBefore() >= 0, "Days before must be > 0");
