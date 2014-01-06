@@ -68,7 +68,7 @@ public class Player {
   private Long id;
   @JsonIgnore
   private Long userId;
-  @JsonIgnore
+  @JsonProperty("player_type")
   private PlayerType type;
   @JsonProperty
   private Long teamId;
@@ -99,11 +99,6 @@ public class Player {
     this.teamId = teamId;
     this.userId = userId;
     this.type = PlayerType.get(playerTypeId);
-  }
-
-  @JsonProperty
-  public String getPlayerType() {
-    return type.label;
   }
 
   /**

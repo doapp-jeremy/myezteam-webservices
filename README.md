@@ -483,26 +483,34 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
         "user": null,
         "team": {
             "id": 3,
+            "owner_id": null,
             "name": "Sloppy Waffles",
             "type": null,
             "default_location": null,
             "description": null
         },
-        "player_type": "Regular"
+        "player_type": {
+            "id": 1,
+            "label": "Regular"
+        }
     },
     {
-        "id": 269,
+        "id": 152,
         "user_id": 3,
-        "team_id": 38,
+        "team_id": 21,
         "user": null,
         "team": {
-            "id": 38,
-            "name": "IBM Coed BLUE Team",
+            "id": 21,
+            "owner_id": null,
+            "name": "Eagle Drug",
             "type": null,
             "default_location": null,
             "description": null
         },
-        "player_type": "Sub"
+        "player_type": {
+            "id": 2,
+            "label": "Sub"
+        }
     }
 ]
 ```
