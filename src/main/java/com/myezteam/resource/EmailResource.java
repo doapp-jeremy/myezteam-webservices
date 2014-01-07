@@ -137,26 +137,24 @@ public class EmailResource extends BaseResource {
         content += "<br>";
         content += email.getContent();
         content += "<br>";
-        // $link = '/responses/email_rsvp/' . $event['Event']['id'] . '/' . $player['Player']['id']
-        // .
-        // '/' . $typeId . '/' . $player['Player']['response_key'];
-        // ResponseKeySalt
-        // $responseKey = md5($eventId . $this->responseKeySalt . $playerId);
-        String urlBase = "http://www.myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
-        byte messageDigest[] = md5.digest(new String(event.getId() + "ResponseKeySalt" + player.getId()).getBytes("UTF-8"));
-        String responseKey = new String();
-        for (int i = 0; i < messageDigest.length; i++) {
-          String byteString = Integer.toHexString(0xFF & messageDigest[i]);
-          if (byteString.length() == 1) {
-            byteString = "0" + byteString;
+
+        if (email.isIncludeRsvpForm()) {
+          String urlBase = "http://www.myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
+          byte messageDigest[] = md5.digest(new String(event.getId() + "ResponseKeySalt" + player.getId()).getBytes("UTF-8"));
+          String responseKey = new String();
+          for (int i = 0; i < messageDigest.length; i++) {
+            String byteString = Integer.toHexString(0xFF & messageDigest[i]);
+            if (byteString.length() == 1) {
+              byteString = "0" + byteString;
+            }
+            responseKey += byteString;
           }
-          responseKey += byteString;
-        }
-        for (ResponseType responseType : ResponseType.instances()) {
-          if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
-            String url = urlBase + "/" + responseType.id + "/" + responseKey;
-            content += "<br>";
-            content += "<a href='" + url + "'>" + responseType.label + "</a>";
+          for (ResponseType responseType : ResponseType.instances()) {
+            if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
+              String url = urlBase + "/" + responseType.id + "/" + responseKey;
+              content += "<br>";
+              content += "<a href='" + url + "'>" + responseType.label + "</a>";
+            }
           }
         }
 
