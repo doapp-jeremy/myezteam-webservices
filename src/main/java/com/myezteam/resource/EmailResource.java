@@ -226,6 +226,16 @@ public class EmailResource extends BaseResource {
       checkArgument(responseTypes.size() > 0, "Must specify at least 1 response type");
 
       String sendType = checkNotNull(email.getSendType(), "Send type is null");
+
+      teamACL.validateWriteAccess(userId, event.getTeamId());
+      emailDAO.create(email);
+
+      Long emailId = emailDAO.getLastInsertId();
+      email.setId(emailId);
+
+      emailDAO.createPlayerTypes(emailId, email.getPlayerTypes());
+      emailDAO.createResponseTypes(emailId, email.getResponseTypes());
+
       if ("now".equals(sendType)) {
         sendEmail(email, event);
       }
@@ -239,15 +249,6 @@ public class EmailResource extends BaseResource {
       else {
         throw new Exception("Invalid send type, must be one of now|days_before|send_on");
       }
-
-      teamACL.validateWriteAccess(userId, event.getTeamId());
-      emailDAO.create(email);
-
-      Long emailId = emailDAO.getLastInsertId();
-      email.setId(emailId);
-
-      emailDAO.createPlayerTypes(emailId, email.getPlayerTypes());
-      emailDAO.createResponseTypes(emailId, email.getResponseTypes());
 
       return email;
     } catch (Throwable t) {
