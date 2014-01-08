@@ -996,3 +996,6 @@ a default email can only be of send_type: days_before
 }
 ```
 
+### POST /emails/{email_id}/send
+Send an existing email
+
