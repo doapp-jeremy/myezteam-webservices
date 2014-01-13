@@ -68,7 +68,7 @@ public interface EmailDAO {
   @SqlQuery("SELECT LAST_INSERT_ID()")
   public abstract Long getLastInsertId();
 
-  @SqlUpdate("UPDATE emails SET modified = UTC_TIMESTAMP(), title = :e.title, days_before = :e.daysBefore, content = :e.content, rsvp = :e.includeRsvpForm, send = :e.sendType, send_on = :e.sendOn WHERE id = :e.id LIMIT 1")
+  @SqlUpdate("UPDATE emails SET modified = UTC_TIMESTAMP(), title = :e.title, days_before = :e.daysBefore, content = :e.content, rsvp = :e.includeRsvpForm, send = :e.sendType, send_on = :e.sendOn, `default` = :e.defaultEmail WHERE id = :e.id LIMIT 1")
   public abstract void update(@BindBean("e") Email email);
 
   @SqlUpdate("DELETE FROM emails WHERE id = :email_id LIMIT 1")
