@@ -24,10 +24,12 @@ public class User {
   private Long id;
   @JsonProperty
   private String email;
-  @JsonProperty
+  @JsonProperty("first_name")
   private String firstName;
-  @JsonProperty
+  @JsonProperty("last_name")
   private String lastName;
+  @JsonProperty
+  private String password;
 
   private User() {}
 
@@ -89,5 +91,12 @@ public class User {
    */
   public String getLastName() {
     return lastName;
+  }
+
+  /**
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
   }
 }

@@ -459,6 +459,28 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
 }
 ```
 
+### POST /users
+create a user
+example data
+```
+{
+  "first_name":"First",
+  "last_name":"last",
+  "email":"blah@gmail.com",
+  "password":"asdf"
+}
+```
+response
+```
+{
+    "id": 762,
+    "email": "blah@gmail.com",
+    "password": null,
+    "first_name": "First",
+    "last_name": "last"
+}
+```
+
 ### PUT /users
 #### Update the logged in users personal info
 ```
@@ -469,6 +491,33 @@ example: POST /v1/auth/login?api_key=a344ba35-e9b1-4360-9335-1c200f8f8d4d
   "email":"junker37@gmail.com"
 }
 ```
+
+### GET /users/friends
+Get a users friends. ie: players on the same teams
+```
+[
+    {
+        "id": 118,
+        "email": "adastall@yahoo.com",
+        "first_name": "Adam",
+        "last_name": "Stallman"
+    },
+    {
+        "id": 711,
+        "email": "alericks21@gmail.com",
+        "first_name": "Andrew",
+        "last_name": "Erickson"
+    },
+    {
+        "id": 707,
+        "email": "andy.koch@gmail.com",
+        "first_name": "Andy",
+        "last_name": "Koch"
+    }
+]
+```
+
+
 
 ## Player Resource
 

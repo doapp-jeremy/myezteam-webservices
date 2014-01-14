@@ -12,6 +12,7 @@ package com.myezteam.db.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
@@ -67,7 +68,14 @@ public interface UserDAO {
   @SqlUpdate("INSERT INTO users (email) VALUES (:email)")
   public void createUser(@Bind("email") String email);
 
+  @SqlUpdate("INSERT INTO users (first_name, last_name, email, password) VALUES (:u.firstName, :u.lastName, :u.email, md5(CONCAT(:u.password,'PasswordSalt')))")
+  public void createUser(@BindBean("u") User user);
+
   @SqlQuery("SELECT LAST_INSERT_ID()")
   public abstract Long getLastInsertId();
+
+  @Mapper(UserMapper.class)
+  @SqlQuery("SELECT User.id,User.first_name,User.last_name,User.email FROM players AS Player RIGHT JOIN users AS User ON (User.id=Player.user_id) WHERE Player.team_id IN ( :team_ids ) GROUP BY User.id ORDER BY User.email")
+  public List<User> findUsersOnTeams(@Bind("team_ids") String teamIds);
 
 }
