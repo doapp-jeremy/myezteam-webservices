@@ -12,6 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.ws.rs.Consumes;
@@ -25,6 +26,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import com.google.common.base.Strings;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Email;
@@ -240,7 +243,25 @@ public class TeamResource extends BaseResource {
       checkNotNull(teamId, "Team id is empty");
       checkNotNull(userId, "User id is empty");
       teamACL.validateReadAccess(userId, teamId);
-      return teamController.getUpcomingEvents(teamId);
+      List<Event> allEvents = teamController.getUpcomingEvents(teamId);
+      List<Event> events = new ArrayList<Event>();
+      DateTime now = DateTime.now(DateTimeZone.UTC);
+      for (Event event : allEvents) {
+        String start = event.getStart();
+        System.out.println(start);
+        // DateTime eventStart = DateTime.parse(event.getStart(),
+        // new
+        // DateTimeFormatterBuilder().append(formatter).toFormatter().withZone(DateTimeZone.forID(event.getTimezone())));
+        DateTime eventStart = event.getStartDateTime();
+        if (eventStart.isAfter(now)) {
+          events.add(event);
+          if (events.size() >= 3) {
+            break;
+          }
+        }
+      }
+
+      return events;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }
