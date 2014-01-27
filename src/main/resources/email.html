@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="myezteam">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title ng-bind="title + ' | My EZ Team'">My EZTeam</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>{EMAIL TITLE}</h1>
+      <ol class="breadcrumb">
+        <li class="active">{EMAIL DESCRIPTION}</li>
+          </ol>
+    </div>
+  </div><!-- /.row -->
+
+  <div class="row">
+      <div class="col-lg-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title inline">Event Info</h3>
+                </div>
+                
+                <div class="panel-body events">
+                  <div class="list-group">
+            <div class="list-group-item">
+                          <h3>{EVENT NAME}</h3>
+                          <p><span class="text-danger">{EVENT TIME}</span></p>
+                          <p><strong>Your Response:</strong> <span class="label label-{CURRENT RESPONSE LOWERCASE i.e. 'yes', or 'no response'}">{CURRENT USERS RESPONSE}</span></p>
+                        <p><strong>Description:</strong> {EVENT DESCRIPTION}</p>
+                        <p><strong>Location:</strong> {EVENT LOCATION}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-lg-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">RSVP</h3>
+              </div>
+        <div class="panel-body">
+                    <div class="form-group">
+                        <fieldset>
+                            <legend>Your RSVP?</legend>
+                            <p>
+                                <a type="button" class="btn label-yes">Yes</a> 
+                                <a type="button" class="btn label-probably">Probably</a> 
+                                <a type="button" class="btn label-maybe">Maybe</a> 
+                                <a type="button" class="btn label-no">No</a>
+                            </p>
+                        </fieldset>
+                </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.row -->
+</div><!-- /#page-wrapper -->
+
+</body>
+</html>

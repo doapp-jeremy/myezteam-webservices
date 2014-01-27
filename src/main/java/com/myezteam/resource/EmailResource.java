@@ -12,10 +12,13 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,6 +30,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import org.joda.time.DateTime;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.Body;
 import com.amazonaws.services.simpleemail.model.Content;
@@ -95,9 +99,34 @@ public class EmailResource extends BaseResource {
     }
   }
 
-  private void sendEmail(Email email, Event event) throws NoSuchAlgorithmException {
+  private String emailTemplate = null;
 
+  private String getEmailTemplate() {
+    if (emailTemplate == null) {
+      InputStream inputStream = ClassLoader.getSystemResourceAsStream("email_inline.html");
+      Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
+      emailTemplate = scanner.hasNext() ? scanner.next() : "could not load template, please contact admin@myezteam.com";
+      scanner.close();
+      try {
+        inputStream.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return emailTemplate;
+  }
+
+  private void sendEmail(Email email, Event event) throws NoSuchAlgorithmException {
+    String template = getEmailTemplate();
     MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+    template = template.replaceAll("\\{EMAIL TITLE\\}", email.getTitle());
+    template = template.replaceAll("\\{EMAIL DESCRIPTION\\}", email.getContent());
+    template = template.replaceAll("\\{EVENT NAME\\}", event.getName());
+    template = template
+        .replaceAll("\\{EVENT TIME\\}", DateTime.parse(event.getStart()).toString("hh:mma 'on' EEEE, MMM d"));
+    template = template.replaceAll("\\{EVENT DESCRIPTION\\}", event.getDescription());
+    template = template.replaceAll("\\{EVENT LOCATION\\}", event.getLocation());
 
     List<Integer> playerTypes = emailDAO.findPlayerTypes(email.getId());
     List<Integer> responseTypes = emailDAO.findResponseTypes(email.getId());
@@ -120,8 +149,8 @@ public class EmailResource extends BaseResource {
         String toEmail = player.getUser().getEmail();
         SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
         List<String> toAddresses = new ArrayList<String>();
-        toAddresses.add(toEmail);
-        // toAddresses.add("junker37@gmail.com");
+        // toAddresses.add(toEmail);
+        toAddresses.add("junker37@gmail.com");
         // toAddresses.add("tomcaflisch@gmail.com");
 
         Destination dest = new Destination().withToAddresses(toAddresses);
@@ -154,11 +183,12 @@ public class EmailResource extends BaseResource {
               String url = urlBase + "/" + responseType.id + "/" + responseKey;
               content += "<br>";
               content += "<a href='" + url + "'>" + responseType.label + "</a>";
+              template = template.replaceFirst("\\{RSVP HREF " + responseType.label.toUpperCase() + "\\}", url);
             }
           }
         }
 
-        Content htmlContent = new Content().withData(content);
+        Content htmlContent = new Content().withData(template);
         Body body = new Body().withHtml(htmlContent);
         msg.setBody(body);
         sendEmailRequest.setMessage(msg);
@@ -234,7 +264,7 @@ public class EmailResource extends BaseResource {
       emailDAO.createPlayerTypes(emailId, email.getPlayerTypes());
       emailDAO.createResponseTypes(emailId, email.getResponseTypes());
 
-      if ("now".equals(sendType)) {
+      if ("now".equalsIgnoreCase(sendType)) {
         sendEmail(email, event);
       }
       else if ("days_before".equals(sendType)) {
