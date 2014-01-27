@@ -94,4 +94,5 @@ public interface EmailDAO {
 
   @SqlUpdate("UPDATE emails SET sent = UTC_TIMESTAMP() WHERE id = :email_id LIMIT 1")
   void setEmailSentNow(@Bind("email_id") Long id);
+
 }

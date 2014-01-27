@@ -154,18 +154,19 @@ public class EmailResource extends BaseResource {
         // toAddresses.add("tomcaflisch@gmail.com");
 
         Destination dest = new Destination().withToAddresses(toAddresses);
+        dest.withBccAddresses("admin@myezteam.com");
         sendEmailRequest.setDestination(dest);
         String title = event.getName() + ": " + email.getTitle();
         Content subjContent = new Content().withData(title);
         Message msg = new Message().withSubject(subjContent);
 
-        String content = "";
-        content += "Start: " + event.getStart();
-        content += "<br>";
-        content += "Location: " + event.getLocation();
-        content += "<br>";
-        content += email.getContent();
-        content += "<br>";
+        // String content = "";
+        // content += "Start: " + event.getStart();
+        // content += "<br>";
+        // content += "Location: " + event.getLocation();
+        // content += "<br>";
+        // content += email.getContent();
+        // content += "<br>";
 
         if (email.isIncludeRsvpForm()) {
           String urlBase = "http://www.myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
@@ -181,8 +182,8 @@ public class EmailResource extends BaseResource {
           for (ResponseType responseType : ResponseType.instances()) {
             if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
               String url = urlBase + "/" + responseType.id + "/" + responseKey;
-              content += "<br>";
-              content += "<a href='" + url + "'>" + responseType.label + "</a>";
+              // content += "<br>";
+              // content += "<a href='" + url + "'>" + responseType.label + "</a>";
               template = template.replaceFirst("\\{RSVP HREF " + responseType.label.toUpperCase() + "\\}", url);
             }
           }
@@ -201,7 +202,7 @@ public class EmailResource extends BaseResource {
       }
     }
 
-    // TODO: update sent time
+    emailDAO.setEmailSentNow(email.getId());
   }
 
   @GET
