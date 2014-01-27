@@ -121,12 +121,12 @@ public class EmailResource extends BaseResource {
     MessageDigest md5 = MessageDigest.getInstance("MD5");
 
     template = template.replaceAll("\\{EMAIL TITLE\\}", email.getTitle());
-    template = template.replaceAll("\\{EMAIL DESCRIPTION\\}", email.getContent());
+    template = template.replaceAll("\\{EMAIL DESCRIPTION\\}", (email.getContent() != null) ? email.getContent() : "");
     template = template.replaceAll("\\{EVENT NAME\\}", event.getName());
     template = template
         .replaceAll("\\{EVENT TIME\\}", DateTime.parse(event.getStart()).toString("hh:mma 'on' EEEE, MMM d"));
-    template = template.replaceAll("\\{EVENT DESCRIPTION\\}", event.getDescription());
-    template = template.replaceAll("\\{EVENT LOCATION\\}", event.getLocation());
+    template = template.replaceAll("\\{EVENT DESCRIPTION\\}", (event.getDescription() != null) ? event.getDescription() : "");
+    template = template.replaceAll("\\{EVENT LOCATION\\}", (event.getLocation() != null) ? event.getLocation() : "");
 
     List<Integer> playerTypes = emailDAO.findPlayerTypes(email.getId());
     List<Integer> responseTypes = emailDAO.findResponseTypes(email.getId());
@@ -149,8 +149,8 @@ public class EmailResource extends BaseResource {
         String toEmail = player.getUser().getEmail();
         SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
         List<String> toAddresses = new ArrayList<String>();
-        // toAddresses.add(toEmail);
-        toAddresses.add("junker37@gmail.com");
+        toAddresses.add(toEmail);
+        // toAddresses.add("junker37@gmail.com");
         // toAddresses.add("tomcaflisch@gmail.com");
 
         Destination dest = new Destination().withToAddresses(toAddresses);
