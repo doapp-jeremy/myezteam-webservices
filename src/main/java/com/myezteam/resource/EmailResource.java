@@ -196,7 +196,6 @@ public class EmailResource extends BaseResource {
         ses.sendEmail(sendEmailRequest);
         // max 5 per second
         Thread.sleep(200);
-        break;
       } catch (Exception e) {
         e.printStackTrace();
       }
