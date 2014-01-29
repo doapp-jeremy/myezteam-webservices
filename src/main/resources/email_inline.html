@@ -1,14 +1,137 @@
-<!-- Inliner Build Version 4380b7741bb759d6cb997545f3add21ad48f010b -->
-<!DOCTYPE html>
-<html lang="en" ng-app="myezteam" style="font-family: sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; font-size: 62.5%; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important;">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
-<title ng-bind="title + ' | My EZ Team'">My EZTeam</title>
-<!-- Bootstrap core CSS --><!-- Add custom CSS here --><link rel="http://new.myezteam.com/email/css/font-awesome.min.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>{TITLE}</title>
+	<style type="text/css">
+		/* Based on The MailChimp Reset INLINE: Yes. */  
+		/* Client-specific Styles */
+		#outlook a {padding:0;} /* Force Outlook to provide a "view in browser" menu link. */
+		body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;} 
+		/* Prevent Webkit and Windows Mobile platforms from changing default font sizes.*/ 
+		.ExternalClass {width:100%;} /* Force Hotmail to display emails at full width */  
+		.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
+		/* Forces Hotmail to display normal line spacing.  More on that: http://www.emailonacid.com/forum/viewthread/43/ */ 
+		#backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}
+		/* End reset */
+
+		/* Some sensible defaults for images
+		Bring inline: Yes. */
+		img {outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;} 
+		a img {border:none;} 
+		.image_fix {display:block;}
+
+		/* Yahoo paragraph fix
+		Bring inline: Yes. */
+		p {margin: 1em 0;}
+
+		/* Hotmail header color reset
+		Bring inline: Yes. */
+		h1, h2, h3, h4, h5, h6 {color: black !important;}
+
+		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: blue !important;}
+
+		h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+		color: red !important; /* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
+		}
+
+		h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+		color: purple !important; /* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */
+		}
+
+		/* Outlook 07, 10 Padding issue fix
+		Bring inline: No.*/
+		table td {border-collapse: collapse;}
+
+		/* Remove spacing around Outlook 07, 10 tables
+		Bring inline: Yes */
+		table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+
+		/* Styling your links has become much simpler with the new Yahoo.  In fact, it falls in line with the main credo of styling in email and make sure to bring your styles inline.  Your link colors will be uniform across clients when brought inline.
+		Bring inline: Yes. */
+		a {color: orange;}
+
+
+		/***************************************************
+		****************************************************
+		MOBILE TARGETING
+		****************************************************
+		***************************************************/
+		@media only screen and (max-device-width: 480px) {
+			/* Part one of controlling phone number linking for mobile. */
+			a[href^="tel"], a[href^="sms"] {
+						text-decoration: none;
+						color: blue; /* or whatever your want */
+						pointer-events: none;
+						cursor: default;
+					}
+
+			.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+						text-decoration: default;
+						color: orange !important;
+						pointer-events: auto;
+						cursor: default;
+					}
+
+		}
+
+		/* More Specific Targeting */
+
+		@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+		/* You guessed it, ipad (tablets, smaller screens, etc) */
+			/* repeating for the ipad */
+			a[href^="tel"], a[href^="sms"] {
+						text-decoration: none;
+						color: blue; /* or whatever your want */
+						pointer-events: none;
+						cursor: default;
+					}
+
+			.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+						text-decoration: default;
+						color: orange !important;
+						pointer-events: auto;
+						cursor: default;
+					}
+		}
+
+		@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+		/* Put your iPhone 4g styles in here */ 
+		}
+
+		/* Android targeting */
+		@media only screen and (-webkit-device-pixel-ratio:.75){
+		/* Put CSS for low density (ldpi) Android layouts in here */
+		}
+		@media only screen and (-webkit-device-pixel-ratio:1){
+		/* Put CSS for medium density (mdpi) Android layouts in here */
+		}
+		@media only screen and (-webkit-device-pixel-ratio:1.5){
+		/* Put CSS for high density (hdpi) Android layouts in here */
+		}
+		/* end Android targeting */
+
+	</style>
+
+	<!-- Targeting Windows Mobile -->
+	<!--[if IEMobile 7]>
+	<style type="text/css">
+	
+	</style>
+	<![endif]-->   
+
+	<!-- ***********************************************
+	****************************************************
+	END MOBILE TARGETING
+	****************************************************
+	************************************************ -->
+
+	<!--[if gte mso 9]>
+		<style>
+		/* Target Outlook 2007 and 2010 */
+		</style>
+	<![endif]-->
 </head>
 <body style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.428571429; color: #000 !important; background-color: transparent !important; text-shadow: none !important; box-shadow: none !important; margin: 50px 0 0;" bgcolor="transparent !important">
 <style type="text/css">
@@ -1394,14 +1517,16 @@ cursor: pointer;
   }
 }
 </style>
-
-<div id="page-wrapper" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; width: 100%; padding: 5px 15px;">
-  <div class="row" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-left: -15px; margin-right: -15px;">
+  
+  
+  
+  <div id="page-wrapper" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #333 !important; width: 100%; padding: 15px 25px;">
+  <div class="row" style="color: #333 !important; background-color: transparent !important; box-shadow: none !important; margin-left: -15px; margin-right: -15px;">
     <div class="col-lg-12" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; position: relative; min-height: 1px; padding-left: 15px; padding-right: 15px;">
-      <h1 style="font-size: 36px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin: 20px 0 10px;">{EMAIL TITLE}</h1>
-      <ol class="breadcrumb" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-top: 0; margin-bottom: 20px; border-radius: 4px; padding: 8px 15px; list-style: none;">
-<li class="active" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; display: inline-block;">{EMAIL DESCRIPTION}</li>
-          </ol>
+      <h1 style="font-size: 36px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #333 !important; background-color: transparent !important; box-shadow: none !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin: 20px 0 10px;">{EMAIL TITLE}</h1>
+      <div class="breadcrumb" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: #F5F5F5 !important; box-shadow: none !important; margin-top: 0; margin-bottom: 20px; border-radius: 4px; padding: 8px 15px; list-style: none;">
+<p class="active" style="margin: 0; color: #999999 !important; display: inline-block;">{EMAIL DESCRIPTION}</p>
+          </div>
 </div>
   </div>
 <!-- /.row -->
@@ -1409,19 +1534,19 @@ cursor: pointer;
   <div class="row" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-left: -15px; margin-right: -15px;">
       <div class="col-lg-12" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; position: relative; min-height: 1px; padding-left: 15px; padding-right: 15px;">
       <div class="panel panel-info" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-bottom: 20px; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); border: 1px solid #bce8f1;">
-        <div class="panel-heading" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; border-bottom-width: 1px; border-bottom-style: solid; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px 15px; border: #bce8f1;">
-            <h3 class="panel-title inline" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; page-break-after: avoid; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin-top: 0; margin-bottom: 0; font-size: 16px; display: inline;">Event Info</h3>
+        <div class="panel-heading" style="color: #3A87AD !important; background-color: #D9EDF7 !important; border-color: #BCE8F1; border-bottom-width: 1px; border-bottom-style: solid; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px 15px; border: #bce8f1;">
+            <h3 class="panel-title inline" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #3A87AD !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; page-break-after: avoid; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin-top: 0; margin-bottom: 0; font-size: 16px; display: inline;">Event Info</h3>
                 </div>
                 
                 <div class="panel-body events" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; padding: 15px;">
                   <div class="list-group" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-bottom: 20px; padding-left: 0;">
             <div class="list-group-item" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; position: relative; display: block; margin-bottom: 0; border-top-right-radius: 4px; border-top-left-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; padding: 10px 15px; border: 1px solid #dddddd;">
-                          <h3 style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; page-break-after: avoid; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin-top: 5px; margin-bottom: 10px; font-size: 24px;">{EVENT NAME}</h3>
-                          <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;"><span class="text-danger" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important;">{EVENT TIME}</span></p>
+                          <h3 style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #333 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; page-break-after: avoid; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin-top: 5px; margin-bottom: 10px; font-size: 24px;">{EVENT NAME}</h3>
+                          <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;"><span class="text-danger" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #B94A48 !important; background-color: transparent !important; box-shadow: none !important;">{EVENT TIME}</span></p>
                           <!-- <p><strong>Your Response:</strong> <span class="label label-{CURRENT RESPONSE LOWERCASE i.e. 'yes', or 'no response'}">{CURRENT USERS RESPONSE}</span></p>
                            -->
-                        <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;"><strong style="font-weight: bold; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important;">Description:</strong> {EVENT DESCRIPTION}</p>
-                        <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;"><strong style="font-weight: bold; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important;">Location:</strong> {EVENT LOCATION}</p>
+                        <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;"><strong style="font-weight: bold; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #333 !important; background-color: transparent !important; box-shadow: none !important;">Description:</strong> {EVENT DESCRIPTION}</p>
+                        <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;"><strong style="font-weight: bold; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #333 !important; background-color: transparent !important; box-shadow: none !important;">Location:</strong> {EVENT LOCATION}</p>
             </div>
           </div>
         </div>
@@ -1430,18 +1555,18 @@ cursor: pointer;
   
     <div class="col-lg-12" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; position: relative; min-height: 1px; padding-left: 15px; padding-right: 15px;">
       <div class="panel panel-info" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-bottom: 20px; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); border: 1px solid #bce8f1;">
-        <div class="panel-heading" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; border-bottom-width: 1px; border-bottom-style: solid; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px 15px; border: #bce8f1;">
-          <h3 class="panel-title" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; page-break-after: avoid; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin-top: 0; margin-bottom: 0; font-size: 16px;">RSVP</h3>
+        <div class="panel-heading" style="color: #3A87AD !important; background-color: #D9EDF7 !important; border-color: #BCE8F1; border-bottom-width: 1px; border-bottom-style: solid; border-top-right-radius: 3px; border-top-left-radius: 3px; padding: 10px 15px; border: #bce8f1;">
+          <h3 class="panel-title" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #3A87AD !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; page-break-after: avoid; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.1; margin-top: 0; margin-bottom: 0; font-size: 16px;">RSVP</h3>
               </div>
         <div class="panel-body" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; padding: 15px;">
                     <div class="form-group" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin-bottom: 15px;">
                         <fieldset style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; margin: 0; padding: 0; border: 0 solid #c0c0c0;">
-<legend style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; display: block; width: 100%; margin-bottom: 20px; font-size: 21px; line-height: inherit; border-bottom-color: #e5e5e5; border-bottom-style: solid; padding: 0; border-width: 0 0 1px;">Your RSVP?</legend>
-                            <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #000 !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;">
-                                <a type="button" class="btn label-yes" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; color: #000 !important; text-decoration: underline; text-shadow: none !important; background-color: transparent !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent;">Yes</a> 
-                                <a type="button" class="btn label-probably" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; color: #000 !important; text-decoration: underline; text-shadow: none !important; background-color: transparent !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent;">Probably</a> 
-                                <a type="button" class="btn label-maybe" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; color: #000 !important; text-decoration: underline; text-shadow: none !important; background-color: transparent !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent;">Maybe</a> 
-                                <a type="button" class="btn label-no" style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; color: #000 !important; text-decoration: underline; text-shadow: none !important; background-color: transparent !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent;">No</a>
+<legend style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #333 !important; background-color: transparent !important; box-shadow: none !important; display: block; width: 100%; margin-bottom: 20px; font-size: 21px; line-height: inherit; border-bottom-color: #e5e5e5; border-bottom-style: solid; padding: 0; border-width: 0 0 1px;">Your RSVP?</legend>
+                            <p style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; text-shadow: none !important; color: #FFF !important; background-color: transparent !important; box-shadow: none !important; orphans: 3; widows: 3; margin: 0 0 10px;">
+                                <a type="button" class="btn label-yes" style="background-color: #5CB85C !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent; color: #FFF;">Yes</a> 
+                                <a type="button" class="btn label-probably" style=" background-color: #E8E83F !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent; color: #FFF;">Probably</a> 
+                                <a type="button" class="btn label-maybe" style="background-color: #F0AA4E !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent; color: #FFF;">Maybe</a> 
+                                <a type="button" class="btn label-no" style=" background-color: #D9534F !important; box-shadow: none !important; display: inline-block; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.428571429; text-align: center; vertical-align: middle; cursor: pointer; border-radius: 4px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; padding: 6px 12px; border: 1px solid transparent; color: #FFF;">No</a>
                             </p>
                         </fieldset>
 </div>
@@ -1452,6 +1577,5 @@ cursor: pointer;
 <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
-
 </body>
 </html>
