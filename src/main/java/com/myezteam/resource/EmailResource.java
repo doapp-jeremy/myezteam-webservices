@@ -116,16 +116,7 @@ public class EmailResource extends BaseResource {
   }
 
   private void sendEmail(Email email, Event event) throws NoSuchAlgorithmException {
-    String template = getEmailTemplate();
     MessageDigest md5 = MessageDigest.getInstance("MD5");
-
-    template = template.replaceAll("\\{EMAIL TITLE\\}", email.getTitle());
-    template = template.replaceAll("\\{EMAIL DESCRIPTION\\}", (email.getContent() != null) ? email.getContent() : "");
-    template = template.replaceAll("\\{EVENT NAME\\}", event.getName());
-    template = template
-        .replaceAll("\\{EVENT TIME\\}", DateTime.parse(event.getStart()).toString("hh:mma 'on' EEEE, MMM d"));
-    template = template.replaceAll("\\{EVENT DESCRIPTION\\}", (event.getDescription() != null) ? event.getDescription() : "");
-    template = template.replaceAll("\\{EVENT LOCATION\\}", (event.getLocation() != null) ? event.getLocation() : "");
 
     List<Integer> playerTypes = emailDAO.findPlayerTypes(email.getId());
     List<Integer> responseTypes = emailDAO.findResponseTypes(email.getId());
@@ -144,6 +135,14 @@ public class EmailResource extends BaseResource {
         if (false == responseTypes.contains(usersResponse.id)) {
           continue;
         }
+        String template = getEmailTemplate();
+        template = template.replaceAll("\\{EMAIL TITLE\\}", email.getTitle());
+        template = template.replaceAll("\\{EMAIL DESCRIPTION\\}", (email.getContent() != null) ? email.getContent() : "");
+        template = template.replaceAll("\\{EVENT NAME\\}", event.getName());
+        template = template
+            .replaceAll("\\{EVENT TIME\\}", DateTime.parse(event.getStart()).toString("hh:mma 'on' EEEE, MMM d"));
+        template = template.replaceAll("\\{EVENT DESCRIPTION\\}", (event.getDescription() != null) ? event.getDescription() : "");
+        template = template.replaceAll("\\{EVENT LOCATION\\}", (event.getLocation() != null) ? event.getLocation() : "");
 
         String toEmail = player.getUser().getEmail();
         SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
@@ -151,12 +150,12 @@ public class EmailResource extends BaseResource {
         // TODO: add team managers as reply to
         // sendEmailRequest.withReplyToAddresses(replyToAddresses);
         List<String> toAddresses = new ArrayList<String>();
-        toAddresses.add(toEmail);
+        // toAddresses.add(toEmail);
         // toAddresses.add("junker37@gmail.com");
         // toAddresses.add("tomcaflisch@gmail.com");
 
         Destination dest = new Destination().withToAddresses(toAddresses);
-        dest.withBccAddresses("admin@myezteam.com");
+        dest.withBccAddresses("admin@myezteam.com", "junker37@gmail.com");
         sendEmailRequest.setDestination(dest);
         String title = event.getName() + ": " + email.getTitle();
         Content subjContent = new Content().withData(title);
