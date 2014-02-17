@@ -99,9 +99,8 @@ public class EmailResource extends BaseResource {
     }
   }
 
-  private String emailTemplate = null;
-
   private String getEmailTemplate() {
+    String emailTemplate = null;
     if (emailTemplate == null) {
       InputStream inputStream = ClassLoader.getSystemResourceAsStream("email_inline.html");
       Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
@@ -148,6 +147,9 @@ public class EmailResource extends BaseResource {
 
         String toEmail = player.getUser().getEmail();
         SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
+        // Collection<String> replyToAddresses = new ArrayList<String>();
+        // TODO: add team managers as reply to
+        // sendEmailRequest.withReplyToAddresses(replyToAddresses);
         List<String> toAddresses = new ArrayList<String>();
         toAddresses.add(toEmail);
         // toAddresses.add("junker37@gmail.com");
