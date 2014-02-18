@@ -150,7 +150,7 @@ public class EmailResource extends BaseResource {
         // TODO: add team managers as reply to
         // sendEmailRequest.withReplyToAddresses(replyToAddresses);
         List<String> toAddresses = new ArrayList<String>();
-        // toAddresses.add(toEmail);
+        toAddresses.add(toEmail);
         // toAddresses.add("junker37@gmail.com");
         // toAddresses.add("tomcaflisch@gmail.com");
 
