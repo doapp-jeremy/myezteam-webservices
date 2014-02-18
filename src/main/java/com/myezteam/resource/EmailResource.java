@@ -155,7 +155,7 @@ public class EmailResource extends BaseResource {
         // toAddresses.add("tomcaflisch@gmail.com");
 
         Destination dest = new Destination().withToAddresses(toAddresses);
-        dest.withBccAddresses("admin@myezteam.com", "junker37@gmail.com");
+        dest.withBccAddresses("admin@myezteam.com");
         sendEmailRequest.setDestination(dest);
         String title = event.getName() + ": " + email.getTitle();
         Content subjContent = new Content().withData(title);
