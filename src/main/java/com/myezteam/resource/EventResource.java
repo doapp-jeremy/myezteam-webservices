@@ -124,8 +124,15 @@ public class EventResource extends BaseResource {
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
       eventDAO.create(event);
+      Long eventId = eventDAO.getLastInsertId();
+      event.setId(eventId);
 
-      return null;
+      for (Email defaultEmail : emailDAO.findDefaultEmailsForTeam(event.getTeamId())) {
+        Email eventEmail = Email.createEventEmail(event, defaultEmail);
+        emailDAO.create(eventEmail);
+      }
+
+      return event;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }

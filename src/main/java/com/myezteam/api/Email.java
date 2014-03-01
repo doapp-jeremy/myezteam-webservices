@@ -65,6 +65,21 @@ public class Email {
   }
 
   /**
+   * @param id2
+   * @param defaultEmail2
+   */
+  private Email(Long eventId, Email defaultEmail) {
+    this.defaultEmail = false;
+    this.eventId = eventId;
+    this.title = defaultEmail.title;
+    this.daysBefore = defaultEmail.daysBefore;
+    this.content = defaultEmail.content;
+    this.includeRsvpForm = defaultEmail.includeRsvpForm;
+    this.sendType = defaultEmail.sendType;
+    this.teamId = defaultEmail.teamId;
+  }
+
+  /**
    * @return the id
    */
   public Long getId() {
@@ -181,5 +196,10 @@ public class Email {
    */
   public void setTeamId(Long teamId) {
     this.teamId = teamId;
+  }
+
+  public static Email createEventEmail(Event event, Email defaultEmail) {
+    Email email = new Email(event.getId(), defaultEmail);
+    return email;
   }
 }

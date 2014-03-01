@@ -95,4 +95,8 @@ public interface EmailDAO {
   @SqlUpdate("UPDATE emails SET sent = UTC_TIMESTAMP() WHERE id = :email_id LIMIT 1")
   void setEmailSentNow(@Bind("email_id") Long id);
 
+  @Mapper(EmailMapper.class)
+  @SqlQuery("SELECT * FROM emails WHERE default = 1 AND team_id = :team_id")
+  public abstract List<Email> findDefaultEmailsForTeam(@Bind("team_id") Long teamId);
+
 }

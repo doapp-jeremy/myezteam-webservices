@@ -150,4 +150,12 @@ public class Event {
   public ResponseType getDefaultResponse() {
     return defaultResponse;
   }
+
+  /**
+   * @param eventId
+   */
+  public void setId(Long id) {
+    this.id = id;
+  }
+
 }

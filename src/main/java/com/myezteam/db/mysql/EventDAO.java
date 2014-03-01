@@ -89,4 +89,7 @@ public interface EventDAO {
   @SqlQuery("SELECT * FROM events WHERE team_id = :team_id AND start < UTC_TIMESTAMP() ORDER BY start DESC, end DESC")
   List<Event> getPastEventsForTeam(@Bind("team_id") Long teamId);
 
+  @SqlQuery("SELECT LAST_INSERT_ID()")
+  public abstract Long getLastInsertId();
+
 }
