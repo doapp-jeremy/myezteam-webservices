@@ -96,7 +96,7 @@ public interface EmailDAO {
   void setEmailSentNow(@Bind("email_id") Long id);
 
   @Mapper(EmailMapper.class)
-  @SqlQuery("SELECT * FROM emails WHERE default = 1 AND team_id = :team_id")
+  @SqlQuery("SELECT * FROM emails WHERE `default` = 1 AND team_id = :team_id")
   public abstract List<Email> findDefaultEmailsForTeam(@Bind("team_id") Long teamId);
 
 }
