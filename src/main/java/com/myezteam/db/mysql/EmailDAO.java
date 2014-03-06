@@ -93,10 +93,15 @@ public interface EmailDAO {
   public abstract void deleteResponseTypes(@Bind("email_id") Long emailId);
 
   @SqlUpdate("UPDATE emails SET sent = UTC_TIMESTAMP() WHERE id = :email_id LIMIT 1")
-  void setEmailSentNow(@Bind("email_id") Long id);
+  public abstract void setEmailSentNow(@Bind("email_id") Long id);
 
   @Mapper(EmailMapper.class)
   @SqlQuery("SELECT * FROM emails WHERE `default` = 1 AND team_id = :team_id")
   public abstract List<Email> findDefaultEmailsForTeam(@Bind("team_id") Long teamId);
 
+  @SqlUpdate("INSERT INTO email_player_types (email_id,player_type_id) SELECT :dest_email_id,player_type_id FROM email_player_types WHERE email_id = :source_email_id")
+  public abstract void copyPlayerTypes(@Bind("source_email_id") long sourceEmailId, @Bind("dest_email_id") long destEmailId);
+
+  @SqlUpdate("INSERT INTO email_response_types (email_id,response_type_id) SELECT :dest_email_id,response_type_id FROM email_response_types WHERE email_id = :source_email_id")
+  public abstract void copyResponseTypes(@Bind("source_email_id") long sourceEmailId, @Bind("dest_email_id") long destEmailId);
 }

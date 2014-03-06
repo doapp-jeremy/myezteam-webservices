@@ -130,6 +130,11 @@ public class EventResource extends BaseResource {
       for (Email defaultEmail : emailDAO.findDefaultEmailsForTeam(event.getTeamId())) {
         Email eventEmail = Email.createEventEmail(event, defaultEmail);
         emailDAO.create(eventEmail);
+        long newEmailId = emailDAO.getLastInsertId();
+        // create player types and reponse types
+        emailDAO.copyPlayerTypes(defaultEmail.getId(), newEmailId);
+        // create player types and reponse types
+        emailDAO.copyResponseTypes(defaultEmail.getId(), newEmailId);
       }
 
       return event;
