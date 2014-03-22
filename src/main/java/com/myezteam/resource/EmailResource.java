@@ -170,7 +170,7 @@ public class EmailResource extends BaseResource {
         // content += "<br>";
 
         if (email.isIncludeRsvpForm()) {
-          String urlBase = "http://www.myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
+          String urlBase = "http://myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
           byte messageDigest[] = md5.digest(new String(event.getId() + "ResponseKeySalt" + player.getId()).getBytes("UTF-8"));
           String responseKey = new String();
           for (int i = 0; i < messageDigest.length; i++) {
