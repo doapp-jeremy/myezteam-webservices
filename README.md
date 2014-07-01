@@ -884,6 +884,7 @@ TODO
   "response_type_id":2,
   "event_id":1254,
   "player_id":188
+  "comment":"Let's go!"
 }
 ```
 
