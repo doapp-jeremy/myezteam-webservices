@@ -38,25 +38,22 @@ public interface UserDAO {
      */
     @Override
     public User map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new User(r.getLong("id"), r.getString("email"), r.getString("first_name"), r.getString("last_name"));
+      return new User(r.getLong("id"), r.getString("email"), r.getString("first_name"), r.getString("last_name"), r.getInt("password_forgotten"), r.getString("password_change_key"));
     }
 
   }
 
-  /**
-   * @param userId
-   * @return
-   */
-  @SqlQuery("SELECT * FROM users WHERE id = :id")
   @Mapper(UserMapper.class)
+  @SqlQuery("SELECT * FROM users WHERE id = :id")
   public User findById(@Bind("id") Long id);
 
-  /**
-   * @return
-   */
-  @SqlQuery("SELECT * FROM users WHERE email = :email")
   @Mapper(UserMapper.class)
+  @SqlQuery("SELECT * FROM users WHERE email = :email")
   public User findByEmail(@Bind("email") String email);
+
+  @Mapper(UserMapper.class)
+  @SqlQuery("SELECT * FROM users WHERE password_change_key IS NOT NULL AND password_change_key = :passwordChangeKey")
+  public User findByPasswordChangeKey(@Bind("passwordChangeKey") String passwordChangeKey);
 
   @SqlQuery("SELECT * FROM users WHERE email = :email AND password = md5(CONCAT(:password,'PasswordSalt'))")
   @Mapper(UserMapper.class)
@@ -71,11 +68,17 @@ public interface UserDAO {
   @SqlUpdate("INSERT INTO users (first_name, last_name, email, password) VALUES (:u.firstName, :u.lastName, :u.email, md5(CONCAT(:u.password,'PasswordSalt')))")
   public void createUser(@BindBean("u") User user);
 
+  @SqlUpdate("UPDATE users SET password_change_key = null, password = md5(CONCAT(:newPassword,'PasswordSalt')) WHERE id = :u.id")
+  public void updatePassword(@BindBean("u") User existingUser, @Bind("newPassword") String newPassword);
+
   @SqlQuery("SELECT LAST_INSERT_ID()")
   public abstract Long getLastInsertId();
 
   @Mapper(UserMapper.class)
   @SqlQuery("SELECT User.id,User.first_name,User.last_name,User.email FROM players AS Player RIGHT JOIN users AS User ON (User.id=Player.user_id) WHERE Player.team_id IN ( :team_ids ) GROUP BY User.id ORDER BY User.email")
   public List<User> findUsersOnTeams(@Bind("team_ids") String teamIds);
+
+  @SqlUpdate("UPDATE users SET password_forgotten = password_forgotten + 1, password_change_key = :passwordChangeKey WHERE email = :email LIMIT 1")
+  public void setPasswordChangeKey(@Bind("email") String email, @Bind("passwordChangeKey") String passwordChangeKey);
 
 }

@@ -518,6 +518,27 @@ Get a users friends. ie: players on the same teams
 ```
 
 
+### POST /users/reset
+Reset users password
+```
+{
+  "email": "junker37@gmail.com",
+  "redirect_url":"http://myezteam.com/change_password"
+}
+```
+The user will get an email with link to the redirect_url passed in with the password change key appended for the user.
+ie: http://myezteam.com/change_password/735b8a08faf827bce845ebbcd3598815
+The site should then post that password change url along with the new password to the /users/change_password endpoint below
+
+### POST /users/change_password
+Changes a users password for a password change key
+```
+{
+  "password_change_key":"735b8a08faf827bce845ebbcd3598815",
+  "new_password":"testing"
+}
+```
+
 
 ## Player Resource
 

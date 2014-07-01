@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
@@ -30,6 +31,10 @@ public class User {
   private String lastName;
   @JsonProperty
   private String password;
+  @JsonIgnore
+  private Integer passwordForgottenCount;
+  @JsonIgnore
+  private String passwordChangeKey;
 
   private User() {}
 
@@ -42,17 +47,17 @@ public class User {
     this.email = email;
   }
 
-  /**
-   * @param long1
-   * @param string
-   * @param string2
-   * @param string3
-   */
-  public User(long id, String email, String firstName, String lastName) {
+  public User(long id, String email, String firstName, String lastName, Integer passwordForgottenCount, String passwordChangeKey) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.passwordForgottenCount = passwordForgottenCount;
+    this.passwordChangeKey = passwordChangeKey;
+  }
+
+  public User(long id, String email, String firstName, String lastName) {
+    this(id, email, firstName, lastName, null, null);
   }
 
   /*
@@ -98,5 +103,12 @@ public class User {
    */
   public String getPassword() {
     return password;
+  }
+
+  /**
+   * @return the passwordForgottenCount
+   */
+  public Integer getPasswordForgottenCount() {
+    return passwordForgottenCount;
   }
 }
