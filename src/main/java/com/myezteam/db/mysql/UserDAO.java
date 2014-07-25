@@ -33,14 +33,20 @@ public interface UserDAO {
     /*
      * (non-Javadoc)
      * 
-     * @see org.skife.jdbi.v2.tweak.ResultSetMapper#map(int, java.sql.ResultSet,
-     * org.skife.jdbi.v2.StatementContext)
+     * @see org.skife.jdbi.v2.tweak.ResultSetMapper#map(int, java.sql.ResultSet, org.skife.jdbi.v2.StatementContext)
      */
     @Override
     public User map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-      return new User(r.getLong("id"), r.getString("email"), r.getString("first_name"), r.getString("last_name"), r.getInt("password_forgotten"), r.getString("password_change_key"));
-    }
+      Integer passwordForgotten = null;
+      String passwordChangeKey = null;
+      try {
+        passwordForgotten = r.getInt("password_forgotten");
+        passwordChangeKey = r.getString("password_change_key");
+      } catch (Throwable t) {
 
+      }
+      return new User(r.getLong("id"), r.getString("email"), r.getString("first_name"), r.getString("last_name"), passwordForgotten, passwordChangeKey);
+    }
   }
 
   @Mapper(UserMapper.class)
