@@ -10,6 +10,7 @@
  */
 package com.myezteam.api;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,6 +151,13 @@ public class Response {
     }
   }
 
+  public Response(Long eventId, Long playerId, ResponseType responseType, String comment) {
+    this.eventId = checkNotNull(eventId, "eventId is null");
+    this.playerId = checkNotNull(playerId, "playerId is null");
+    this.response = checkNotNull(responseType, "responseType is null");
+    this.comment = checkNotNull(comment, "comment is null");
+  }
+
   public Long getId() {
     return this.id;
   }
@@ -173,7 +181,9 @@ public class Response {
    */
   @JsonProperty("created")
   public String getCreated() {
-    if (created != null) { return created.toString(); }
+    if (created != null) {
+      return created.toString();
+    }
     return null;
   }
 
@@ -181,7 +191,9 @@ public class Response {
    * @return
    */
   public Long getResponseTypeId() {
-    if (response != null) { return (long) response.id; }
+    if (response != null) {
+      return (long) response.id;
+    }
     return responseTypeId;
   }
 
