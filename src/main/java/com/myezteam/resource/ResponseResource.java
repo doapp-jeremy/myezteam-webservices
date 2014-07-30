@@ -10,6 +10,7 @@
  */
 package com.myezteam.resource;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -91,4 +92,24 @@ public class ResponseResource extends BaseResource {
     }
   }
 
+  @GET
+  @Path("/email_rsvp/{event_id}/{player_id}/{response_type_id}/{response_key}")
+  public String emailRsvp(/* @QueryParam(API_KEY) String apiKey, */@PathParam("event_id") Long eventId, @PathParam("player_id") Long playerId, @PathParam("response_type_id") Long responseTypeId,
+      @PathParam("response_key") String responseKey) {
+    try {
+      // checkApiKey(apiKey);
+
+      checkNotNull(eventId, "event id is null");
+      checkNotNull(playerId, "player id is null");
+      checkNotNull(responseTypeId, "response type is null");
+      checkNotNull(responseKey, "response key is null");
+
+      String expectedResponseKey = ResourceUtil.generateResponseKey(eventId, playerId);
+      checkArgument(responseKey.equals(expectedResponseKey), "response key does not match");
+
+      return "success";
+    } catch (Throwable t) {
+      throw new WebApplicationException(t);
+    }
+  }
 }

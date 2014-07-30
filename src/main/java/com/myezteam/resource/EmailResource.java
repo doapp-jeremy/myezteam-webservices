@@ -14,7 +14,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,8 +115,6 @@ public class EmailResource extends BaseResource {
   }
 
   private void sendEmail(Email email, Event event) throws NoSuchAlgorithmException {
-    MessageDigest md5 = MessageDigest.getInstance("MD5");
-
     List<Integer> playerTypes = emailDAO.findPlayerTypes(email.getId());
     List<Integer> responseTypes = emailDAO.findResponseTypes(email.getId());
 
@@ -171,15 +168,7 @@ public class EmailResource extends BaseResource {
 
         if (email.isIncludeRsvpForm()) {
           String urlBase = "http://myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
-          byte messageDigest[] = md5.digest(new String(event.getId() + "ResponseKeySalt" + player.getId()).getBytes("UTF-8"));
-          String responseKey = new String();
-          for (int i = 0; i < messageDigest.length; i++) {
-            String byteString = Integer.toHexString(0xFF & messageDigest[i]);
-            if (byteString.length() == 1) {
-              byteString = "0" + byteString;
-            }
-            responseKey += byteString;
-          }
+          String responseKey = ResourceUtil.generateResponseKey(event.getId(), player.getId());
           for (ResponseType responseType : ResponseType.instances()) {
             if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
               String url = urlBase + "/" + responseType.id + "/" + responseKey;
