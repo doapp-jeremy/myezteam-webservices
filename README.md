@@ -919,8 +919,51 @@ TODO
     }
 ]
 ```
-
-
+### GET /response/email_rsvp/{event_id}/{player_id}/{response_type_id}/{response_key}
+#### Used to rsvp a user from an email link without auth
+#### Response
+```
+{
+  "response": {
+    "id": null,
+    "event_id": 1529,
+    "player_id": 1526,
+    "player_info": null,
+    "response": {
+      "id": 3,
+      "label": "Probably"
+    },
+    "created": null,
+    "comment": "rsvp via email link",
+    "response_type_id": 3
+  },
+  "player": {
+    "id": 1526,
+    "user_id": 666,
+    "team_id": 281,
+    "user": null,
+    "team": null,
+    "player_type": {
+      "id": 1,
+      "label": "Regular"
+    }
+  },
+  "event": {
+    "id": 1529,
+    "name": "ddd",
+    "team_id": 281,
+    "timezone": "America/Chicago",
+    "start": "2014-08-29T23:00:34.000-05:00",
+    "end": "2014-08-29T04:00:34.000-05:00",
+    "description": "aaa",
+    "location": null,
+    "default_response": {
+      "id": 1,
+      "label": "No Response"
+    }
+  }
+}
+```
 ## Email Resource
 
 ### POST /emails
