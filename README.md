@@ -921,6 +921,10 @@ TODO
 ```
 ### GET /responses/email_rsvp/{event_id}/{player_id}/{response_type_id}/{response_key}
 #### Used to rsvp a user from an email link without auth
+#### Example
+```
+GET /responses/email_rsvp/1529/1526/3/8e59a0deb215c3092ebac4c0e7b18d4a
+```
 #### Response
 ```
 {
