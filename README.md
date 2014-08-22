@@ -919,7 +919,7 @@ TODO
     }
 ]
 ```
-### GET /response/email_rsvp/{event_id}/{player_id}/{response_type_id}/{response_key}
+### GET /responses/email_rsvp/{event_id}/{player_id}/{response_type_id}/{response_key}
 #### Used to rsvp a user from an email link without auth
 #### Response
 ```
