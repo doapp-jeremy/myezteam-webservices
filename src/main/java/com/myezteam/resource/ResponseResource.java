@@ -12,7 +12,9 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -95,7 +97,8 @@ public class ResponseResource extends BaseResource {
 
   @GET
   @Path("/email_rsvp/{event_id}/{player_id}/{response_type_id}/{response_key}")
-  public Response emailRsvp(/* @QueryParam(API_KEY) String apiKey, */@PathParam("event_id") Long eventId, @PathParam("player_id") Long playerId, @PathParam("response_type_id") Long responseTypeId,
+  public Map<String, Object> emailRsvp(/* @QueryParam(API_KEY) String apiKey, */@PathParam("event_id") Long eventId, @PathParam("player_id") Long playerId,
+      @PathParam("response_type_id") Long responseTypeId,
       @PathParam("response_key") String responseKey) {
     try {
       // checkApiKey(apiKey);
@@ -116,7 +119,12 @@ public class ResponseResource extends BaseResource {
       teamACL.validateWriteAccess(player.getUserId(), player.getTeamId());
 
       responseDAO.create(response);
-      return response;
+
+      Map<String, Object> result = new HashMap<>();
+      result.put("player", player);
+      result.put("response", response);
+      result.put("event", eventDAO.findById(eventId));
+      return result;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }
