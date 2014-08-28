@@ -267,25 +267,27 @@ public class EmailResource extends BaseResource {
       else {
         throw new Exception("Invalid send type, must be one of now|days_before|send_on");
       }
-
-      if (email.isDefaultEmail()) {
-        // make all existing events have it
-        for (Event eventToSetEmailFor : eventDAO.getEventsForTeam(event.getTeamId())) {
-          if (eventToSetEmailFor.getId().equals(email.getEventId())) {
-            continue;
-          }
-          DateTime start = DateTime.parse(eventToSetEmailFor.getStart());
-          if (start.isAfterNow()) {
-            Email newEmail = new Email(email.getTitle(), email.getDaysBefore(), email.getContent(), eventToSetEmailFor.getId(), email.isIncludeRsvpForm(), sendType, null, false,
-                email.getTeamId());
-            emailDAO.create(newEmail);
-          }
-        }
-      }
-
+      createEmailsFromDefaultIfNecessary(email);
       return email;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
+    }
+  }
+
+  private void createEmailsFromDefaultIfNecessary(Email email) {
+    if (email.isDefaultEmail()) {
+      // make all existing events have it
+      for (Event eventToSetEmailFor : eventDAO.getEventsForTeam(email.getTeamId())) {
+        if (eventToSetEmailFor.getId().equals(email.getEventId())) {
+          continue;
+        }
+        DateTime start = DateTime.parse(eventToSetEmailFor.getStart());
+        if (start.isAfterNow()) {
+          Email newEmail = new Email(email.getTitle(), email.getDaysBefore(), email.getContent(), eventToSetEmailFor.getId(), email.isIncludeRsvpForm(), email.getSendType(), null, false,
+              email.getTeamId());
+          emailDAO.create(newEmail);
+        }
+      }
     }
   }
 
@@ -340,6 +342,8 @@ public class EmailResource extends BaseResource {
       emailDAO.createPlayerTypes(email.getId(), email.getPlayerTypes());
       emailDAO.deleteResponseTypes(email.getId());
       emailDAO.createResponseTypes(email.getId(), email.getResponseTypes());
+
+      createEmailsFromDefaultIfNecessary(email);
 
       return email;
     } catch (Throwable t) {
