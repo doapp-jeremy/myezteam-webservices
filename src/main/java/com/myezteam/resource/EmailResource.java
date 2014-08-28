@@ -268,6 +268,21 @@ public class EmailResource extends BaseResource {
         throw new Exception("Invalid send type, must be one of now|days_before|send_on");
       }
 
+      if (email.isDefaultEmail()) {
+        // make all existing events have it
+        for (Event eventToSetEmailFor : eventDAO.getEventsForTeam(event.getTeamId())) {
+          if (eventToSetEmailFor.getId().equals(email.getEventId())) {
+            continue;
+          }
+          DateTime start = DateTime.parse(eventToSetEmailFor.getStart());
+          if (start.isAfterNow()) {
+            Email newEmail = new Email(email.getTitle(), email.getDaysBefore(), email.getContent(), eventToSetEmailFor.getId(), email.isIncludeRsvpForm(), sendType, null, false,
+                email.getTeamId());
+            emailDAO.create(newEmail);
+          }
+        }
+      }
+
       return email;
     } catch (Throwable t) {
       throw new WebApplicationException(t);

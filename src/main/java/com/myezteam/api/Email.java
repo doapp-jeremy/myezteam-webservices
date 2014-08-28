@@ -64,6 +64,11 @@ public class Email {
     this.teamId = teamId;
   }
 
+  public Email(String title, Integer daysBefore, String content, Long eventId, Boolean includeRsvpForm, String sendType,
+      String sendOn, Boolean defaultEmail, Long teamId) {
+    this(null, title, daysBefore, content, eventId, includeRsvpForm, sendType, sendOn, defaultEmail, teamId);
+  }
+
   /**
    * @param id2
    * @param defaultEmail2
