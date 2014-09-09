@@ -116,7 +116,7 @@ public class ResponseResource extends BaseResource {
       Response response = new Response(eventId, playerId, responseType, "rsvp via email link");
       Player player = playerDAO.findPlayer(response.getPlayerId());
       checkNotNull(player, "Invalid player id");
-      teamACL.validateWriteAccess(player.getUserId(), player.getTeamId());
+      teamACL.validateReadAccess(player.getUserId(), player.getTeamId());
 
       responseDAO.create(response);
 
