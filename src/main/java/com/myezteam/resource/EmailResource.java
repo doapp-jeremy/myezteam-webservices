@@ -167,7 +167,7 @@ public class EmailResource extends BaseResource {
         // content += "<br>";
 
         if (email.isIncludeRsvpForm()) {
-          String urlBase = "http://myezteam.com/responses/email_rsvp/" + event.getId() + "/" + player.getId();
+          String urlBase = "http://myezteam.com/index.html#/responses/email_rsvp/" + event.getId() + "/" + player.getId();
           String responseKey = ResourceUtil.generateResponseKey(event.getId(), player.getId());
           for (ResponseType responseType : ResponseType.instances()) {
             if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
