@@ -255,9 +255,6 @@ public class TeamResource extends BaseResource {
         DateTime eventStart = event.getStartDateTime();
         if (eventStart.isAfter(now)) {
           events.add(event);
-          if (events.size() >= 3) {
-            break;
-          }
         }
       }
 
