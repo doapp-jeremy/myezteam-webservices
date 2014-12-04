@@ -286,6 +286,10 @@ public class EmailResource extends BaseResource {
           Email newEmail = new Email(email.getTitle(), email.getDaysBefore(), email.getContent(), eventToSetEmailFor.getId(), email.isIncludeRsvpForm(), email.getSendType(), null, false,
               email.getTeamId());
           emailDAO.create(newEmail);
+          long newEmailId = emailDAO.getLastInsertId();
+          // copy player types
+          emailDAO.createPlayerTypes(newEmailId, email.getPlayerTypes());
+          emailDAO.createResponseTypes(newEmailId, email.getResponseTypes());
         }
       }
     }
