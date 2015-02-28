@@ -72,13 +72,14 @@ public class EventResource extends BaseResource {
       DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendYear(4, 4).appendLiteral("-").appendMonthOfYear(2)
           .appendLiteral("-").appendDayOfMonth(2).appendLiteral(" ").appendHourOfDay(2).appendLiteral(":").appendMinuteOfHour(2)
           .appendLiteral(":").appendSecondOfDay(2).toFormatter();
-      DateTime now = DateTime.now(DateTimeZone.UTC).plusHours(1);
+
       for (Event event : allEvents) {
         String start = event.getStart();
         System.out.println(start);
         // DateTime eventStart = DateTime.parse(event.getStart(),
         // new
         // DateTimeFormatterBuilder().append(formatter).toFormatter().withZone(DateTimeZone.forID(event.getTimezone())));
+        DateTime now = DateTime.now(DateTimeZone.forID(event.getTimezone())).minusHours(1);
         DateTime eventStart = event.getStartDateTime();
         if (eventStart.isAfter(now)) {
           events.add(event);
