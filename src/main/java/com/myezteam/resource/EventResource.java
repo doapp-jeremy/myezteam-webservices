@@ -60,10 +60,12 @@ public class EventResource extends BaseResource {
   }
 
   @GET
-  public List<Event> list(@Auth Long userId, @QueryParam(API_KEY) String apiKey) {
+  public List<Event> list(@Auth Long userId, @QueryParam(API_KEY) String apiKey, @QueryParam("limit") Integer limit) {
     try {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
+      
+      limit = limit == null ? 10 : limit; 
 
       List<Event> allEvents = eventDAO.findUpcomingEvents(userId);
       List<Event> events = new ArrayList<Event>();
@@ -83,7 +85,7 @@ public class EventResource extends BaseResource {
         DateTime eventStart = event.getStartDateTime();
         if (eventStart.isAfter(now)) {
           events.add(event);
-          if (events.size() >= 3) {
+          if (events.size() >= limit) {
             break;
           }
         }
