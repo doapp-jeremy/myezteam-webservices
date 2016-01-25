@@ -65,7 +65,7 @@ public class EventResource extends BaseResource {
       checkNotNull(userId, "Invalid auth");
       checkApiKey(apiKey);
       
-      limit = limit == null ? 10 : limit; 
+      limit = limit == null ? 11 : limit; 
 
       List<Event> allEvents = eventDAO.findUpcomingEvents(userId);
       List<Event> events = new ArrayList<Event>();
