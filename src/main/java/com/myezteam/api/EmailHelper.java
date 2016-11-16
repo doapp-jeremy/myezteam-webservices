@@ -120,8 +120,8 @@ public class EmailHelper {
         sendEmailRequest.setMessage(msg);
         SendEmailResult result = ses.sendEmail(sendEmailRequest);
         log.debug("SES message id: " + result.getMessageId());
-        // max 5 per second
-        Thread.sleep(200);
+        // max 1 per second
+        Thread.sleep(1000);
       } catch (Exception e) {
         e.printStackTrace();
       }
