@@ -207,4 +207,15 @@ public class Email {
     Email email = new Email(event.getId(), defaultEmail);
     return email;
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return title + " - " + sendType;
+  }
+
 }

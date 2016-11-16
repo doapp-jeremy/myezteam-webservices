@@ -91,4 +91,8 @@ public interface EventDAO {
   @SqlQuery("SELECT LAST_INSERT_ID()")
   public abstract Long getLastInsertId();
 
+  @SqlQuery("SELECT * FROM events WHERE id = :id")
+  @Mapper(EventMapper.class)
+  public Event getEvent(@Bind("id") Long eventId);
+
 }

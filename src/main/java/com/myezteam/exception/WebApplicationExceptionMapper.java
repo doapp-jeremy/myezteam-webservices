@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import org.apache.log4j.Logger;
-import com.amazonaws.services.cloudfront.model.InvalidArgumentException;
 
 
 /**
@@ -38,7 +37,7 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
     Throwable t = e.getCause();
     if (t != null) {
       t.printStackTrace();
-      if ((t instanceof IllegalArgumentException) || (t instanceof InvalidArgumentException)) {
+      if (t instanceof IllegalArgumentException) {
         return Response.status(400)
             .type(MediaType.APPLICATION_JSON)
             .entity(new WsError(t))
@@ -53,5 +52,4 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
         .entity(new WsError(e))
         .build();
   }
-
 }

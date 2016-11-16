@@ -35,8 +35,7 @@ public interface EmailDAO {
     /*
      * (non-Javadoc)
      * 
-     * @see org.skife.jdbi.v2.tweak.ResultSetMapper#map(int, java.sql.ResultSet,
-     * org.skife.jdbi.v2.StatementContext)
+     * @see org.skife.jdbi.v2.tweak.ResultSetMapper#map(int, java.sql.ResultSet, org.skife.jdbi.v2.StatementContext)
      */
     @Override
     public Email map(int index, ResultSet r, StatementContext ctx) throws SQLException {
@@ -104,4 +103,8 @@ public interface EmailDAO {
 
   @SqlUpdate("INSERT INTO email_response_types (email_id,response_type_id) SELECT :dest_email_id,response_type_id FROM email_response_types WHERE email_id = :source_email_id")
   public abstract void copyResponseTypes(@Bind("source_email_id") long sourceEmailId, @Bind("dest_email_id") long destEmailId);
+
+  @Mapper(EmailMapper.class)
+  @SqlQuery("SELECT Email.* FROM emails AS Email RIGHT JOIN events AS Event ON (Event.id = Email.event_id) WHERE Event.start >= UTC_TIMESTAMP() AND Email.send = 'days_before' AND Email.sent IS NULL AND Email.days_before >= DATEDIFF(Event.start,UTC_TIMESTAMP())")
+  public abstract List<Email> getEmailsForDaysBefore();
 }

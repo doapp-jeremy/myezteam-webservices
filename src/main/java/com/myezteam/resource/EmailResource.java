@@ -12,12 +12,7 @@ package com.myezteam.resource;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,17 +26,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import org.joda.time.DateTime;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
-import com.amazonaws.services.simpleemail.model.Body;
-import com.amazonaws.services.simpleemail.model.Content;
-import com.amazonaws.services.simpleemail.model.Destination;
-import com.amazonaws.services.simpleemail.model.Message;
-import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.api.Email;
+import com.myezteam.api.EmailHelper;
 import com.myezteam.api.Event;
-import com.myezteam.api.Player;
-import com.myezteam.api.Response;
-import com.myezteam.api.Response.ResponseType;
 import com.myezteam.db.mysql.EmailDAO;
 import com.myezteam.db.mysql.EventDAO;
 import com.myezteam.db.mysql.PlayerDAO;
@@ -64,7 +52,6 @@ public class EmailResource extends BaseResource {
   private final EventDAO eventDAO;
   private final EmailDAO emailDAO;
   private final ResponseDAO responseDAO;
-  private final AmazonSimpleEmailServiceClient ses;
 
   public EmailResource(TeamACL teamACL, TeamDAO teamDAO, PlayerDAO playerDAO, EventDAO eventDAO, EmailDAO emailDAO,
       ResponseDAO responseDAO, AmazonSimpleEmailServiceClient ses) {
@@ -74,7 +61,6 @@ public class EmailResource extends BaseResource {
     this.eventDAO = eventDAO;
     this.emailDAO = emailDAO;
     this.responseDAO = responseDAO;
-    this.ses = ses;
   }
 
   @POST
@@ -90,108 +76,12 @@ public class EmailResource extends BaseResource {
 
       teamACL.validateWriteAccess(userId, event.getTeamId());
 
-      sendEmail(email, event);
+      EmailHelper.sendEmail(emailDAO, playerDAO, responseDAO, email, event);
 
       return email;
     } catch (Throwable t) {
       throw new WebApplicationException(t);
     }
-  }
-
-  private String getEmailTemplate() {
-    String emailTemplate = null;
-    if (emailTemplate == null) {
-      InputStream inputStream = ClassLoader.getSystemResourceAsStream("email_inline.html");
-      Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
-      emailTemplate = scanner.hasNext() ? scanner.next() : "could not load template, please contact admin@myezteam.com";
-      scanner.close();
-      try {
-        inputStream.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-    return emailTemplate;
-  }
-
-  private void sendEmail(Email email, Event event) throws NoSuchAlgorithmException {
-    List<Integer> playerTypes = emailDAO.findPlayerTypes(email.getId());
-    List<Integer> responseTypes = emailDAO.findResponseTypes(email.getId());
-
-    List<Player> players = playerDAO.getPlayersForTeam(event.getTeamId());
-    for (Player player : players) {
-      try {
-        if (false == playerTypes.contains(player.getPlayerTypeId())) {
-          continue;
-        }
-        ResponseType usersResponse = ResponseType.NO_RESPONSE;
-        Response response = responseDAO.findUsersLastResponsesForEvent(player.getUserId(), email.getEventId());
-        if (response != null) {
-          usersResponse = ResponseType.get(response.getResponseTypeId());
-        }
-        if (false == responseTypes.contains(usersResponse.id)) {
-          continue;
-        }
-        String template = getEmailTemplate();
-        template = template.replaceAll("\\{EMAIL TITLE\\}", email.getTitle());
-        template = template.replaceAll("\\{EMAIL DESCRIPTION\\}", (email.getContent() != null) ? email.getContent() : "");
-        template = template.replaceAll("\\{EVENT NAME\\}", event.getName());
-        template = template
-            .replaceAll("\\{EVENT TIME\\}", DateTime.parse(event.getStart()).toString("hh:mma 'on' EEEE, MMM d"));
-        template = template.replaceAll("\\{EVENT DESCRIPTION\\}", (event.getDescription() != null) ? event.getDescription() : "");
-        template = template.replaceAll("\\{EVENT LOCATION\\}", (event.getLocation() != null) ? event.getLocation() : "");
-
-        String toEmail = player.getUser().getEmail();
-        SendEmailRequest sendEmailRequest = new SendEmailRequest().withSource("myezteam@gmail.com");
-        // Collection<String> replyToAddresses = new ArrayList<String>();
-        // TODO: add team managers as reply to
-        // sendEmailRequest.withReplyToAddresses(replyToAddresses);
-        List<String> toAddresses = new ArrayList<String>();
-        toAddresses.add(toEmail);
-        // toAddresses.add("junker37@gmail.com");
-        // toAddresses.add("tomcaflisch@gmail.com");
-
-        Destination dest = new Destination().withToAddresses(toAddresses);
-        dest.withBccAddresses("admin@myezteam.com");
-        sendEmailRequest.setDestination(dest);
-        String title = event.getName() + ": " + email.getTitle();
-        Content subjContent = new Content().withData(title);
-        Message msg = new Message().withSubject(subjContent);
-
-        // String content = "";
-        // content += "Start: " + event.getStart();
-        // content += "<br>";
-        // content += "Location: " + event.getLocation();
-        // content += "<br>";
-        // content += email.getContent();
-        // content += "<br>";
-
-        if (email.isIncludeRsvpForm()) {
-          String urlBase = "http://myezteam.com/index.html#/responses/email_rsvp/" + event.getId() + "/" + player.getId();
-          String responseKey = ResourceUtil.generateResponseKey(event.getId(), player.getId());
-          for (ResponseType responseType : ResponseType.instances()) {
-            if (false == ResponseType.NO_RESPONSE.equals(responseType)) {
-              String url = urlBase + "/" + responseType.id + "/" + responseKey;
-              // content += "<br>";
-              // content += "<a href='" + url + "'>" + responseType.label + "</a>";
-              template = template.replaceFirst("\\{RSVP HREF " + responseType.label.toUpperCase() + "\\}", url);
-            }
-          }
-        }
-
-        Content htmlContent = new Content().withData(template);
-        Body body = new Body().withHtml(htmlContent);
-        msg.setBody(body);
-        sendEmailRequest.setMessage(msg);
-        ses.sendEmail(sendEmailRequest);
-        // max 5 per second
-        Thread.sleep(200);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
-    emailDAO.setEmailSentNow(email.getId());
   }
 
   @GET
@@ -255,7 +145,7 @@ public class EmailResource extends BaseResource {
       emailDAO.createResponseTypes(emailId, email.getResponseTypes());
 
       if ("now".equalsIgnoreCase(sendType)) {
-        sendEmail(email, event);
+        EmailHelper.sendEmail(emailDAO, playerDAO, responseDAO, email, event);
       }
       else if ("days_before".equals(sendType)) {
         checkArgument(email.getDaysBefore() >= 0, "Days before must be > 0");
