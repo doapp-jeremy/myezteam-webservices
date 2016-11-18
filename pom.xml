@@ -89,11 +89,6 @@
 			<version>${dropwizard.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${dropwizard.source}</groupId>
-			<artifactId>dropwizard-auth</artifactId>
-			<version>${dropwizard.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlets</artifactId>
 			<version>8.1.10.v20130312</version>
