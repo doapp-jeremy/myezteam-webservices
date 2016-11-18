@@ -28,32 +28,6 @@
 			<id>common-beanutils</id>
 			<url>http://central.maven.org/maven2/commons-beanutils/commons-beanutils/1.9.2/commons-beanutils-1.9.2.jar</url>
 		</repository>
-		<!-- heroku hack because invalid maven certificate -->
-		<repository>
-			<id>central</id>
-			<name>Maven Central Repository</name>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
-		<!-- end heroku hack because invalid maven certificate -->
-	</repositories>
-
-	<!-- heroku hack because invalid maven certificate -->
-	<pluginRepositories>
-		<pluginRepository>
-			<id>central</id>
-			<name>Maven Plugin Repository</name>
-			<url>http://repo1.maven.org/maven2</url>
-			<layout>default</layout>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
-	<!-- end heroku hack because invalid maven certificate -->
-
 
 	<dependencies>
 		<dependency>
