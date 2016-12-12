@@ -1,0 +1,14 @@
+version: 0.1
+
+phases:
+  pre-build:
+    commands:
+      - aws s3 cp s3://builds.myezteam.com/env/prod src/main/resources/env.properties
+  build:
+    commands:
+      - mvn clean package
+artifacts:
+  files:
+    - target/*
+  discard-paths: yes    
+  
