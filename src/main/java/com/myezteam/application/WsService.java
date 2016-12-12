@@ -11,13 +11,16 @@ package com.myezteam.application;
  * Copyright 2013 - All rights reserved.  Created by DoApp, Inc.
  */
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.joda.time.DateTimeZone;
 import org.skife.jdbi.v2.DBI;
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -26,7 +29,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.Table
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.myezteam.acl.TeamACL;
 import com.myezteam.auth.TokenAuthenticator;
-import com.myezteam.config.AwsConfiguration;
 import com.myezteam.config.WsConfiguration;
 import com.myezteam.db.TeamController;
 import com.myezteam.db.dynamo.TokenDAO;
@@ -46,11 +48,13 @@ import com.myezteam.resource.PlayerResource;
 import com.myezteam.resource.ResponseResource;
 import com.myezteam.resource.TeamResource;
 import com.myezteam.resource.UserResource;
+import com.mysql.jdbc.Driver;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.auth.oauth.OAuthProvider;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizard.db.DatabaseConfiguration;
 import com.yammer.dropwizard.jdbi.DBIFactory;
 import com.yammer.dropwizard.jersey.InvalidEntityExceptionMapper;
 import com.yammer.dropwizard.jersey.JsonProcessingExceptionMapper;
@@ -61,6 +65,22 @@ import com.yammer.dropwizard.jersey.JsonProcessingExceptionMapper;
  * 
  */
 public class WsService extends Service<WsConfiguration> {
+
+  private static DatabaseConfiguration databaseConfig = new DatabaseConfiguration();
+  static {
+    Properties prop = new Properties();
+    try (InputStream inputStream = WsService.class.getClassLoader().getResourceAsStream("env.properties")) {
+      prop.load(inputStream);
+      for (String name : prop.stringPropertyNames()) {
+        System.setProperty(name, prop.getProperty(name));
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Could not load properties file");
+    }
+    databaseConfig.setUrl(checkNotNull(System.getProperty("dw.database.url"), "dw.database.url is null"));
+    databaseConfig.setUser(checkNotNull(System.getProperty("dw.database.user"), "dw.database.user is null"));
+    databaseConfig.setPassword(checkNotNull(System.getProperty("dw.database.password"), "dw.database.password is null"));
+  }
 
   /**
    * @param args
@@ -83,13 +103,13 @@ public class WsService extends Service<WsConfiguration> {
   /*
    * (non-Javadoc)
    * 
-   * @see com.yammer.dropwizard.Service#run(com.yammer.dropwizard.config.Configuration,
-   * com.yammer.dropwizard.config.Environment)
+   * @see com.yammer.dropwizard.Service#run(com.yammer.dropwizard.config.Configuration, com.yammer.dropwizard.config.Environment)
    */
   @Override
   public void run(WsConfiguration configuration, Environment environment) throws Exception {
     final DBIFactory factory = new DBIFactory();
-    final DBI jdbi = factory.build(environment, configuration.getDatabase(), "mysql");
+    databaseConfig.setDriverClass(Driver.class.getName());
+    final DBI jdbi = factory.build(environment, databaseConfig, "mysql");
 
     final TeamDAO teamDAO = jdbi.onDemand(TeamDAO.class);
     final PlayerDAO playerDAO = jdbi.onDemand(PlayerDAO.class);
@@ -98,13 +118,11 @@ public class WsService extends Service<WsConfiguration> {
     final EmailDAO emailDAO = jdbi.onDemand(EmailDAO.class);
     final ResponseDAO responseDAO = jdbi.onDemand(ResponseDAO.class);
 
-    AwsConfiguration awsConfiguration = configuration.getAwsConfiguration();
-    AWSCredentials awsCredentials = awsConfiguration.getAWSCredentials();
-    AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(awsCredentials);
+    AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient();
     DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(dynamoDB, new DynamoDBMapperConfig(
-        TableNameOverride.withTableNamePrefix(awsConfiguration.getTablePrefix())));
+        TableNameOverride.withTableNamePrefix("DEV-")));
 
-    AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(awsCredentials);
+    AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient();
 
     TokenDAO tokenDAO = new TokenDAO(dynamoDBMapper);
 

@@ -1,12 +1,4 @@
-aws:
-  tablePrefix: DEV-
-
 # Database settings.
-database:
-  # the name of your JDBC driver
-  driverClass: com.mysql.jdbc.Driver
-
-
 logging:
   # Settings for logging to stdout.
   console:
@@ -16,12 +8,6 @@ logging:
 
     # Do not display log statements below this threshold to stdout.
     threshold: ALL
-
-  # Logger-specific levels.
-  loggers:
-
-    # Overrides the level of com.example.dw.Thing and sets it to DEBUG.
-    "com.doapps.push": DEBUG
 
   # Settings for logging to a file.
   file:
