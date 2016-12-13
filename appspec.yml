@@ -6,7 +6,7 @@ files:
   - source: target
     destination: /opt/myezteam/jars
   - source: etc/myezteam-ws.conf
-    destination: /etc/init/
+    destination: /lib/systemd/system/
 hooks:
   ApplicationStart:
     - runas: root

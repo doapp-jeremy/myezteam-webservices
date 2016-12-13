@@ -1,0 +1,7 @@
+[Unit]
+Description=myezteam webservice
+
+[Service]
+ExecStart=/usr/bin/java -Djava.net.preferIPv4Stack=true -Djdk.xml.entityExpansionLimit=0 -classpath ":/opt/myezteam/jars/*" com.myezteam.application.WsService server /opt/myezteam/prod.yml
+Restart=on-abnormal
+PIDFile=option
