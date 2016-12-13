@@ -5,7 +5,7 @@ files:
     destination: /opt/myezteam/
   - source: target
     destination: /opt/myezteam/jars
-  - source: etc/myezteam-ws.conf
+  - source: etc/myezteam-ws.service
     destination: /lib/systemd/system/
 hooks:
   ApplicationStart:
