@@ -1,14 +1,14 @@
 version: 0.1
 
 phases:
-  pre-build:
-    commands:
-      - aws s3 cp s3://builds.myezteam.com/env/prod src/main/resources/env.properties
   build:
     commands:
-      - mvn clean package
+      - aws s3 cp s3://builds.myezteam.com/env/prod src/main/resources/env.properties && mvn clean package
+
 artifacts:
+  type: ZIP
   files:
-    - target/*
-  discard-paths: yes    
-  
+    - target/webservices*.jar
+    - src/main/resources/prod.yml
+    - etc/myezteam-ws.conf
+    - bin/application_start.sh
