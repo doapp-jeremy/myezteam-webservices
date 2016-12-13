@@ -1,0 +1,20 @@
+version: 0.0
+os: linux
+files:
+  - source: src/main/resources/prod.yml
+    destination: /opt/myezteam/
+  - source: target
+    destination: /opt/myezteam/jars
+  - source: etc/myezteam-ws.conf
+    destination: /etc/init/
+hooks:
+  ApplicationStart:
+    - runas: root
+      location: bin/application_start.sh
+      timeout: 600
+permissions:
+  - object: /opt/myezteam/
+    pattern: "**"
+    owner: root
+    group: root
+    mode: 650
