@@ -8,6 +8,7 @@ phases:
 artifacts:
   type: ZIP
   files:
+    - appspec.yml
     - target/webservices*.jar
     - src/main/resources/prod.yml
     - etc/myezteam-ws.conf
