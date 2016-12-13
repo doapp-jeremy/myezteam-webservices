@@ -2,6 +2,7 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+systemctl daemon-reload
 systemctl restart myezteam-ws.service
 RC=$?
 if [ $RC -ne 0 ]; then
